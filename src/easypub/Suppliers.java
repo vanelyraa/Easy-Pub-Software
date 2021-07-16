@@ -28,53 +28,10 @@ public class Suppliers extends javax.swing.JFrame {
      */
     public Suppliers() {
         initComponents();
-        Connect();
-    }
-    
-    Connection cn;
-    PreparedStatement pst;
-    DefaultTableModel df;
-  
-    public void Connect(){
         
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            cn= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Suppliers.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Suppliers.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
-    public void load() {
-    int x;
-        try {
-            pst = cn.prepareStatement("select * from supplier");
-        
-    ResultSet rs = pst.executeQuery();
-    ResultSetMetaData rd = rs.getMetaData();
-    x = rd.getColumnCount();
-    df = (DefaultTableModel)SupTable.getModel();    
-    df.setRowCount(0);
     
-    while(rs.next()){
-        Vector vec = new Vector();
-        for(int i=1; i<=x; i++){
-            vec.add(rs.getString("supplier_name"));
-            vec.add(rs.getString("adress"));
-            vec.add(rs.getString("country"));
-            vec.add(rs.getString("eircode"));
-            vec.add(rs.getString("email"));
-            vec.add(rs.getString("phone"));
-            vec.add(rs.getString("contact"));
-        }
-        df.addRow(vec);
-    }
-    } catch (SQLException ex) {
-            Logger.getLogger(Suppliers.class.getName()).log(Level.SEVERE, null, ex);
-        }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -230,151 +187,38 @@ public class Suppliers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_save_supActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_save_supActionPerformed
-        try {
-            String supplier_name = txsupplier_name.getText();
+        
+            /*String supplier_name = txsupplier_name.getText();
             String adress = txadress.getText();
             String country = txcountry.getText();
             String eircode = txeircode.getText();
             String email = txemail.getText();
             String phone = txphone.getText();
-            String contact = txcontact.getText();
+            String contact = txcontact.getText();*/
             
             
             
-            pst = cn.prepareStatement("insert new vendor(supplier_name, adress, country, eircode, email, phone, contact)values(?,?,?,?,?,?,?)");
-            pst.setString(1,supplier_name);
-            pst.setString(2,adress);
-            pst.setString(3,country);
-            pst.setString(4,eircode);
-            pst.setString(5,email);
-            pst.setString(6,phone);
-            pst.setString(7,contact);
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Supplier Added Successfully");
-        
-            txsupplier_name.setText("");
-            txadress.setText("");
-            txcountry.setText("");
-            txeircode.setText("");
-            txemail.setText("");
-            txphone.setText("");
-            txcontact.setText("");
-            txsupplier_name.requestFocus();
-            load();
             
-        } catch (SQLException ex) {
-            Logger.getLogger(Suppliers.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }//GEN-LAST:event_bt_save_supActionPerformed
 
     private void SupTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupTableMouseClicked
-        df = (DefaultTableModel)SupTable.getModel();
-        int selected = SupTable.getSelectedRow();
-        int supplier_ID = Integer.parseInt(df.getValueAt(selected, 0).toString());
-        txsupplier_name.setText(df.getValueAt(selected, 1).toString());
-        txadress.setText(df.getValueAt(selected, 2).toString());
-        txcountry.setText(df.getValueAt(selected, 3).toString());
-        txeircode.setText(df.getValueAt(selected, 4).toString());
-        txemail.setText(df.getValueAt(selected, 5).toString());
-        txphone.setText(df.getValueAt(selected, 6).toString());
-        txcontact.setText(df.getValueAt(selected, 7).toString());
         
-        bt_save_sup.setEnabled(false);
-      
         
     }//GEN-LAST:event_SupTableMouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         
-            df = (DefaultTableModel)SupTable.getModel();
-            int selected = SupTable.getSelectedRow();
-            int supplier_ID = Integer.parseInt(df.getValueAt(selected, 0).toString());
-            
-            String supplier_name = txsupplier_name.getText();
-            String adress = txadress.getText();
-            String country = txcountry.getText();
-            String eircode = txeircode.getText();
-            String email = txemail.getText();
-            String phone = txphone.getText();
-            String contact = txcontact.getText();
-            
-            try {
-            
-            pst = cn.prepareStatement("edit supplier(supplier_name=?, adress=?, country=?, eircode=?, email=?, phone=?, contact=?)where id=?");
-            pst.setString(1,supplier_name);
-            pst.setString(2,adress);
-            pst.setString(3,country);
-            pst.setString(4,eircode);
-            pst.setString(5,email);
-            pst.setString(6,phone);
-            pst.setString(7,contact);
-            pst.setInt(8,supplier_ID);
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Supplier updated Successfully");
-        
-            txsupplier_name.setText("");
-            txadress.setText("");
-            txcountry.setText("");
-            txeircode.setText("");
-            txemail.setText("");
-            txphone.setText("");
-            txcontact.setText("");
-            txsupplier_name.requestFocus();
-            load();
-            bt_save_sup.setEnabled(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Suppliers.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+           
         
         
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        df = (DefaultTableModel)SupTable.getModel();
-            int selected = SupTable.getSelectedRow();
-            int supplier_ID = Integer.parseInt(df.getValueAt(selected, 0).toString());
-            
-            
-            try {
-            
-            pst = cn.prepareStatement("delete supplier where id=?");
-            
-            pst.setInt(1,supplier_ID);
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Supplier deleted Successfully");
         
-            txsupplier_name.setText("");
-            txadress.setText("");
-            txcountry.setText("");
-            txeircode.setText("");
-            txemail.setText("");
-            txphone.setText("");
-            txcontact.setText("");
-            txsupplier_name.requestFocus();
-            load();
-            bt_save_sup.setEnabled(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Suppliers.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        txsupplier_name.setText("");
-            txadress.setText("");
-            txcountry.setText("");
-            txeircode.setText("");
-            txemail.setText("");
-            txphone.setText("");
-            txcontact.setText("");
-            txsupplier_name.requestFocus();
-            load();
-            bt_save_sup.setEnabled(true);
-        
-        
-        
-        
+       
     }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
