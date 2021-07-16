@@ -20,7 +20,7 @@ public class Sales extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void drinkCost(){
+   /* public void drinkCost(){
         
         double sum = 0;
         
@@ -44,7 +44,7 @@ public class Sales extends javax.swing.JFrame {
         double change = cash-sum;
         String custchange = String.format("£ %.2f", change);
         jTextField2.setText(custchange);
-    }
+    }*/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -775,179 +775,95 @@ public class Sales extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        double itemPrice = 1.00;
+        /*double itemPrice = 1.00;
         
         DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
         table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+        drinkCost();*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-       double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
-       double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton17ActionPerformed
 
     private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton19ActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton21ActionPerformed
 
     private void jButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton26ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton26ActionPerformed
 
     private void jButton29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton29ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton29ActionPerformed
 
     private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton30ActionPerformed
 
     private void jButton31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton31ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton31ActionPerformed
 
     private void jButton33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton33ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton33ActionPerformed
 
     private void jButton36ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton36ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton36ActionPerformed
 
     private void jButton39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton39ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton39ActionPerformed
 
     private void jButton40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton40ActionPerformed
-       double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton40ActionPerformed
 
     private void jButton41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton41ActionPerformed
-       double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton41ActionPerformed
 
     private void jButton43ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton43ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton43ActionPerformed
 
     private void jButton45ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton45ActionPerformed
-       double itemPrice = 1.00;
-        
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
+       
     }//GEN-LAST:event_jButton45ActionPerformed
 
     private void jButton49ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton49ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton49ActionPerformed
 
     private void jButton64ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton64ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton64ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        double itemPrice = 1.00;
         
-        DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
-        table.addRow(new Object[]{"Gin","1",itemPrice});
-        drinkCost();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton51ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton51ActionPerformed
