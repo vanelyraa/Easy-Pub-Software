@@ -31,9 +31,7 @@ public class Products extends javax.swing.JFrame {
         initComponents();       
     }
     
-    Connection cnct;
-    PreparedStatement prepst;
-    
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -199,36 +197,12 @@ public class Products extends javax.swing.JFrame {
 
     private void bt_save_prodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_save_prodActionPerformed
        
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-            prepst = cnct.prepareStatement("insert into category (name, supplier, cost, price, leadtime, unit, minqty,category)values(?,?,?,?,?,?,?,?)");
-             
-            prepst.setString(1,txproduct_name.getText());
-            prepst.setString(2,dropsup.getSelectedItem().toString());
-            prepst.setInt(3,Integer.valueOf(txcost.getText()));
-            prepst.setInt(4,Integer.valueOf(txsaleprice.getText()));
-            prepst.setInt(5,Integer.valueOf(txleadtime.getText()));
-            prepst.setString(6,txunit.getText());
-            prepst.setInt(7,Integer.valueOf(txminqty.getText()));
-            prepst.setString(8,dropcategory.getSelectedItem().toString());
-            prepst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Product Added Successfully");
-                    cnct.close();
-                    } catch (SQLException ex) {
-                Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-            
-        
+      
         
     }//GEN-LAST:event_bt_save_prodActionPerformed
 
     private void ProdTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProdTableMouseClicked
-       df = (DefaultTableModel)ProdTable.getModel();
+       /*df = (DefaultTableModel)ProdTable.getModel();
         int selected = ProdTable.getSelectedRow();
         int product_ID = Integer.parseInt(df.getValueAt(selected, 0).toString());
         txproduct_name.setText(df.getValueAt(selected, 1).toString());
@@ -240,95 +214,19 @@ public class Products extends javax.swing.JFrame {
         txminqty.setText(df.getValueAt(selected, 7).toString());
         dropcategory.setSelectedItem(df.getValueAt(selected, 8).toString());
         
-        bt_save_prod.setEnabled(false);
+        bt_save_prod.setEnabled(false);*/
     }//GEN-LAST:event_ProdTableMouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       df = (DefaultTableModel)ProdTable.getModel();
-            int selected = ProdTable.getSelectedRow();
-            int product_ID = Integer.parseInt(df.getValueAt(selected, 0).toString());
-            
-            String product_name = txproduct_name.getText();
-            String supplier_name =  dropsup.getSelectedItem().toString();
-            String cost = txcost.getText();
-            String sales_price = txsaleprice.getText();
-            String lead_time = txleadtime.getText();
-            String unit = txunit.getText();
-            String min_qty = txminqty.getText();
-            String category = dropcategory.getSelectedItem().toString();
-            
-                        try {
-
-          pst = cn.prepareStatement("edit product((product_name=?, supplier_name=?, cost=?, sales_price=?, lead_time=?, unit=?, min_qty=?, category=?)");
-            pst.setString(1,product_name);
-            pst.setString(2,supplier_name);
-            pst.setString(3,cost);
-            pst.setString(4,sales_price);
-            pst.setString(5,lead_time);
-            pst.setString(6,unit);
-            pst.setString(7,min_qty);
-            pst.setString(8,category);
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Product updated Successfully");
-        
-            txproduct_name.setText("");
-            dropsup.setSelectedIndex(-1);
-            txcost.setText("");
-            txsaleprice.setText("");
-            txleadtime.setText("");
-            txunit.setText("");
-            txminqty.setText("");
-            dropcategory.setSelectedIndex(-1);
-            txproduct_name.requestFocus();
-            load();  
-            bt_save_prod.setEnabled(true);
-            } catch (SQLException ex) {
-            Logger.getLogger(Suppliers.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+      
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        /*df = (DefaultTableModel)ProdTable.getModel();
-            int selected = ProdTable.getSelectedRow();
-            int product_ID = Integer.parseInt(df.getValueAt(selected, 0).toString());
-            
-             
-
-            try {
-                pst = cn.prepareStatement("delete supplier where id=?");
-            
-          pst.setInt(1,product_ID);
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Product deleted Successfully");
-            txproduct_name.setText("");
-           dropsup.setSelectedIndex(-1);
-            txcost.setText("");
-            txsaleprice.setText("");
-            txleadtime.setText("");
-            txunit.setText("");
-            txminqty.setText("");
-            dropcategory.setSelectedIndex(-1);
-            txproduct_name.requestFocus();
-            load();  
-            bt_save_prod.setEnabled(true);
-            
-            } catch (SQLException ex) {
-                Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        txproduct_name.setText("");
-           dropsup.setSelectedIndex(-1);
-            txcost.setText("");
-            txsaleprice.setText("");
-            txleadtime.setText("");
-            txunit.setText("");
-            txminqty.setText("");
-            dropcategory.setSelectedIndex(-1);
-            txproduct_name.requestFocus();
-            load();  
-            bt_save_prod.setEnabled(true);
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void bt_save_prodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_save_prodMouseClicked
