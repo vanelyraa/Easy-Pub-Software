@@ -28,68 +28,10 @@ public class Stock extends javax.swing.JFrame {
      */
     public Stock() {
         initComponents();
-        Connect();
-        Product();
-    }
-    
-    Connection cn;
-    PreparedStatement pst;
-    DefaultTableModel df;
-    ResultSet rs;
-  
-    public void Connect(){
         
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            cn= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-        
-    public void Product(){
-        try {  
-            pst = cn.prepareStatement("select product name");
-            rs=pst.executeQuery();
-            comboprod.removeAllItems();
-            
-            while(rs.next()){
-                comboprod.addItem(rs.getString("product_name"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     
-    public void load() {
-    int x;
-        try {
-            pst = cn.prepareStatement("select * from product");
-        
-    ResultSet rs = pst.executeQuery();
-    ResultSetMetaData rd = rs.getMetaData();
-    x = rd.getColumnCount();
-    df = (DefaultTableModel)SupTable.getModel();    
-    df.setRowCount(0);
-    
-    while(rs.next()){
-        Vector vec = new Vector();
-        for(int i=1; i<=x; i++){
-            vec.add(rs.getString("product_name"));
-            vec.add(rs.getString("transaction type"));
-            vec.add(rs.getString("quantity"));
-            
-        }
-        df.addRow(vec);
-    }
-    } catch (SQLException ex) {
-            Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-        }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -196,53 +138,20 @@ public class Stock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_save_supActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_save_supActionPerformed
-        try {
-            
-            String product_name = comboprod.getSelectedItem().toString();            
+      
+            /*String product_name = comboprod.getSelectedItem().toString();            
             String transaction = jComboBox2.getSelectedItem().toString();
-            String qty = txqtystock.getText();
-            
-            pst = cn.prepareStatement("insert new stock(supplier_name, transaction type, quantity)values(?,?,?)");
+            String qty = txqtystock.getText();*/
            
-            pst.setString(1,product_name);
-             pst.setString(2,transaction);
-            pst.setString(3,qty);
-            
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Stock Added Successfully");
-        
-            comboprod.setSelectedIndex(-1);
-        jComboBox2.setSelectedIndex(-1);
-            txqtystock.setText("");
-            comboprod.requestFocus();
-            
-            load();
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }//GEN-LAST:event_bt_save_supActionPerformed
 
     private void SupTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupTableMouseClicked
-        df = (DefaultTableModel)SupTable.getModel();
-        int selected = SupTable.getSelectedRow();
-        int supplier_ID = Integer.parseInt(df.getValueAt(selected, 0).toString());
         
-        comboprod.setSelectedItem(df.getValueAt(selected, 1).toString());
-        jComboBox2.setSelectedItem(df.getValueAt(selected, 2).toString());
-        txqtystock.setText(df.getValueAt(selected, 3).toString());
-        
-        bt_save_sup.setEnabled(false);
-      
         
     }//GEN-LAST:event_SupTableMouseClicked
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        comboprod.setSelectedIndex(-1);
-        jComboBox2.setSelectedIndex(-1);
-        txqtystock.setText("");
-        comboprod.requestFocus();
-            load();  
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
