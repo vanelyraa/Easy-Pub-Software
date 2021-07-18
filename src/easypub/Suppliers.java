@@ -67,6 +67,8 @@ public class Suppliers extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(950, 600));
+        setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(null);
 
         SupTable.setModel(new javax.swing.table.DefaultTableModel(
