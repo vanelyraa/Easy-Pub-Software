@@ -64,6 +64,8 @@ public class Products extends javax.swing.JFrame {
         dropsup = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(950, 600));
+        setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(null);
 
         ProdTable.setModel(new javax.swing.table.DefaultTableModel(
