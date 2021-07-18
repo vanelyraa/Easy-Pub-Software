@@ -35,6 +35,8 @@ public class Main extends javax.swing.JFrame {
         bt_others = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(950, 600));
+        setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
