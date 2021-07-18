@@ -25,6 +25,10 @@ public class Login extends javax.swing.JFrame {
     
     
     }
+    
+    Connection cnct = null;
+    Statement stat = null;
+    ResultSet resst = null;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -70,7 +74,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btPassword.setText("jPasswordField1");
         btPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btPasswordActionPerformed(evt);
@@ -86,7 +89,7 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(jLabel1))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addGap(60, 60, 60)
                             .addComponent(jLabel2)
@@ -95,10 +98,12 @@ public class Login extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(54, 54, 54)
                             .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButton1)
-                                .addComponent(btPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jButton1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE))
+                                .addComponent(btPassword)))))
                 .addGap(83, 83, 83))
         );
         layout.setVerticalGroup(
@@ -128,18 +133,32 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btUserActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-            String username = btUser.getText();
+         String username = btUser.getText();
             String password = String.valueOf(btPassword.getPassword());
-       if(username.isEmpty() || password.isEmpty()){
+         if(username.isEmpty() || password.isEmpty()){
            JOptionPane.showMessageDialog(this, "Login failed, user or password empty"); 
        } else{
-          loginUser(username, password) ;
+             try {
+                 cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                
+                 PreparedStatement login = cnct.prepareStatement("Select * from login WHERE user = ? AND password = ?");
+                 login.setString(1, username);
+            login.setString(2, password);
+            resst = login.executeQuery();
+                  if(resst.next()){
+            
+            
+            new Main().setVisible(true);
+            dispose();
+            
+            }     
+                 
+                 
+             } catch (SQLException ex) {
+                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+             }
        }
-        
-            
-            
-           
+       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPasswordActionPerformed
@@ -191,35 +210,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 
-    private void loginUser(String username, String password) {
-        Connection conDb = DtbConnect.connectDtb();
-        if(conDb != null){
-        try {
-            
-            PreparedStatement pst = (PreparedStatement)
-                    conDb.prepareStatement("Select * from login WHERE user = ? AND password = ?");
-            
-            pst.setString(1, username);
-            pst.setString(2, password);
-            ResultSet rss=pst.executeQuery();
-            if(rss.next()){
-            dispose();
-            Main dashboard = new Main();
-            dashboard.setTitle("Dashboard");
-            dashboard.setVisible(true);
-            }else{
-               
-                JOptionPane.showMessageDialog(this, "Login failed, user or password not found","Error",JOptionPane.ERROR_MESSAGE);
-            }
-            
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }else{
-                System.out.println("The connection is not available");
-                }
-            
-        
-    }
+    
+    
 }
