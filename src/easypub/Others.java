@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -25,75 +26,75 @@ public class Others extends javax.swing.JFrame {
     /**
      * Creates new form Others
      */
-    
     int createId;
+
     public Others() {
         initComponents();
         getUserId();
         CategorySelect();
-       
+        getCatId();
+
     }
-    
+
     Connection cnct = null;
     Statement stat = null;
     ResultSet resst = null;
-    
-    public void getUserId(){
-        try{
-            cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
+
+    public void getUserId() {
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
             resst = stat.executeQuery("select MAX(user) from login");
-        resst.next();
-        resst.getString("MAX(user)");
-        
-        if(resst.getString("MAX(user)")== null){
-            txUseuId.setText("U001");
-        }else{
-            long userID = Long.parseLong(resst.getString("MAX(user)").substring(1,resst.getString("MAX(user)").length()));
-        userID++;
-        txUseuId.setText("U"+ String.format("%03d", userID));
-        }
-           
-    }   catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
-    }
-    
-     public void getCatId(){
-        try{
-            cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("select MAX(category_ID) from category");
-        resst.next();
-        resst.getString("MAX(category_ID)");
-        
-        if(resst.getString("MAX(category_ID)")== null){
-            txUseuId.setText("C01");
-        }else{
-            long userID = Long.parseLong(resst.getString("MAX(category_ID)").substring(1,resst.getString("MAX(category_ID)").length()));
-        userID++;
-        txUseuId.setText("C"+ String.format("%02d", userID));
-        }
-           
-    }   catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
-    }
-     
-     public void CategorySelect(){
-        try {
-            cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("select * from category");
-            CatTable.setModel(DbUtils.resultSetTotableModel(resst));
+            resst.next();
+            resst.getString("MAX(user)");
+
+            if (resst.getString("MAX(user)") == null) {
+                txUseuId.setText("U001");
+            } else {
+                long userID = Long.parseLong(resst.getString("MAX(user)").substring(1, resst.getString("MAX(user)").length()));
+                userID++;
+                txUseuId.setText("U" + String.format("%03d", userID));
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
-     }
-    
-    
+
+    }
+
+    public void getCatId() {
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select MAX(category_ID) from category");
+            resst.next();
+            resst.getString("MAX(category_ID)");
+
+            if (resst.getString("MAX(category_ID)") == null) {
+                hcecking.setText("C01");
+            } else {
+                long catID = Long.parseLong(resst.getString("MAX(category_ID)").substring(1, resst.getString("MAX(category_ID)").length()));
+                catID++;
+                hcecking.setText("C" + String.format("%02d", catID));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void CategorySelect() {
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select category_ID, category from category");
+            CatTable.setModel(DbUtils.resultSetToTableModel(resst));
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -128,10 +129,13 @@ public class Others extends javax.swing.JFrame {
         txemail = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txUseuId = new javax.swing.JLabel();
-        txCatId = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        hcecking = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(950, 600));
+        setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
@@ -166,7 +170,7 @@ public class Others extends javax.swing.JFrame {
 
         jSeparator1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         getContentPane().add(jSeparator1);
-        jSeparator1.setBounds(470, 20, 10, 560);
+        jSeparator1.setBounds(440, 20, 10, 560);
 
         jLabel3.setText("Name");
         getContentPane().add(jLabel3);
@@ -295,45 +299,62 @@ public class Others extends javax.swing.JFrame {
         getContentPane().add(txUseuId);
         txUseuId.setBounds(60, 140, 130, 14);
 
-        txCatId.setText("Category ID");
-        txCatId.setEnabled(false);
-        getContentPane().add(txCatId);
-        txCatId.setBounds(520, 400, 80, 14);
-
         jLabel14.setText("Category ID");
         getContentPane().add(jLabel14);
         jLabel14.setBounds(520, 380, 80, 14);
 
+        hcecking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hceckingActionPerformed(evt);
+            }
+        });
+        getContentPane().add(hcecking);
+        hcecking.setBounds(520, 400, 110, 20);
+
+        jButton1.setText("Clear");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(760, 550, 60, 23);
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-   
+
     private void btCreateUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCreateUActionPerformed
-        
+
     }//GEN-LAST:event_btCreateUActionPerformed
 
     private void btAddCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddCatActionPerformed
-        
-           
-        
+
+
     }//GEN-LAST:event_btAddCatActionPerformed
 
     private void btEditCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditCatActionPerformed
-        
+
     }//GEN-LAST:event_btEditCatActionPerformed
 
     private void btDelCatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDelCatMouseClicked
-        if(txcategory.getText().isEmpty()){
-          JOptionPane.showMessageDialog(this, "Select the category to be deleted");    
-        }else{
-            try{
-                cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-                String catg = txcategory.getText();
-                Statement delete =  cnct.createStatement();
-                delete.executeUpdate("Delete from easypubdatabase.category where category="+catg);
+        if (txcategory.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select the category to be deleted");
+        } else {
+            try {
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+
+                PreparedStatement delete = cnct.prepareStatement("Delete from category where category_ID=?");
+                delete.setString(1, hcecking.getText());
+                delete.execute();
                 CategorySelect();
-                JOptionPane.showMessageDialog(null, "Category deleted sucesfully"); 
-                
+                JOptionPane.showMessageDialog(null, "Category deleted sucesfully");
+
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -341,65 +362,89 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_btDelCatMouseClicked
 
     private void btCreateUMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCreateUMouseClicked
-       try{
-           cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-           PreparedStatement create = cnct.prepareStatement("insert into login values(?,?,?,?,?)");
-           create.setString(1,txUseuId.getText());
-           create.setString(2,txpassword.getText());
-           create.setString(3,txusername.getText());
-           create.setString(4,txlname.getText());
-           create.setString(5,txemail.getText());
-           
-           create.executeUpdate();
-           JOptionPane.showMessageDialog(this, "User created sucesfully"); 
-           //getUserId();
-           cnct.close();
-           
-       } catch (SQLException ex) {
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            PreparedStatement create = cnct.prepareStatement("insert into login values(?,?,?,?,?)");
+            create.setString(1, txUseuId.getText());
+            create.setString(2, txpassword.getText());
+            create.setString(3, txusername.getText());
+            create.setString(4, txlname.getText());
+            create.setString(5, txemail.getText());
+
+            create.executeUpdate();
+            JOptionPane.showMessageDialog(this, "User created sucesfully");
+            //getUserId();
+            cnct.close();
+
+        } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }//GEN-LAST:event_btCreateUMouseClicked
 
     private void btAddCatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAddCatMouseClicked
-         try {
-            
-            cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-           PreparedStatement add = cnct.prepareStatement("insert into category values(?)");
-           add.setString(1,txCatId.getText()); 
-           add.setString(2,txcategory.getText());
-                    int row = add.executeUpdate();
-           
-            JOptionPane.showMessageDialog(null, "New category registered"); 
+        try {
+
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            PreparedStatement add = cnct.prepareStatement("insert into category (category_ID, category) values(?,?)");
+            add.setString(1, hcecking.getText());
+            add.setString(2, txcategory.getText());
+            int row = add.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "New category registered");
             cnct.close();
             CategorySelect();
-           
+
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btAddCatMouseClicked
 
     private void CatTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CatTableMouseClicked
-        DefaultTableModel tableCat = (DefaultTableModel)CatTable.getModel();
+        DefaultTableModel tableCat = (DefaultTableModel) CatTable.getModel();
         int rowIndex = CatTable.getSelectedRow();
-        txCatId.setText(tableCat.getValueAt(rowIndex, 0).toString());
+        hcecking.setText(tableCat.getValueAt(rowIndex, 0).toString());
         txcategory.setText(tableCat.getValueAt(rowIndex, 1).toString());
     }//GEN-LAST:event_CatTableMouseClicked
 
     private void btEditCatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditCatMouseClicked
-          if (txcategory.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Select the category to be deleted"); 
-    }else{
-            try{
-                cnct= DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-             PreparedStatement edit = cnct.prepareStatement("update easypubdatabase.category set category_ID='"+txCatId.getText()+"'"+",category="+txcategory.getText());
-            create.executeUpdate(updateQuery);
-            JOptionPane.showMessageDialog(this, "User created sucesfully"); 
+        if (txcategory.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select the category to be deleted");
+        } else {
+            try {
+
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+
+                PreparedStatement edit = cnct.prepareStatement("update category SET category = ? where category_ID = ?");
+
+                edit.setString(1, txcategory.getText());
+                edit.setString(2, hcecking.getText());
+
+                int row1 = edit.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Category updated sucesfully");
+                cnct.close();
+                CategorySelect();
             } catch (SQLException ex) {
-               Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-           }
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
+
     }//GEN-LAST:event_btEditCatMouseClicked
+
+    private void hceckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hceckingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_hceckingActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        hcecking.setText("");
+        txcategory.setText("");
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -444,6 +489,8 @@ public class Others extends javax.swing.JFrame {
     private javax.swing.JButton btEditCat;
     private javax.swing.JButton btGenRep;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JTextField hcecking;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -462,7 +509,6 @@ public class Others extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private java.awt.TextField textField1;
-    private javax.swing.JLabel txCatId;
     private javax.swing.JLabel txUseuId;
     private javax.swing.JTextField txcategory;
     private javax.swing.JTextField txemail;
@@ -472,29 +518,31 @@ public class Others extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void registerUser(String uName, String lName, String email, String uPassword) {
-        Connection conDb = DtbConnect.connectDtb();
-        if(conDb != null){
-        try {            
-            PreparedStatement pst = (PreparedStatement)
-                    conDb.prepareStatement("INSERT INTO login (name, lastname, email, password) VALUES (?,?,?,?)");
-            
-            pst.setString(1, uName);
-            pst.setString(2, lName);
-            pst.setString(3, email);
-            pst.setString(4, uPassword);
-            int rss=pst.executeUpdate();
-           
-                JOptionPane.showMessageDialog(this, "New user registered","Sucess",JOptionPane.ERROR_MESSAGE);
-            
-            txusername.setText("");
-            txlname.setText("");
-            txemail.setText("");
-            txpassword.setText("");
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }else{
-                System.out.println("The connection is not available");
+            try {
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                
+                try {
+                    PreparedStatement newUser = cnct.prepareStatement("INSERT INTO login (name, lastname, email, password) VALUES (?,?,?,?)");
+                    
+                    newUser.setString(1, uName);
+                    newUser.setString(2, lName);
+                    newUser.setString(3, email);
+                    newUser.setString(4, uPassword);
+                    int rss = newUser.executeUpdate();
+                    
+                    JOptionPane.showMessageDialog(this, "New user registered", "Sucess", JOptionPane.ERROR_MESSAGE);
+                    
+                    txusername.setText("");
+                    txlname.setText("");
+                    txemail.setText("");
+                    txpassword.setText("");
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
     }
 }
