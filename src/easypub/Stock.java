@@ -5,18 +5,17 @@
  */
 package easypub;
 
-
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import net.proteanit.sql.DbUtils;
 /**
  *
  * @author vanel
@@ -31,6 +30,59 @@ public class Stock extends javax.swing.JFrame {
         
     }
     
+     Connection cnct = null;
+    Statement stat = null;
+    ResultSet resst = null;
+    PreparedStatement prepst = null;
+    //java.util.Date DateTr;
+   // java.sql.Date transDate;
+    
+    public void StockSelect() {
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select date, product_name, transaction, quantity from stock");
+            stockTable.setModel(DbUtils.resultSetToTableModel(resst));
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+     public class ProductDropB{
+        String id;
+        String product;
+        
+        
+    
+    
+    public ProductDropB(String id,String product){
+        this.id= id;
+        this.product=product;
+    
+}
+    
+    public String toString(){
+        return product;
+    }
+    }
+    
+    public void Product(){
+   
+            try {
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                prepst = cnct.prepareStatement("select * from product");
+            
+            resst = prepst.executeQuery();
+            comboprod.removeAllItems();
+            while(resst.next())
+            {
+           // comboprod.addItem(new ProductDropB(resst.getString(1),resst.getString(2)));
+            }
+            }catch (SQLException ex) {
+                Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
+            }   
+             
+        }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,7 +94,7 @@ public class Stock extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        SupTable = new javax.swing.JTable();
+        stockTable = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 200), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
@@ -53,34 +105,40 @@ public class Stock extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txqtystock = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        comboprod = new javax.swing.JComboBox<>();
+        comboprod = new javax.swing.JComboBox();
         jComboBox2 = new javax.swing.JComboBox<>();
+        transDate = new com.toedter.calendar.JDateChooser();
+        jLabel6 = new javax.swing.JLabel();
+        btEditSt = new javax.swing.JButton();
+        btDelSt = new javax.swing.JButton();
+        txid = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(950, 600));
         setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(null);
 
-        SupTable.setModel(new javax.swing.table.DefaultTableModel(
+        stockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Product", "Quantity"
+                "Date", "Product", "Quantity", "Transaction"
             }
         ));
-        SupTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        stockTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                SupTableMouseClicked(evt);
+                stockTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(SupTable);
+        jScrollPane1.setViewportView(stockTable);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 130, 530, 450);
+        jScrollPane1.setBounds(30, 130, 580, 450);
         getContentPane().add(jTextField1);
         jTextField1.setBounds(70, 100, 117, 20);
 
@@ -96,44 +154,86 @@ public class Stock extends javax.swing.JFrame {
         jLabel3.setBounds(390, 10, 130, 80);
 
         bt_save_sup.setText("Save");
+        bt_save_sup.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_save_supMouseClicked(evt);
+            }
+        });
         bt_save_sup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_save_supActionPerformed(evt);
             }
         });
         getContentPane().add(bt_save_sup);
-        bt_save_sup.setBounds(770, 560, 70, 23);
+        bt_save_sup.setBounds(630, 560, 70, 23);
 
         jButton6.setText("Clear");
         jButton6.setActionCommand("Clear data");
+        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton6MouseClicked(evt);
+            }
+        });
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
         getContentPane().add(jButton6);
-        jButton6.setBounds(847, 560, 70, 23);
+        jButton6.setBounds(860, 560, 70, 23);
 
         jLabel2.setText("Product");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(600, 130, 50, 14);
+        jLabel2.setBounds(640, 130, 50, 14);
 
         jLabel4.setText("Transaction type");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(600, 180, 90, 14);
+        jLabel4.setBounds(640, 230, 90, 14);
         getContentPane().add(txqtystock);
-        txqtystock.setBounds(600, 250, 110, 20);
+        txqtystock.setBounds(640, 300, 110, 20);
 
-        jLabel5.setText("Quantity");
+        jLabel5.setText("Date");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(600, 230, 60, 14);
+        jLabel5.setBounds(640, 330, 60, 14);
 
         getContentPane().add(comboprod);
-        comboprod.setBounds(600, 150, 300, 22);
+        comboprod.setBounds(640, 150, 200, 22);
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "goods receipt", "void", "waste" }));
         getContentPane().add(jComboBox2);
-        jComboBox2.setBounds(600, 200, 110, 20);
+        jComboBox2.setBounds(640, 250, 110, 20);
+
+        transDate.setDateFormatString("dd-MM-yyyy");
+        getContentPane().add(transDate);
+        transDate.setBounds(640, 350, 110, 20);
+
+        jLabel6.setText("Quantity");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(640, 280, 60, 14);
+
+        btEditSt.setText("Edit");
+        btEditSt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btEditStMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btEditSt);
+        btEditSt.setBounds(700, 560, 51, 23);
+
+        btDelSt.setText("Delete");
+        btDelSt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btDelStMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btDelSt);
+        btDelSt.setBounds(780, 560, 63, 23);
+        getContentPane().add(txid);
+        txid.setBounds(640, 200, 110, 20);
+
+        jLabel7.setText("ID");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(640, 180, 60, 14);
 
         pack();
         setLocationRelativeTo(null);
@@ -141,20 +241,110 @@ public class Stock extends javax.swing.JFrame {
 
     private void bt_save_supActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_save_supActionPerformed
       
-            /*String product_name = comboprod.getSelectedItem().toString();            
-            String transaction = jComboBox2.getSelectedItem().toString();
-            String qty = txqtystock.getText();*/
+            
            
     }//GEN-LAST:event_bt_save_supActionPerformed
 
-    private void SupTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupTableMouseClicked
+    private void stockTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stockTableMouseClicked
+        DefaultTableModel tableProd = (DefaultTableModel)stockTable.getModel();
+        int rowIndex = stockTable.getSelectedRow();
+       
+        comboprod.setSelectedItem(tableProd.getValueAt(rowIndex, 1).toString());
+        jComboBox2.setSelectedItem(tableProd.getValueAt(rowIndex, 2).toString());
+        txqtystock.setText(tableProd.getValueAt(rowIndex, 3).toString());
         
         
-    }//GEN-LAST:event_SupTableMouseClicked
+        
+    }//GEN-LAST:event_stockTableMouseClicked
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void bt_save_supMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_save_supMouseClicked
+       //DateTr = transDate.getDate();
+       //transDate = new java.sql.Date(DateTr.getTime());
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            prepst = cnct.prepareStatement("insert into stock values(?,?,?,?)");
+           
+            //prepst.setDate(1, transDate);
+            prepst.setString(2,comboprod.getSelectedItem().toString());            
+            prepst.setString(3, jComboBox2.getSelectedItem().toString());
+            prepst.setString(4, txqtystock.getText());
+           
+
+            int row = prepst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Stock updated sucesfully");
+           
+            cnct.close();
+            StockSelect();
+            
+            jButton6MouseClicked(evt);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bt_save_supMouseClicked
+
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        comboprod.setSelectedItem(-1);
+        jComboBox2.setSelectedItem(-1);
+            txqtystock.setText("");
+    }//GEN-LAST:event_jButton6MouseClicked
+
+    private void btEditStMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditStMouseClicked
+         if (txqtystock.getText().isEmpty())/*||txproduct_name.getText().isEmpty()|| dropsup.getSelectedItem()==null|| txcost.getText().isEmpty()|| txsaleprice.getText().isEmpty()|| txleadtime.getText().isEmpty()|| txunit.getText().isEmpty()|| txminqty.getText().isEmpty()|| dropcategory.getSelectedItem()==null)*/ {
+            JOptionPane.showMessageDialog(this, "Select the category to be edited");
+        } else { 
+            try {
+
+               // DateTr = transDate.getDate();
+      // transDate = new java.sql.Date(DateTr.getTime());
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+
+                prepst = cnct.prepareStatement("update stock SET date= ?, transaction= ?, quantity = ? where product_name= ?)");
+                       
+
+               // prepst.setDate(1, transDate);
+                prepst.setString(2, comboprod.getSelectedItem().toString());
+                prepst.setString(3, jComboBox2.getSelectedItem().toString());
+                prepst.setString(4, txqtystock.getText());
+            
+
+                int row1 = prepst.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Category updated sucesfully");
+                cnct.close();
+                StockSelect();
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         }
+        
+    }//GEN-LAST:event_btEditStMouseClicked
+
+    private void btDelStMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDelStMouseClicked
+         
+        if (txqtystock.getText().isEmpty())/*||txproduct_name.getText().isEmpty()|| dropsup.getSelectedItem()==null|| txcost.getText().isEmpty()|| txsaleprice.getText().isEmpty()|| txleadtime.getText().isEmpty()|| txunit.getText().isEmpty()|| txminqty.getText().isEmpty()|| dropcategory.getSelectedItem()==null)*/ {
+            JOptionPane.showMessageDialog(this, "Select the category to be deleted");
+        } else { 
+        
+            try {
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+
+                prepst = cnct.prepareStatement("Delete from product where product_name=?");
+                prepst.setString(1, comboprod.getSelectedItem().toString());
+                prepst.execute();
+                StockSelect();
+                JOptionPane.showMessageDialog(null, "Product deleted sucesfully");
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        }
+    }//GEN-LAST:event_btDelStMouseClicked
 
     /**
      * @param args the command line arguments
@@ -199,9 +389,10 @@ public class Stock extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable SupTable;
+    private javax.swing.JButton btDelSt;
+    private javax.swing.JButton btEditSt;
     private javax.swing.JButton bt_save_sup;
-    private javax.swing.JComboBox<String> comboprod;
+    private javax.swing.JComboBox comboprod;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -210,8 +401,13 @@ public class Stock extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable stockTable;
+    private com.toedter.calendar.JDateChooser transDate;
+    private javax.swing.JTextField txid;
     private javax.swing.JTextField txqtystock;
     // End of variables declaration//GEN-END:variables
 }
