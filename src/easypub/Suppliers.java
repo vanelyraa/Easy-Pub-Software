@@ -6,21 +6,24 @@
 package easypub;
 
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import net.proteanit.sql.DbUtils;
+
+
 /**
  *
  * @author vanel
  */
+
 public class Suppliers extends javax.swing.JFrame {
 
     /**
@@ -28,9 +31,48 @@ public class Suppliers extends javax.swing.JFrame {
      */
     public Suppliers() {
         initComponents();
+        getSupplierId();
+        SupplierSelect();
         
     }
     
+    Connection cnct = null;
+    Statement stat = null;
+    ResultSet resst = null;
+    PreparedStatement prepst = null;
+    
+    public void getSupplierId() {
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select MAX(supplier_ID) from product");
+            resst.next();
+            resst.getString("MAX(supplier_ID)");
+
+            if (resst.getString("MAX(supplier_ID)") == null) {
+                txsupplier_id.setText("S001");
+            } else {
+                long prodID = Long.parseLong(resst.getString("MAX(supplier_ID)").substring(1, resst.getString("MAX(supplier_ID)").length()));
+                prodID++;
+                txsupplier_id.setText("S" + String.format("%03d", prodID));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void SupplierSelect() {
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select supplier_ID, supplier_name, adress, country, eircode, email, phone, contact from supplier");
+            SupTable.setModel(DbUtils.resultSetToTableModel(resst));
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,6 +107,8 @@ public class Suppliers extends javax.swing.JFrame {
         txcountry = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
+        txsupplier_id = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(950, 600));
@@ -106,6 +150,11 @@ public class Suppliers extends javax.swing.JFrame {
         jLabel3.setBounds(390, 10, 200, 80);
 
         bt_save_sup.setText("Save");
+        bt_save_sup.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_save_supMouseClicked(evt);
+            }
+        });
         bt_save_sup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_save_supActionPerformed(evt);
@@ -115,6 +164,11 @@ public class Suppliers extends javax.swing.JFrame {
         bt_save_sup.setBounds(630, 560, 70, 23);
 
         jButton5.setText("Edit");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -125,6 +179,11 @@ public class Suppliers extends javax.swing.JFrame {
 
         jButton6.setText("Clear");
         jButton6.setActionCommand("Clear data");
+        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton6MouseClicked(evt);
+            }
+        });
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -133,49 +192,54 @@ public class Suppliers extends javax.swing.JFrame {
         getContentPane().add(jButton6);
         jButton6.setBounds(860, 560, 57, 23);
         getContentPane().add(txsupplier_name);
-        txsupplier_name.setBounds(600, 150, 300, 20);
+        txsupplier_name.setBounds(600, 200, 300, 20);
 
         jLabel2.setText("Name");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(600, 130, 27, 14);
+        jLabel2.setBounds(600, 180, 27, 14);
         getContentPane().add(txadress);
-        txadress.setBounds(600, 200, 300, 20);
+        txadress.setBounds(600, 250, 300, 20);
 
         jLabel4.setText("Adress");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(600, 180, 40, 14);
+        jLabel4.setBounds(600, 230, 40, 14);
         getContentPane().add(txeircode);
-        txeircode.setBounds(600, 250, 70, 20);
+        txeircode.setBounds(600, 300, 70, 20);
 
         jLabel5.setText("Eircode");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(600, 230, 40, 14);
+        jLabel5.setBounds(600, 280, 40, 14);
         getContentPane().add(txphone);
-        txphone.setBounds(600, 350, 130, 20);
+        txphone.setBounds(600, 400, 130, 20);
 
         jLabel7.setText("Phone");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(600, 330, 60, 14);
+        jLabel7.setBounds(600, 380, 60, 14);
         getContentPane().add(txcontact);
-        txcontact.setBounds(760, 350, 140, 20);
+        txcontact.setBounds(760, 400, 140, 20);
 
         jLabel8.setText("Contact");
         getContentPane().add(jLabel8);
-        jLabel8.setBounds(760, 330, 60, 14);
+        jLabel8.setBounds(760, 380, 60, 14);
         getContentPane().add(txemail);
-        txemail.setBounds(600, 300, 220, 20);
+        txemail.setBounds(600, 350, 220, 20);
 
         jLabel9.setText("Email");
         getContentPane().add(jLabel9);
-        jLabel9.setBounds(600, 280, 80, 14);
+        jLabel9.setBounds(600, 330, 80, 14);
         getContentPane().add(txcountry);
-        txcountry.setBounds(710, 250, 190, 20);
+        txcountry.setBounds(710, 300, 190, 20);
 
         jLabel10.setText("Country");
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(710, 230, 40, 14);
+        jLabel10.setBounds(710, 280, 40, 14);
 
         jButton7.setText("Delete");
+        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton7MouseClicked(evt);
+            }
+        });
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -183,29 +247,35 @@ public class Suppliers extends javax.swing.JFrame {
         });
         getContentPane().add(jButton7);
         jButton7.setBounds(790, 560, 63, 23);
+        getContentPane().add(txsupplier_id);
+        txsupplier_id.setBounds(600, 150, 300, 20);
+
+        jLabel6.setText("ID");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(600, 130, 11, 10);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_save_supActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_save_supActionPerformed
-        
-            /*String supplier_name = txsupplier_name.getText();
-            String adress = txadress.getText();
-            String country = txcountry.getText();
-            String eircode = txeircode.getText();
-            String email = txemail.getText();
-            String phone = txphone.getText();
-            String contact = txcontact.getText();*/
-            
-            
-            
-            
+          
     }//GEN-LAST:event_bt_save_supActionPerformed
 
     private void SupTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupTableMouseClicked
+        DefaultTableModel tableProd = (DefaultTableModel)SupTable.getModel();
+        int rowIndex = SupTable.getSelectedRow();
+        txsupplier_id.setText(tableProd.getValueAt(rowIndex, 0).toString());
+        txsupplier_name.setText(tableProd.getValueAt(rowIndex, 1).toString());
         
+        txadress.setText(tableProd.getValueAt(rowIndex, 2).toString());
+        txcountry.setText(tableProd.getValueAt(rowIndex, 3).toString());
+        txeircode.setText(tableProd.getValueAt(rowIndex, 4).toString());
+        txemail.setText(tableProd.getValueAt(rowIndex, 5).toString());
+        txphone.setText(tableProd.getValueAt(rowIndex, 6).toString());
+        txcontact.setText(tableProd.getValueAt(rowIndex, 7).toString());
         
+        bt_save_sup.setEnabled(false);
     }//GEN-LAST:event_SupTableMouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -222,6 +292,103 @@ public class Suppliers extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
        
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        if (txsupplier_id.getText().isEmpty())/*||txproduct_name.getText().isEmpty()|| dropsup.getSelectedItem()==null|| txcost.getText().isEmpty()|| txsaleprice.getText().isEmpty()|| txleadtime.getText().isEmpty()|| txunit.getText().isEmpty()|| txminqty.getText().isEmpty()|| dropcategory.getSelectedItem()==null)*/ {
+            JOptionPane.showMessageDialog(this, "Select the supplier to be edited");
+        } else {
+            try {
+
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+
+                prepst = cnct.prepareStatement("update supplier SET  supplier_name= ?, adress= ?, country= ?, eircode= ?, email= ?, phone= ?, contact= ? where supplier_ID= ?");
+                        
+
+                prepst.setString(1, txsupplier_id.getText());
+            prepst.setString(2, txsupplier_name.getText());
+            prepst.setString(3, txadress.getText());
+            prepst.setString(4, txcountry.getText());
+            prepst.setString(5, txeircode.getText());
+            prepst.setString(6, txemail.getText());
+            prepst.setString(7, txphone.getText());
+            prepst.setString(8, txcontact.getText());
+            
+
+                int row1 = prepst.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Supplier updated sucesfully");
+                cnct.close();
+                SupplierSelect();
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
+        if (txsupplier_id.getText().isEmpty())/*||txproduct_name.getText().isEmpty()|| dropsup.getSelectedItem()==null|| txcost.getText().isEmpty()|| txsaleprice.getText().isEmpty()|| txleadtime.getText().isEmpty()|| txunit.getText().isEmpty()|| txminqty.getText().isEmpty()|| dropcategory.getSelectedItem()==null)*/ {
+            JOptionPane.showMessageDialog(this, "Select the supplier to be deleted");
+        } else {
+            try {
+
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+
+                
+                prepst = cnct.prepareStatement("Delete from supplier where supplier_ID= ?");
+                        
+
+                prepst.setString(1, txsupplier_id.getText());
+             prepst.execute();
+             SupplierSelect();
+
+                JOptionPane.showMessageDialog(this, "Supplier deleted sucesfully");
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton7MouseClicked
+
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        txsupplier_id.setText("");
+        txsupplier_name.setText("");        
+        txadress.setText("");
+        txcountry.setText("");
+        txeircode.setText("");
+        txemail.setText("");
+        txphone.setText("");
+        txcontact.setText("");
+    }//GEN-LAST:event_jButton6MouseClicked
+
+    private void bt_save_supMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_save_supMouseClicked
+        try {
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            prepst = cnct.prepareStatement("insert into supplier values(?,?,?,?,?,?,?,?)");
+            prepst.setString(1, txsupplier_id.getText());
+            prepst.setString(2, txsupplier_name.getText());
+            prepst.setString(3, txadress.getText());
+            prepst.setString(4, txcountry.getText());
+            prepst.setString(5, txeircode.getText());
+            prepst.setString(6, txemail.getText());
+            prepst.setString(7, txphone.getText());
+            prepst.setString(8, txcontact.getText());
+           
+            
+
+            int row = prepst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Supplier created sucesfully");
+           
+            cnct.close();
+            SupplierSelect();
+            
+            jButton6MouseClicked(evt);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          
+    }//GEN-LAST:event_bt_save_supMouseClicked
 
     /**
      * @param args the command line arguments
@@ -274,6 +441,7 @@ public class Suppliers extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -285,6 +453,7 @@ public class Suppliers extends javax.swing.JFrame {
     private javax.swing.JTextField txeircode;
     private javax.swing.JTextField txemail;
     private javax.swing.JTextField txphone;
+    private javax.swing.JTextField txsupplier_id;
     private javax.swing.JTextField txsupplier_name;
     // End of variables declaration//GEN-END:variables
 }
