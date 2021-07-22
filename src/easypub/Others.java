@@ -373,8 +373,14 @@ public class Others extends javax.swing.JFrame {
 
             create.executeUpdate();
             JOptionPane.showMessageDialog(this, "User created sucesfully");
-            //getUserId();
+           
             cnct.close();
+            
+            txUseuId.setText("");
+            txpassword.setText("");
+            txusername.setText("");
+            txlname.setText("");
+            txemail.setText("");
 
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
