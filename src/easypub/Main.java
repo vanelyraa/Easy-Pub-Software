@@ -103,7 +103,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_suppliersActionPerformed
 
     private void bt_salesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salesActionPerformed
-       Sales b = new Sales();
+       Sale b = new Sale();
         b.setVisible(true);
     }//GEN-LAST:event_bt_salesActionPerformed
 
