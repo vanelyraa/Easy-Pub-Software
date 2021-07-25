@@ -70,13 +70,15 @@ public class Stock extends javax.swing.JFrame {
    
             try {
                 cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-                prepst = cnct.prepareStatement("select * from product");
+                stat = cnct.createStatement();
+                resst = stat.executeQuery("select * from product");
             
-            resst = prepst.executeQuery();
+            
             comboprod.removeAllItems();
             while(resst.next())
             {
-           // comboprod.addItem(new ProductDropB(resst.getString(1),resst.getString(2)));
+            String name = resst.getString("product_name");
+             comboprod.addItem(name);
             }
             }catch (SQLException ex) {
                 Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,7 +109,6 @@ public class Stock extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         comboprod = new javax.swing.JComboBox();
         jComboBox2 = new javax.swing.JComboBox<>();
-        transDate = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
         btEditSt = new javax.swing.JButton();
         btDelSt = new javax.swing.JButton();
@@ -115,7 +116,6 @@ public class Stock extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(950, 600));
         setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(null);
 
@@ -202,10 +202,6 @@ public class Stock extends javax.swing.JFrame {
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "goods receipt", "void", "waste" }));
         getContentPane().add(jComboBox2);
         jComboBox2.setBounds(640, 250, 110, 20);
-
-        transDate.setDateFormatString("dd-MM-yyyy");
-        getContentPane().add(transDate);
-        transDate.setBounds(640, 350, 110, 20);
 
         jLabel6.setText("Quantity");
         getContentPane().add(jLabel6);
@@ -406,7 +402,6 @@ public class Stock extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTable stockTable;
-    private com.toedter.calendar.JDateChooser transDate;
     private javax.swing.JTextField txid;
     private javax.swing.JTextField txqtystock;
     // End of variables declaration//GEN-END:variables
