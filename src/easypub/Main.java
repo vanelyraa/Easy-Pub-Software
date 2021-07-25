@@ -5,6 +5,8 @@
  */
 package easypub;
 
+import java.awt.Toolkit;
+
 /**
  *
  * @author vanel
@@ -16,7 +18,19 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        setExtendedState(Main.MAXIMIZED_BOTH);
     }
+    
+   /* this.setAlwaysOnTop(true);
+    Toolkit tk = Toolkit.getDefaultToolkit();
+    int vert = (int)tk.getScreenSize().getWidth();
+    int horz = (int)tk.getScreenSize().getHeight();
+    insets maxScr = Toolkit.getDefaultToolkit().getScreeninsets(getGraphicsConfiguration());
+    int screenSize = maxScr.bottom;
+    
+    this.setSize(vert, horz);*/
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,72 +41,81 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         bt_suppliers = new javax.swing.JButton();
-        bt_sales = new javax.swing.JButton();
+        bt_others = new javax.swing.JButton();
         bt_products = new javax.swing.JButton();
         bt_stock = new javax.swing.JButton();
-        bt_others = new javax.swing.JButton();
+        bt_sales = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(950, 600));
         setMinimumSize(new java.awt.Dimension(950, 600));
-        getContentPane().setLayout(null);
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 100));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setText("EasyPub Dashboard");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(230, 10, 490, 58);
+        jPanel2.add(jLabel1);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         bt_suppliers.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         bt_suppliers.setText("Suppliers");
+        bt_suppliers.setPreferredSize(new java.awt.Dimension(200, 120));
         bt_suppliers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_suppliersActionPerformed(evt);
             }
         });
-        getContentPane().add(bt_suppliers);
-        bt_suppliers.setBounds(650, 150, 200, 130);
-
-        bt_sales.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        bt_sales.setText("Sales");
-        bt_sales.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_salesActionPerformed(evt);
-            }
-        });
-        getContentPane().add(bt_sales);
-        bt_sales.setBounds(110, 150, 200, 130);
-
-        bt_products.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        bt_products.setText("Products");
-        bt_products.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_productsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(bt_products);
-        bt_products.setBounds(380, 150, 200, 130);
-
-        bt_stock.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        bt_stock.setText("Stock");
-        bt_stock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_stockActionPerformed(evt);
-            }
-        });
-        getContentPane().add(bt_stock);
-        bt_stock.setBounds(250, 350, 200, 130);
+        jPanel1.add(bt_suppliers, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
 
         bt_others.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         bt_others.setText("Others");
+        bt_others.setPreferredSize(new java.awt.Dimension(200, 120));
         bt_others.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_othersActionPerformed(evt);
             }
         });
-        getContentPane().add(bt_others);
-        bt_others.setBounds(530, 350, 200, 130);
+        jPanel1.add(bt_others, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 50, -1, -1));
+
+        bt_products.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        bt_products.setText("Products");
+        bt_products.setPreferredSize(new java.awt.Dimension(200, 120));
+        bt_products.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_productsActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bt_products, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 50, -1, -1));
+
+        bt_stock.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        bt_stock.setText("Stock");
+        bt_stock.setPreferredSize(new java.awt.Dimension(200, 120));
+        bt_stock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_stockActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bt_stock, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 220, -1, -1));
+
+        bt_sales.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        bt_sales.setText("Sales");
+        bt_sales.setPreferredSize(new java.awt.Dimension(200, 120));
+        bt_sales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_salesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bt_sales, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 220, -1, -1));
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -164,5 +187,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton bt_stock;
     private javax.swing.JButton bt_suppliers;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }
