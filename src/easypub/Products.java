@@ -95,13 +95,16 @@ public class Products extends javax.swing.JFrame {
    
             try {
                 cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-                prepst = cnct.prepareStatement("select * from category");
+                
+                stat = cnct.createStatement();
+                resst = stat.executeQuery("select * from category");
             
-            resst = prepst.executeQuery();
+            
             dropcategory.removeAllItems();
             while(resst.next())
             {
-            //dropcategory.addItem(new CategoryDropB(resst.getString(1),resst.getString(2)));
+           String name = resst.getString("category");
+             dropcategory.addItem(name);
             }
             }catch (SQLException ex) {
                 Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,10 +131,11 @@ public class Products extends javax.swing.JFrame {
     }
     
     public void SupplierDb(){
-   try{
+  /* try{
          cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
          stat = cnct.createStatement();
-         resst = stat.executeQuery("select supplier_name from supplier");
+         resst = stat.executeQuery("select * from supplier");
+         dropsup.removeAllItems();
          while(resst.next()){
              String name = resst.getString("supplier_name");
              dropsup.addItem(name);
@@ -139,9 +143,9 @@ public class Products extends javax.swing.JFrame {
    }catch (SQLException ex) {
                 Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
             }
-   }
+   }*/
          
-           /* try {
+            try {
                 cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
                 prepst = cnct.prepareStatement("select * from supplier");
             
@@ -149,13 +153,13 @@ public class Products extends javax.swing.JFrame {
             dropsup.removeAllItems();
             while(resst.next())
             {
-            //dropsup.addItem(new SupplierDropB(resst.getString(1),resst.getString(2)));
+            dropsup.addItem(new SupplierDropB(resst.getString(1),resst.getString(2)));
             }
             }catch (SQLException ex) {
                 Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
             }  
              
-        }*/
+        }
             
        
     
