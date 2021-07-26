@@ -31,8 +31,7 @@ public class Others extends javax.swing.JFrame {
     public Others() {
         initComponents();
         getUserId();
-        CategorySelect();
-        getCatId();
+        
 
     }
 
@@ -62,136 +61,68 @@ public class Others extends javax.swing.JFrame {
 
     }
 
-    public void getCatId() {
-        try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("select MAX(category_ID) from category");
-            resst.next();
-            resst.getString("MAX(category_ID)");
-
-            if (resst.getString("MAX(category_ID)") == null) {
-                hcecking.setText("C01");
-            } else {
-                long catID = Long.parseLong(resst.getString("MAX(category_ID)").substring(1, resst.getString("MAX(category_ID)").length()));
-                catID++;
-                hcecking.setText("C" + String.format("%02d", catID));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    public void CategorySelect() {
-        try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("select category_ID, category from category");
-            CatTable.setModel(DbUtils.resultSetToTableModel(resst));
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 100), new java.awt.Dimension(0, 100), new java.awt.Dimension(32767, 100));
-        btGenRep = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
+        jLabel12 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        txUseuId = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
         txusername = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txpassword = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        btCreateU = new javax.swing.JButton();
-        textField1 = new java.awt.TextField();
-        jPasswordField2 = new javax.swing.JPasswordField();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        txcategory = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        CatTable = new javax.swing.JTable();
-        btAddCat = new javax.swing.JButton();
-        btEditCat = new javax.swing.JButton();
-        btDelCat = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
-        txlname = new javax.swing.JTextField();
         txemail = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        txUseuId = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        hcecking = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txpassword = new javax.swing.JTextField();
+        btCreateU = new javax.swing.JButton();
+        txlname = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        textField1 = new java.awt.TextField();
+        btGenRep = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(950, 600));
         setMinimumSize(new java.awt.Dimension(950, 600));
-        getContentPane().setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        jLabel1.setText("Categories");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(600, 290, 260, 60);
+        jPanel1.setPreferredSize(new java.awt.Dimension(200, 200));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jLabel2.setText("Users");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(170, 20, 130, 50);
 
-        filler1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(filler1);
-        filler1.setBounds(215, 96, 0, 100);
-
-        btGenRep.setText("Generate");
-        getContentPane().add(btGenRep);
-        btGenRep.setBounds(520, 230, 77, 23);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox1);
-        jComboBox1.setBounds(520, 130, 380, 20);
-
-        jLabel4.setText("Type");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(520, 110, 24, 14);
-
-        jLabel5.setText("Dates");
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(520, 170, 40, 14);
-
-        jSeparator1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        getContentPane().add(jSeparator1);
-        jSeparator1.setBounds(440, 20, 10, 560);
+        jLabel12.setText("User ID");
 
         jLabel3.setText("Name");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(60, 170, 40, 14);
-        getContentPane().add(txusername);
-        txusername.setBounds(60, 190, 350, 20);
+
+        txUseuId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txUseuIdActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Last name");
 
         jLabel6.setText("Email");
-        getContentPane().add(jLabel6);
-        jLabel6.setBounds(60, 270, 24, 14);
-        getContentPane().add(txpassword);
-        txpassword.setBounds(60, 340, 110, 20);
 
         jLabel7.setText("Password");
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(60, 320, 46, 14);
 
-        jLabel8.setText("Confirm password");
-        getContentPane().add(jLabel8);
-        jLabel8.setBounds(60, 370, 110, 14);
-
+        btCreateU.setBackground(new java.awt.Color(0, 102, 51));
+        btCreateU.setForeground(new java.awt.Color(204, 255, 204));
         btCreateU.setText("Create");
         btCreateU.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -203,127 +134,213 @@ public class Others extends javax.swing.JFrame {
                 btCreateUActionPerformed(evt);
             }
         });
-        getContentPane().add(btCreateU);
-        btCreateU.setBounds(60, 430, 65, 23);
 
-        textField1.setText("textField1");
-        getContentPane().add(textField1);
-        textField1.setBounds(520, 190, 60, 20);
-
-        jPasswordField2.setText("jPasswordField2");
-        getContentPane().add(jPasswordField2);
-        jPasswordField2.setBounds(60, 390, 112, 20);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(151, 151, 151)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(130, 130, 130))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(276, 276, 276))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(268, 268, 268))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(263, 263, 263))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(txUseuId)
+                        .addGap(199, 199, 199))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(txpassword)
+                        .addGap(148, 148, 148))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(243, 243, 243))
+                    .addComponent(txusername, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txemail, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txlname, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btCreateU, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(56, 56, 56))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txUseuId)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txusername)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txlname, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txemail)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txpassword)
+                .addGap(28, 28, 28)
+                .addComponent(btCreateU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(23, 23, 23))
+        );
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jLabel9.setText("Reports");
-        getContentPane().add(jLabel9);
-        jLabel9.setBounds(630, 20, 190, 60);
 
-        jLabel10.setText("New category");
-        getContentPane().add(jLabel10);
-        jLabel10.setBounds(520, 430, 80, 14);
-        getContentPane().add(txcategory);
-        txcategory.setBounds(520, 450, 110, 20);
+        jLabel4.setText("Type");
 
-        CatTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Category_ID", "Name"
-            }
-        ));
-        CatTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                CatTableMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(CatTable);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(670, 380, 230, 140);
+        jLabel5.setText("Dates");
 
-        btAddCat.setText("Add");
-        btAddCat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btAddCatMouseClicked(evt);
-            }
-        });
-        btAddCat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAddCatActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btAddCat);
-        btAddCat.setBounds(520, 550, 70, 23);
+        textField1.setText("textField1");
 
-        btEditCat.setText("Edit");
-        btEditCat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btEditCatMouseClicked(evt);
-            }
-        });
-        btEditCat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btEditCatActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btEditCat);
-        btEditCat.setBounds(600, 550, 73, 23);
+        btGenRep.setBackground(new java.awt.Color(0, 102, 51));
+        btGenRep.setForeground(new java.awt.Color(204, 255, 204));
+        btGenRep.setText("Generate");
 
-        btDelCat.setText("Delete");
-        btDelCat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btDelCatMouseClicked(evt);
-            }
-        });
-        getContentPane().add(btDelCat);
-        btDelCat.setBounds(680, 550, 70, 23);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(99, 99, 99)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(135, 135, 135))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(132, 132, 132))
+                                    .addComponent(textField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(59, 59, 59))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btGenRep, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 24, Short.MAX_VALUE)))))
+                .addGap(36, 36, 36))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textField1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                .addGap(231, 231, 231)
+                .addComponent(btGenRep, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
+        );
 
-        jLabel11.setText("Last name");
-        getContentPane().add(jLabel11);
-        jLabel11.setBounds(60, 220, 60, 14);
-        getContentPane().add(txlname);
-        txlname.setBounds(60, 240, 350, 20);
-        getContentPane().add(txemail);
-        txemail.setBounds(60, 290, 350, 20);
+        jPanel3.setBackground(new java.awt.Color(0, 102, 51));
 
-        jLabel12.setText("User ID");
-        getContentPane().add(jLabel12);
-        jLabel12.setBounds(60, 120, 40, 14);
+        jLabel8.setBackground(new java.awt.Color(204, 255, 204));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(204, 255, 204));
+        jLabel8.setText("Other features");
 
-        txUseuId.setText("ID number");
-        getContentPane().add(txUseuId);
-        txUseuId.setBounds(60, 140, 130, 14);
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(266, 266, 266))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
-        jLabel14.setText("Category ID");
-        getContentPane().add(jLabel14);
-        jLabel14.setBounds(520, 380, 80, 14);
+        jPanel4.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 90, 15));
 
-        hcecking.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hceckingActionPerformed(evt);
-            }
-        });
-        getContentPane().add(hcecking);
-        hcecking.setBounds(520, 400, 110, 20);
+        jButton1.setBackground(new java.awt.Color(0, 102, 51));
+        jButton1.setForeground(new java.awt.Color(204, 255, 204));
+        jButton1.setText("jButton1");
+        jPanel4.add(jButton1);
 
-        jButton1.setText("Clear");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
-            }
-        });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(760, 550, 60, 23);
+        jButton2.setBackground(new java.awt.Color(0, 102, 51));
+        jButton2.setForeground(new java.awt.Color(204, 255, 204));
+        jButton2.setText("jButton2");
+        jPanel4.add(jButton2);
+
+        jButton3.setBackground(new java.awt.Color(0, 102, 51));
+        jButton3.setForeground(new java.awt.Color(204, 255, 204));
+        jButton3.setText("jButton3");
+        jPanel4.add(jButton3);
+
+        jButton4.setBackground(new java.awt.Color(0, 102, 51));
+        jButton4.setForeground(new java.awt.Color(204, 255, 204));
+        jButton4.setText("jButton4");
+        jPanel4.add(jButton4);
+
+        jButton5.setBackground(new java.awt.Color(0, 102, 51));
+        jButton5.setForeground(new java.awt.Color(204, 255, 204));
+        jButton5.setText("jButton5");
+        jPanel4.add(jButton5);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
 
         pack();
         setLocationRelativeTo(null);
@@ -333,42 +350,14 @@ public class Others extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btCreateUActionPerformed
 
-    private void btAddCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddCatActionPerformed
-
-
-    }//GEN-LAST:event_btAddCatActionPerformed
-
-    private void btEditCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditCatActionPerformed
-
-    }//GEN-LAST:event_btEditCatActionPerformed
-
-    private void btDelCatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDelCatMouseClicked
-        if (txcategory.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Select the category to be deleted");
-        } else {
-            try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-
-                PreparedStatement delete = cnct.prepareStatement("Delete from category where category_ID=?");
-                delete.setString(1, hcecking.getText());
-                delete.execute();
-                CategorySelect();
-                JOptionPane.showMessageDialog(null, "Category deleted sucesfully");
-
-            } catch (SQLException ex) {
-                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btDelCatMouseClicked
-
     private void btCreateUMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCreateUMouseClicked
         try {
             cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             PreparedStatement create = cnct.prepareStatement("insert into login values(?,?,?,?,?)");
             create.setString(1, txUseuId.getText());
             create.setString(2, txpassword.getText());
-            create.setString(3, txusername.getText());
-            create.setString(4, txlname.getText());
+            create.setString(3, txUseuId.getText());
+            create.setString(4, txusername.getText());
             create.setString(5, txemail.getText());
 
             create.executeUpdate();
@@ -378,8 +367,8 @@ public class Others extends javax.swing.JFrame {
             
             txUseuId.setText("");
             txpassword.setText("");
+            txUseuId.setText("");
             txusername.setText("");
-            txlname.setText("");
             txemail.setText("");
 
         } catch (SQLException ex) {
@@ -388,69 +377,9 @@ public class Others extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btCreateUMouseClicked
 
-    private void btAddCatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAddCatMouseClicked
-        try {
-
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            PreparedStatement add = cnct.prepareStatement("insert into category (category_ID, category) values(?,?)");
-            add.setString(1, hcecking.getText());
-            add.setString(2, txcategory.getText());
-            int row = add.executeUpdate();
-
-            JOptionPane.showMessageDialog(this, "New category registered");
-            cnct.close();
-            CategorySelect();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btAddCatMouseClicked
-
-    private void CatTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CatTableMouseClicked
-        DefaultTableModel tableCat = (DefaultTableModel) CatTable.getModel();
-        int rowIndex = CatTable.getSelectedRow();
-        hcecking.setText(tableCat.getValueAt(rowIndex, 0).toString());
-        txcategory.setText(tableCat.getValueAt(rowIndex, 1).toString());
-    }//GEN-LAST:event_CatTableMouseClicked
-
-    private void btEditCatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditCatMouseClicked
-        if (txcategory.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Select the category to be deleted");
-        } else {
-            try {
-
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-
-                PreparedStatement edit = cnct.prepareStatement("update category SET category = ? where category_ID = ?");
-
-                edit.setString(1, txcategory.getText());
-                edit.setString(2, hcecking.getText());
-
-                int row1 = edit.executeUpdate();
-
-                JOptionPane.showMessageDialog(this, "Category updated sucesfully");
-                cnct.close();
-                CategorySelect();
-            } catch (SQLException ex) {
-                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-
-    }//GEN-LAST:event_btEditCatMouseClicked
-
-    private void hceckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hceckingActionPerformed
+    private void txUseuIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txUseuIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_hceckingActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        hcecking.setText("");
-        txcategory.setText("");
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_txUseuIdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -488,21 +417,16 @@ public class Others extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable CatTable;
-    private javax.swing.JButton btAddCat;
     private javax.swing.JButton btCreateU;
-    private javax.swing.JButton btDelCat;
-    private javax.swing.JButton btEditCat;
     private javax.swing.JButton btGenRep;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.JTextField hcecking;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -511,12 +435,12 @@ public class Others extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private java.awt.TextField textField1;
-    private javax.swing.JLabel txUseuId;
-    private javax.swing.JTextField txcategory;
+    private javax.swing.JTextField txUseuId;
     private javax.swing.JTextField txemail;
     private javax.swing.JTextField txlname;
     private javax.swing.JTextField txpassword;
@@ -538,8 +462,8 @@ public class Others extends javax.swing.JFrame {
                     
                     JOptionPane.showMessageDialog(this, "New user registered", "Sucess", JOptionPane.ERROR_MESSAGE);
                     
+                    txUseuId.setText("");
                     txusername.setText("");
-                    txlname.setText("");
                     txemail.setText("");
                     txpassword.setText("");
                 } catch (SQLException ex) {
