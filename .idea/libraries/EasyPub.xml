@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="EasyPub">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/EasyPub.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
