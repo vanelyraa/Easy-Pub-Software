@@ -95,29 +95,45 @@ public class Stock extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        btDelSt = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         stockTable = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 200), new java.awt.Dimension(0, 200), new java.awt.Dimension(32767, 200));
-        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
         bt_save_sup = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txqtystock = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        comboprod = new javax.swing.JComboBox();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
         btEditSt = new javax.swing.JButton();
-        btDelSt = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txqtystock = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
         txid = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        comboprod = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(950, 600));
-        getContentPane().setLayout(null);
+        getContentPane().setLayout(new java.awt.GridLayout());
+
+        btDelSt.setBackground(new java.awt.Color(0, 102, 51));
+        btDelSt.setForeground(new java.awt.Color(204, 255, 204));
+        btDelSt.setText("Delete");
+        btDelSt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btDelStMouseClicked(evt);
+            }
+        });
 
         stockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -137,22 +153,10 @@ public class Stock extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(stockTable);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 130, 580, 450);
-        getContentPane().add(jTextField1);
-        jTextField1.setBounds(70, 100, 117, 20);
-
         jLabel1.setText("Search");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(30, 100, 33, 14);
-        getContentPane().add(filler1);
-        filler1.setBounds(391, 0, 0, 303);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        jLabel3.setText("Stock");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(390, 10, 130, 80);
-
+        bt_save_sup.setBackground(new java.awt.Color(0, 102, 51));
+        bt_save_sup.setForeground(new java.awt.Color(204, 255, 204));
         bt_save_sup.setText("Save");
         bt_save_sup.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -164,9 +168,18 @@ public class Stock extends javax.swing.JFrame {
                 bt_save_supActionPerformed(evt);
             }
         });
-        getContentPane().add(bt_save_sup);
-        bt_save_sup.setBounds(630, 560, 70, 23);
 
+        btEditSt.setBackground(new java.awt.Color(0, 102, 51));
+        btEditSt.setForeground(new java.awt.Color(204, 255, 204));
+        btEditSt.setText("Edit");
+        btEditSt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btEditStMouseClicked(evt);
+            }
+        });
+
+        jButton6.setBackground(new java.awt.Color(0, 102, 51));
+        jButton6.setForeground(new java.awt.Color(204, 255, 204));
         jButton6.setText("Clear");
         jButton6.setActionCommand("Clear data");
         jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -179,57 +192,147 @@ public class Stock extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton6);
-        jButton6.setBounds(860, 560, 70, 23);
-
-        jLabel2.setText("Product");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(640, 130, 50, 14);
-
-        jLabel4.setText("Transaction type");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(640, 230, 90, 14);
-        getContentPane().add(txqtystock);
-        txqtystock.setBounds(640, 300, 110, 20);
 
         jLabel5.setText("Date");
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(640, 330, 60, 14);
-
-        getContentPane().add(comboprod);
-        comboprod.setBounds(640, 150, 200, 22);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "goods receipt", "void", "waste" }));
-        getContentPane().add(jComboBox2);
-        jComboBox2.setBounds(640, 250, 110, 20);
 
         jLabel6.setText("Quantity");
-        getContentPane().add(jLabel6);
-        jLabel6.setBounds(640, 280, 60, 14);
 
-        btEditSt.setText("Edit");
-        btEditSt.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btEditStMouseClicked(evt);
-            }
-        });
-        getContentPane().add(btEditSt);
-        btEditSt.setBounds(700, 560, 51, 23);
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "goods receipt", "void", "waste" }));
 
-        btDelSt.setText("Delete");
-        btDelSt.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btDelStMouseClicked(evt);
-            }
-        });
-        getContentPane().add(btDelSt);
-        btDelSt.setBounds(780, 560, 63, 23);
-        getContentPane().add(txid);
-        txid.setBounds(640, 200, 110, 20);
+        jLabel4.setText("Transaction type");
 
         jLabel7.setText("ID");
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(640, 180, 60, 14);
+
+        comboprod.setPreferredSize(new java.awt.Dimension(30, 30));
+        comboprod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboprodActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Product");
+
+        jPanel2.setBackground(new java.awt.Color(0, 102, 51));
+        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(204, 255, 204));
+        jLabel3.setText("Stock");
+        jPanel2.add(jLabel3);
+
+        jPanel3.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 90, 10));
+
+        jButton1.setBackground(new java.awt.Color(0, 102, 51));
+        jButton1.setForeground(new java.awt.Color(204, 255, 204));
+        jButton1.setText("jButton1");
+        jPanel3.add(jButton1);
+
+        jButton2.setBackground(new java.awt.Color(0, 102, 51));
+        jButton2.setForeground(new java.awt.Color(204, 255, 204));
+        jButton2.setText("jButton2");
+        jPanel3.add(jButton2);
+
+        jButton3.setBackground(new java.awt.Color(0, 102, 51));
+        jButton3.setForeground(new java.awt.Color(204, 255, 204));
+        jButton3.setText("jButton3");
+        jPanel3.add(jButton3);
+
+        jButton4.setBackground(new java.awt.Color(0, 102, 51));
+        jButton4.setForeground(new java.awt.Color(204, 255, 204));
+        jButton4.setText("jButton4");
+        jPanel3.add(jButton4);
+
+        jButton5.setBackground(new java.awt.Color(0, 102, 51));
+        jButton5.setForeground(new java.awt.Color(204, 255, 204));
+        jButton5.setText("jButton5");
+        jPanel3.add(jButton5);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(14, 14, 14)
+                                        .addComponent(bt_save_sup, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btEditSt, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btDelSt, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txqtystock, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txid, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(comboprod, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txid, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txqtystock, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btDelSt)
+                            .addComponent(bt_save_sup)
+                            .addComponent(btEditSt)
+                            .addComponent(jButton6))))
+                .addGap(19, 19, 19))
+        );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btDelSt, btEditSt, bt_save_sup, jButton6});
+
+        getContentPane().add(jPanel1);
 
         pack();
         setLocationRelativeTo(null);
@@ -342,6 +445,10 @@ public class Stock extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btDelStMouseClicked
 
+    private void comboprodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboprodActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboprodActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -389,7 +496,11 @@ public class Stock extends javax.swing.JFrame {
     private javax.swing.JButton btEditSt;
     private javax.swing.JButton bt_save_sup;
     private javax.swing.JComboBox comboprod;
-    private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
@@ -399,6 +510,9 @@ public class Stock extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTable stockTable;
