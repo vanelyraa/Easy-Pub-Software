@@ -42,7 +42,7 @@ public class Products extends javax.swing.JFrame {
     
     public void getProductId() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
             resst = stat.executeQuery("select MAX(product_ID) from product");
             resst.next();
@@ -64,9 +64,9 @@ public class Products extends javax.swing.JFrame {
     
     public void ProductSelect() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
-            resst = stat.executeQuery("select product_ID, product_name, supplier_name, cost, Quantity, sales_price, lead_time, unit, min_qty, category from product");
+            resst = stat.executeQuery("select product_ID, product_name, supplier_name, cost, quantity, sales_price, lead_time, unit, min_qty, category from product");
             ProdTable.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,7 +94,7 @@ public class Products extends javax.swing.JFrame {
     public void Category(){
    
             try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
                 
                 stat = cnct.createStatement();
                 resst = stat.executeQuery("select * from category");
@@ -146,7 +146,7 @@ public class Products extends javax.swing.JFrame {
    }*/
          
             try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
                 prepst = cnct.prepareStatement("select * from supplier");
             
             resst = prepst.executeQuery();
@@ -161,7 +161,7 @@ public class Products extends javax.swing.JFrame {
              
         }
     
-    
+    //32:48
   
 	
        
@@ -201,10 +201,10 @@ public class Products extends javax.swing.JFrame {
         btClearProd = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(950, 600));
@@ -337,28 +337,53 @@ public class Products extends javax.swing.JFrame {
 
         jButton2.setBackground(new java.awt.Color(0, 102, 51));
         jButton2.setForeground(new java.awt.Color(204, 255, 204));
-        jButton2.setText("jButton2");
+        jButton2.setText("Sales");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel4.add(jButton2);
-
-        jButton1.setBackground(new java.awt.Color(0, 102, 51));
-        jButton1.setForeground(new java.awt.Color(204, 255, 204));
-        jButton1.setText("jButton1");
-        jPanel4.add(jButton1);
 
         jButton3.setBackground(new java.awt.Color(0, 102, 51));
         jButton3.setForeground(new java.awt.Color(204, 255, 204));
-        jButton3.setText("jButton3");
+        jButton3.setText("Stock");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel4.add(jButton3);
 
         jButton4.setBackground(new java.awt.Color(0, 102, 51));
         jButton4.setForeground(new java.awt.Color(204, 255, 204));
-        jButton4.setText("jButton4");
+        jButton4.setText("Products");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jPanel4.add(jButton4);
 
         jButton5.setBackground(new java.awt.Color(0, 102, 51));
         jButton5.setForeground(new java.awt.Color(204, 255, 204));
-        jButton5.setText("jButton5");
+        jButton5.setText("Suppliers");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         jPanel4.add(jButton5);
+
+        jButton6.setBackground(new java.awt.Color(0, 102, 51));
+        jButton6.setForeground(new java.awt.Color(204, 255, 204));
+        jButton6.setText("Others");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButton6);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -534,7 +559,7 @@ public class Products extends javax.swing.JFrame {
 
     private void bt_save_prodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_save_prodMouseClicked
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             prepst = cnct.prepareStatement("insert into product values(?,?,?,?,?,?,?,?,?,?,?)");
             prepst.setString(1, txproduct_id.getText());
             prepst.setString(2, txproduct_name.getText());
@@ -566,7 +591,7 @@ public class Products extends javax.swing.JFrame {
         } else {
             try {
 
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
 
                 prepst = cnct.prepareStatement("update product SET product_name = ?, supplier_name = ?, cost = ?, Quantity = ?, sales_price= ?, lead_time= ?, unit= ?, min_qty= ?, category = ? where product_ID = ?");
 
@@ -597,7 +622,7 @@ public class Products extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select the product to be deleted");
         } else {
             try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
 
                 prepst = cnct.prepareStatement("Delete from product where product_ID=?");
                 prepst.setString(1, txproduct_id.getText());
@@ -626,6 +651,31 @@ public class Products extends javax.swing.JFrame {
     private void txproduct_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txproduct_nameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txproduct_nameActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Sale b = new Sale();
+        b.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Stock d = new Stock();
+        d.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Products c = new Products();
+        c.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        Suppliers a = new Suppliers();
+        a.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Others e = new Others();
+        e.setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -671,11 +721,11 @@ public class Products extends javax.swing.JFrame {
     private javax.swing.JButton bt_save_prod;
     private javax.swing.JComboBox dropcategory;
     private javax.swing.JComboBox dropsup;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
