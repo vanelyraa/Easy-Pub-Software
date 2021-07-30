@@ -39,7 +39,7 @@ public class Category extends javax.swing.JFrame {
     
     public void getCatId() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
             resst = stat.executeQuery("select MAX(category_ID) from category");
             resst.next();
@@ -61,9 +61,9 @@ public class Category extends javax.swing.JFrame {
 
     public void CategorySelect() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
-            resst = stat.executeQuery("select category_ID, category from category");
+            resst = stat.executeQuery("select category_ID, category_name from category");
             CatTable.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
@@ -101,7 +101,7 @@ public class Category extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setBackground(java.awt.Color.white);
 
@@ -212,32 +212,58 @@ public class Category extends javax.swing.JFrame {
 
         jButton2.setBackground(new java.awt.Color(0, 102, 51));
         jButton2.setForeground(new java.awt.Color(204, 255, 204));
-        jButton2.setText("jButton2");
+        jButton2.setText("Sales");
+        jButton2.setActionCommand("Sales");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(0, 102, 51));
         jButton3.setForeground(new java.awt.Color(204, 255, 204));
-        jButton3.setText("jButton3");
+        jButton3.setText("Stock");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(0, 102, 51));
         jButton4.setForeground(new java.awt.Color(204, 255, 204));
-        jButton4.setText("jButton4");
+        jButton4.setText("Products");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setBackground(new java.awt.Color(0, 102, 51));
         jButton5.setForeground(new java.awt.Color(204, 255, 204));
-        jButton5.setText("jButton5");
+        jButton5.setText("Suppliers");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setBackground(new java.awt.Color(0, 102, 51));
         jButton6.setForeground(new java.awt.Color(204, 255, 204));
-        jButton6.setText("jButton6");
+        jButton6.setText("Others");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addGap(63, 63, 63)
                 .addComponent(jButton2)
-                .addGap(99, 99, 99)
+                .addGap(96, 96, 96)
                 .addComponent(jButton3)
                 .addGap(99, 99, 99)
                 .addComponent(jButton4)
@@ -247,6 +273,9 @@ public class Category extends javax.swing.JFrame {
                 .addComponent(jButton6)
                 .addGap(61, 61, 61))
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton2, jButton3, jButton4, jButton5, jButton6});
+
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -327,8 +356,8 @@ public class Category extends javax.swing.JFrame {
     private void btAddCatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAddCatMouseClicked
         try {
 
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            PreparedStatement add = cnct.prepareStatement("insert into category (category_ID, category) values(?,?)");
+            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+            PreparedStatement add = cnct.prepareStatement("insert into category (category_ID, category_name) values(?,?)");
             add.setString(1, hcecking.getText());
             add.setString(2, txcategory.getText());
             int row = add.executeUpdate();
@@ -352,7 +381,7 @@ public class Category extends javax.swing.JFrame {
         } else {
             try {
 
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
 
                 PreparedStatement edit = cnct.prepareStatement("update category SET category = ? where category_ID = ?");
 
@@ -380,7 +409,7 @@ public class Category extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select the category to be deleted");
         } else {
             try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3307/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
 
                 PreparedStatement delete = cnct.prepareStatement("Delete from category where category_ID=?");
                 delete.setString(1, hcecking.getText());
@@ -413,6 +442,31 @@ public class Category extends javax.swing.JFrame {
     private void hceckingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hceckingActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_hceckingActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+      Stock d = new Stock();
+        d.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+       Suppliers a = new Suppliers();
+        a.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Others e = new Others();
+        e.setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Sale b = new Sale();
+        b.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+      Products c = new Products();
+        c.setVisible(true);  
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
