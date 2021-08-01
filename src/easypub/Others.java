@@ -81,7 +81,7 @@ public class Others extends javax.swing.JFrame {
         btCreateU = new javax.swing.JButton();
         txlname = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        usertp = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -139,6 +139,8 @@ public class Others extends javax.swing.JFrame {
 
         jLabel13.setText("User type");
 
+        usertp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "user" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -177,7 +179,7 @@ public class Others extends javax.swing.JFrame {
                                 .addGap(118, 118, 118)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(usertp, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(56, 56, 56))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(151, 151, 151)
@@ -196,7 +198,7 @@ public class Others extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txUseuId, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-                    .addComponent(jComboBox2))
+                    .addComponent(usertp))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -391,12 +393,13 @@ public class Others extends javax.swing.JFrame {
     private void btCreateUMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCreateUMouseClicked
         try {
             cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            PreparedStatement create = cnct.prepareStatement("insert into login values(?,?,?,?,?)");
+            PreparedStatement create = cnct.prepareStatement("insert into login values(?,?,?,?,?,?)");
             create.setString(1, txUseuId.getText());
             create.setString(2, txpassword.getText());
-            create.setString(3, txusername.getText());
-            create.setString(4, txlname.getText());
-            create.setString(5, txemail.getText());
+            create.setString(3, usertp.getSelectedItem().toString());
+                    create.setString(4, txusername.getText());
+            create.setString(5, txlname.getText());
+            create.setString(6, txemail.getText());
 
             create.executeUpdate();
             JOptionPane.showMessageDialog(this, "User created sucesfully");
@@ -488,7 +491,6 @@ public class Others extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -510,14 +512,15 @@ public class Others extends javax.swing.JFrame {
     private javax.swing.JTextField txlname;
     private javax.swing.JTextField txpassword;
     private javax.swing.JTextField txusername;
+    private javax.swing.JComboBox<String> usertp;
     // End of variables declaration//GEN-END:variables
 
-    private void registerUser(String uName, String lName, String email, String uPassword) {
+   /* private void registerUser(String uName, String lName, String email, String uPassword) {
             try {
                 cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
                 
                 try {
-                    PreparedStatement newUser = cnct.prepareStatement("INSERT INTO login (password, name, lastname, email ) VALUES (?,?,?,?)");
+                    PreparedStatement newUser = cnct.prepareStatement("INSERT INTO login (user, password, type, user_name, user_lname, user_email ) VALUES (?,?,?,?,?,?)");
                     newUser.setString(1, uPassword);
                     newUser.setString(2, uName);
                     newUser.setString(3, lName);
@@ -539,5 +542,5 @@ public class Others extends javax.swing.JFrame {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
         
-    }
+    }*/
 }
