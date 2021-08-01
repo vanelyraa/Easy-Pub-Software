@@ -103,7 +103,7 @@ public class Products extends javax.swing.JFrame {
             dropcategory.removeAllItems();
             while(resst.next())
             {
-           String name = resst.getString("category");
+           String name = resst.getString("category_ID");
              dropcategory.addItem(name);
             }
             }catch (SQLException ex) {
