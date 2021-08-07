@@ -132,10 +132,9 @@ public class Login extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap())
+                .addGap(0, 9, Short.MAX_VALUE))
         );
 
         jLabel4.setText("Forgot password?");
@@ -151,6 +150,11 @@ public class Login extends javax.swing.JFrame {
         });
 
         usertp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "user" }));
+        usertp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usertpActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("User type");
@@ -193,11 +197,11 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(usertp)
                     .addComponent(jLabel5))
-                .addGap(16, 16, 16)
-                .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addGap(16, 16, 16)
                 .addComponent(jButton1)
-                .addGap(16, 16, 16))
+                .addContainerGap())
         );
 
         jPanel2.add(jPanel1, new java.awt.GridBagConstraints());
@@ -222,12 +226,28 @@ public class Login extends javax.swing.JFrame {
             try {
                 cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
 
-                PreparedStatement login = cnct.prepareStatement("Select * from login WHERE user = ? AND password = ?");
+                PreparedStatement login = cnct.prepareStatement("Select * from login WHERE user = ? and password = ? and type=?");
                 login.setString(1, username);
                 login.setString(2, password);
+                login.setString(3, utype);
+                
+                
                 resst = login.executeQuery();
                 if(resst.next()){
-                     String st = resst.getString("type");
+                    JOptionPane.showMessageDialog(this, "Login succesfull");
+                    if(usertp.getSelectedIndex()==0){
+                      Main main = new Main();
+                             main.setVisible(true);
+                             setVisible(false);  
+                    }else {
+                      MainUser mainUs = new MainUser();
+                             mainUs.setVisible(true);
+                             setVisible(false);  
+                    }
+                }else{
+                         JOptionPane.showMessageDialog(this, "Login Username or password not found");   
+                            }
+                     /*String st = resst.getString("type");
                      if(st.equalsIgnoreCase("admin")&&(utype.equalsIgnoreCase("admin"))){
                   
                      Main main = new Main();
@@ -236,14 +256,14 @@ public class Login extends javax.swing.JFrame {
                     //dispose();
                      }
                      if(st.equalsIgnoreCase("user")&&(utype.equalsIgnoreCase("user"))){
-                      Sale pos = new Sale();
-                             pos.setVisible(true);
-                             setVisible(false);   
+                     MainUser mainUs = new MainUser();
+                             mainUs.setVisible(true);
+                             setVisible(false);
                      }
                      else{
 JOptionPane.showMessageDialog(this, "Username or password not found"); 
-                }
-                }
+                }*/
+                
 
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -265,6 +285,10 @@ JOptionPane.showMessageDialog(this, "Username or password not found");
         sdcode.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jLabel4MousePressed
+
+    private void usertpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usertpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usertpActionPerformed
 
     /**
      * @param args the command line arguments
