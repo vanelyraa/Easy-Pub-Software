@@ -109,19 +109,20 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btSales" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="btSuppliers" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="bt_suppliers" min="-2" max="-2" attributes="0"/>
+                          <Component id="btCategory" linkSize="1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="bt_others1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
-                          <Component id="bt_others" min="-2" max="-2" attributes="0"/>
+                          <Component id="btOthers" linkSize="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="bt_sales" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
-                          <Component id="bt_stock" min="-2" max="-2" attributes="0"/>
+                          <Component id="btStock" linkSize="1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="113" max="32767" attributes="0"/>
-                          <Component id="bt_products" min="-2" max="-2" attributes="0"/>
+                          <Component id="btProducts" linkSize="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
@@ -135,15 +136,15 @@
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="bt_sales" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bt_stock" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bt_products" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btSales" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btStock" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btProducts" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="bt_suppliers" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bt_others" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bt_others1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btSuppliers" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btOthers" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btCategory" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               </Group>
@@ -151,7 +152,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="bt_suppliers">
+        <Component class="javax.swing.JButton" name="btSuppliers">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
@@ -168,10 +169,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_suppliersActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSuppliersActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="bt_others">
+        <Component class="javax.swing.JButton" name="btOthers">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
@@ -188,10 +189,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_othersActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btOthersActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="bt_stock">
+        <Component class="javax.swing.JButton" name="btStock">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
@@ -208,10 +209,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_stockActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btStockActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="bt_sales">
+        <Component class="javax.swing.JButton" name="btSales">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
@@ -228,10 +229,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_salesActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSalesActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="bt_products">
+        <Component class="javax.swing.JButton" name="btProducts">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
@@ -248,7 +249,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_productsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btProductsActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
@@ -265,7 +266,7 @@
             <Property name="text" type="java.lang.String" value="Welcome!"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="bt_others1">
+        <Component class="javax.swing.JButton" name="btCategory">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
@@ -282,7 +283,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_others1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCategoryActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
