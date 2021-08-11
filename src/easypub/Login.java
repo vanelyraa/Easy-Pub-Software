@@ -17,27 +17,23 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Login
-     */
-    
-    public Login(){
-    initComponents();
-    
-        setTitle("EasyPub Login");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);        
-        
-        setLocationRelativeTo(null);
-        setVisible(true);    
-    setResizable(false);
-    pack();
-    
-    
-    }
-    
     Connection cnct = null;
     Statement stat = null;
     ResultSet resst = null;
+    PreparedStatement prepst = null;
+
+    public Login() {
+        initComponents();
+        cnct = ConnectDB.connect();
+
+        setTitle("EasyPub Login");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(false);
+        pack();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,15 +48,15 @@ public class Login extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        btUser = new javax.swing.JTextField();
+        tfUsername = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        btPassword = new javax.swing.JPasswordField();
+        btSubmit = new javax.swing.JButton();
+        tfPassword = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        usertp = new javax.swing.JComboBox<>();
+        btForgotPass = new javax.swing.JLabel();
+        cbUserType = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
 
         jTextField2.setText("jTextField2");
@@ -88,26 +84,14 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(250, 250));
         jPanel1.setRequestFocusEnabled(false);
 
-        btUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btUserActionPerformed(evt);
-            }
-        });
-
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Password");
 
-        jButton1.setBackground(new java.awt.Color(204, 255, 204));
-        jButton1.setText("Submit");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btSubmit.setBackground(new java.awt.Color(204, 255, 204));
+        btSubmit.setText("Submit");
+        btSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        btPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btPasswordActionPerformed(evt);
+                btSubmitActionPerformed(evt);
             }
         });
 
@@ -137,24 +121,19 @@ public class Login extends javax.swing.JFrame {
                 .addGap(0, 9, Short.MAX_VALUE))
         );
 
-        jLabel4.setText("Forgot password?");
-        jLabel4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        btForgotPass.setText("Forgot password?");
+        btForgotPass.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                jLabel4MouseMoved(evt);
+                btForgotPassMouseMoved(evt);
             }
         });
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btForgotPass.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jLabel4MousePressed(evt);
+                btForgotPassMousePressed(evt);
             }
         });
 
-        usertp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "user" }));
-        usertp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usertpActionPerformed(evt);
-            }
-        });
+        cbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "user" }));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("User type");
@@ -167,8 +146,8 @@ public class Login extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
+                    .addComponent(btSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btForgotPass)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
@@ -176,9 +155,9 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(usertp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                            .addComponent(btPassword, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(cbUserType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tfUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                            .addComponent(tfPassword, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -188,20 +167,20 @@ public class Login extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(btUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usertp)
+                    .addComponent(cbUserType)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(16, 16, 16)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addComponent(btForgotPass)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btSubmit)
+                .addGap(39, 39, 39))
         );
 
         jPanel2.add(jPanel1, new java.awt.GridBagConstraints());
@@ -212,83 +191,52 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btPasswordActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String username = btUser.getText();
-        String password = String.valueOf(btPassword.getPassword());
-        String utype = usertp.getSelectedItem().toString();
-        if(username.isEmpty() || password.isEmpty()){
+    private void btSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSubmitActionPerformed
+        String username = tfUsername.getText();
+        String password = String.valueOf(tfPassword.getPassword());
+        String utype = cbUserType.getSelectedItem().toString();
+        if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Login failed, user or password empty");
-        } else{
+        } else {
             try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
 
-                PreparedStatement login = cnct.prepareStatement("Select * from login WHERE user = ? and password = ? and type=?");
-                login.setString(1, username);
-                login.setString(2, password);
-                login.setString(3, utype);
-                
-                
-                resst = login.executeQuery();
-                if(resst.next()){
+                prepst = cnct.prepareStatement("Select * from login WHERE user = ? and password = ? and type=?");
+                prepst.setString(1, username);
+                prepst.setString(2, password);
+                prepst.setString(3, utype);
+
+                resst = prepst.executeQuery();
+                if (resst.next()) {
                     JOptionPane.showMessageDialog(this, "Login succesfull");
-                    if(usertp.getSelectedIndex()==0){
-                      Main main = new Main();
-                             main.setVisible(true);
-                             setVisible(false);  
-                    }else {
-                      MainUser mainUs = new MainUser();
-                             mainUs.setVisible(true);
-                             setVisible(false);  
+                    if (cbUserType.getSelectedIndex() == 0) {
+                        Main main = new Main();
+                        main.setVisible(true);
+                        setVisible(false);
+                    } else {
+                        MainUser mainUs = new MainUser();
+                        mainUs.setVisible(true);
+                        setVisible(false);
                     }
-                }else{
-                         JOptionPane.showMessageDialog(this, "Login Username or password not found");   
-                            }
-                     /*String st = resst.getString("type");
-                     if(st.equalsIgnoreCase("admin")&&(utype.equalsIgnoreCase("admin"))){
-                  
-                     Main main = new Main();
-                             main.setVisible(true);
-                             setVisible(false);
-                    //dispose();
-                     }
-                     if(st.equalsIgnoreCase("user")&&(utype.equalsIgnoreCase("user"))){
-                     MainUser mainUs = new MainUser();
-                             mainUs.setVisible(true);
-                             setVisible(false);
-                     }
-                     else{
-JOptionPane.showMessageDialog(this, "Username or password not found"); 
-                }*/
-                
+                } else {
+                    JOptionPane.showMessageDialog(this, "Login Username or password not found");
+                }
 
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btSubmitActionPerformed
 
-    private void btUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUserActionPerformed
+    private void btForgotPassMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btForgotPassMouseMoved
+        btForgotPass.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_btForgotPassMouseMoved
 
-    }//GEN-LAST:event_btUserActionPerformed
-
-    private void jLabel4MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseMoved
-        jLabel4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_jLabel4MouseMoved
-
-    private void jLabel4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MousePressed
+    private void btForgotPassMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btForgotPassMousePressed
         ForgotPass sdcode = new ForgotPass();
         sdcode.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_jLabel4MousePressed
-
-    private void usertpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usertpActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usertpActionPerformed
+    }//GEN-LAST:event_btForgotPassMousePressed
 
     /**
      * @param args the command line arguments
@@ -322,30 +270,27 @@ JOptionPane.showMessageDialog(this, "Username or password not found");
             public void run() {
                 Login login = new Login();
                 //new Login().setVisible(true);
-                
+
             }
         });
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField btPassword;
-    private javax.swing.JTextField btUser;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel btForgotPass;
+    private javax.swing.JButton btSubmit;
+    private javax.swing.JComboBox<String> cbUserType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JComboBox<String> usertp;
+    private javax.swing.JPasswordField tfPassword;
+    private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 
-    
-    
 }
