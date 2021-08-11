@@ -50,14 +50,14 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txPrice" min="-2" pref="198" max="-2" attributes="0"/>
-                              <Component id="comboprod" alignment="1" min="-2" pref="198" max="-2" attributes="0"/>
+                              <Component id="tfPrice" min="-2" pref="198" max="-2" attributes="0"/>
+                              <Component id="cbProduct" alignment="1" min="-2" pref="198" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="totSale" min="-2" pref="198" max="-2" attributes="0"/>
+                          <Component id="tfTotal" min="-2" pref="198" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
@@ -65,11 +65,11 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="add" min="-2" pref="83" max="-2" attributes="0"/>
+                                  <Component id="btAdd" min="-2" pref="83" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="remove" min="-2" pref="84" max="-2" attributes="0"/>
+                                  <Component id="btRemove" min="-2" pref="84" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="txQty" min="-2" pref="198" max="-2" attributes="0"/>
+                              <Component id="tfQty" min="-2" pref="198" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
@@ -79,8 +79,8 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="changeSale" min="-2" pref="198" max="-2" attributes="0"/>
-                              <Component id="cashSale" min="-2" pref="198" max="-2" attributes="0"/>
+                              <Component id="tfChange" min="-2" pref="198" max="-2" attributes="0"/>
+                              <Component id="tfCash" min="-2" pref="198" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -88,11 +88,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane1" alignment="1" min="-2" pref="537" max="-2" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="clear" min="-2" pref="87" max="-2" attributes="0"/>
+                          <Component id="btClear" min="-2" pref="87" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="print" min="-2" pref="88" max="-2" attributes="0"/>
+                          <Component id="btPrint" min="-2" pref="88" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                          <Component id="btCash" min="-2" pref="112" max="-2" attributes="0"/>
+                          <Component id="btPay" min="-2" pref="112" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -109,45 +109,45 @@
                           <Component id="jScrollPane1" min="-2" pref="348" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btCash" alignment="3" min="-2" pref="64" max="-2" attributes="0"/>
-                              <Component id="print" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
-                              <Component id="clear" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                              <Component id="btPay" alignment="3" min="-2" pref="64" max="-2" attributes="0"/>
+                              <Component id="btPrint" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
+                              <Component id="btClear" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel6" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                              <Component id="comboprod" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbProduct" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel7" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                              <Component id="txPrice" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfPrice" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
-                              <Component id="txQty" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfQty" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="add" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                              <Component id="remove" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                              <Component id="btAdd" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                              <Component id="btRemove" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel1" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                              <Component id="totSale" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfTotal" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel3" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                              <Component id="cashSale" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfCash" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel4" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                              <Component id="changeSale" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfChange" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -157,7 +157,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JComboBox" name="comboprod">
+        <Component class="javax.swing.JComboBox" name="cbProduct">
           <Properties>
             <Property name="editable" type="boolean" value="true"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -170,9 +170,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="comboprodPopupMenuWillBecomeInvisible"/>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboprodActionPerformed"/>
-            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="comboprodKeyReleased"/>
+            <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="cbProductPopupMenuWillBecomeInvisible"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -186,22 +184,19 @@
             <Property name="text" type="java.lang.String" value="Product"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txPrice">
+        <Component class="javax.swing.JTextField" name="tfPrice">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="1"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txQty">
+        <Component class="javax.swing.JTextField" name="tfQty">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="1"/>
             </Property>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txQtyActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
@@ -219,7 +214,7 @@
             <Property name="text" type="java.lang.String" value="Quantity"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btCash">
+        <Component class="javax.swing.JButton" name="btPay">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="66" red="0" type="rgb"/>
@@ -230,10 +225,10 @@
             <Property name="text" type="java.lang.String" value="PAY"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCashActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btPayActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="print">
+        <Component class="javax.swing.JButton" name="btPrint">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="66" red="0" type="rgb"/>
@@ -244,7 +239,7 @@
             <Property name="text" type="java.lang.String" value="Print"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btPrintActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
@@ -255,7 +250,7 @@
             <Property name="text" type="java.lang.String" value="Change"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="changeSale">
+        <Component class="javax.swing.JTextField" name="tfChange">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="1"/>
@@ -270,15 +265,12 @@
             <Property name="text" type="java.lang.String" value="Cash"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="cashSale">
+        <Component class="javax.swing.JTextField" name="tfCash">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="1"/>
             </Property>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cashSaleActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -288,15 +280,12 @@
             <Property name="text" type="java.lang.String" value="Total"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="totSale">
+        <Component class="javax.swing.JTextField" name="tfTotal">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="1"/>
             </Property>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="totSaleActionPerformed"/>
-          </Events>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
           <AuxValues>
@@ -305,7 +294,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="tableSale">
+            <Component class="javax.swing.JTable" name="tbSale">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="4" rowCount="4">
@@ -343,9 +332,6 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableSaleMouseClicked"/>
-              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -390,7 +376,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="clear">
+        <Component class="javax.swing.JButton" name="btClear">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="66" red="0" type="rgb"/>
@@ -401,10 +387,10 @@
             <Property name="text" type="java.lang.String" value="Clear"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btClearActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="remove">
+        <Component class="javax.swing.JButton" name="btRemove">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="66" red="0" type="rgb"/>
@@ -415,10 +401,10 @@
             <Property name="text" type="java.lang.String" value="Remove"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btRemoveActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="add">
+        <Component class="javax.swing.JButton" name="btAdd">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="66" red="0" type="rgb"/>
@@ -426,10 +412,10 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="add"/>
+            <Property name="text" type="java.lang.String" value="Add"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAddActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
