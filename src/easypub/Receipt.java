@@ -19,38 +19,36 @@ public class Receipt extends javax.swing.JFrame {
     public Receipt() {
         initComponents();
     }
-    
+
     String rtot;
     String rcash;
-   
-    
 
     public Receipt(String tot, String cash, TableModel model) {
-         initComponents();
-         this.rtot = tot;
-         this.rcash = cash;
-         
-         txtprint.setText(txtprint.getText()+"***********************************\n");
-         txtprint.setText(txtprint.getText()+"**************RECEIPT**************\n");
-         txtprint.setText(txtprint.getText()+"\n");
-         txtprint.setText(txtprint.getText()+"Product"+"\t"+"Price"+"\t"+"Price"+"\t"+"Total");
-         
-         for(int i=0;i<model.getRowCount();i++){
-             String product = (String) model.getValueAt(i,0);
-             String price = (String) model.getValueAt(i,1);
-             String qty = (String) model.getValueAt(i,2);
-             int total = (int) model.getValueAt(i,3);
-             
-             txtprint.setText(txtprint.getText()+product+"\t"+price+"\t"+qty+"\t"+total);
-         }
-          txtprint.setText(txtprint.getText()+"\n");
-           txtprint.setText(txtprint.getText()+"\n");
-           
-         txtprint.setText(txtprint.getText()+"          "+ "Total: " +tot+"\n");
-         
-         txtprint.setText(txtprint.getText()+"***********************************\n");
-         txtprint.setText(txtprint.getText()+"***********************************\n");
-         txtprint.setText(txtprint.getText()+"*************THANK YOU!************\n");
+        initComponents();
+        this.rtot = tot;
+        this.rcash = cash;
+
+        txtprint.setText(txtprint.getText() + "***********************************\n");
+        txtprint.setText(txtprint.getText() + "**************RECEIPT**************\n");
+        txtprint.setText(txtprint.getText() + "\n");
+        txtprint.setText(txtprint.getText() + "Product" + "\t" + "Price" + "\t" + "Price" + "\t" + "Total");
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String product = (String) model.getValueAt(i, 0);
+            String price = (String) model.getValueAt(i, 1);
+            String qty = (String) model.getValueAt(i, 2);
+            int total = (int) model.getValueAt(i, 3);
+
+            txtprint.setText(txtprint.getText() + product + "\t" + price + "\t" + qty + "\t" + total);
+        }
+        txtprint.setText(txtprint.getText() + "\n");
+        txtprint.setText(txtprint.getText() + "\n");
+
+        txtprint.setText(txtprint.getText() + "          " + "Total: " + tot + "\n");
+
+        txtprint.setText(txtprint.getText() + "***********************************\n");
+        txtprint.setText(txtprint.getText() + "***********************************\n");
+        txtprint.setText(txtprint.getText() + "*************THANK YOU!************\n");
     }
 
     /**
