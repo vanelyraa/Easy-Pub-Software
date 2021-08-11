@@ -7,19 +7,13 @@ package easypub;
 
 import javax.swing.WindowConstants;
 
-/**
- *
- * @author vanel
- */
-public class MainUser extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainUser
-     */
+public class MainUser extends javax.swing.JFrame {
+   
     public MainUser() {
         initComponents();
         setResizable(false);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); 
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     /**
@@ -34,7 +28,7 @@ public class MainUser extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        bt_sales = new javax.swing.JButton();
+        btSales = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,14 +63,14 @@ public class MainUser extends javax.swing.JFrame {
         jPanel3.setAlignmentY(0.0F);
         jPanel3.setPreferredSize(new java.awt.Dimension(900, 500));
 
-        bt_sales.setBackground(new java.awt.Color(204, 255, 204));
-        bt_sales.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        bt_sales.setForeground(new java.awt.Color(0, 102, 51));
-        bt_sales.setText("Sales");
-        bt_sales.setPreferredSize(new java.awt.Dimension(170, 130));
-        bt_sales.addActionListener(new java.awt.event.ActionListener() {
+        btSales.setBackground(new java.awt.Color(204, 255, 204));
+        btSales.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btSales.setForeground(new java.awt.Color(0, 102, 51));
+        btSales.setText("Sales");
+        btSales.setPreferredSize(new java.awt.Dimension(170, 130));
+        btSales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_salesActionPerformed(evt);
+                btSalesActionPerformed(evt);
             }
         });
 
@@ -96,7 +90,7 @@ public class MainUser extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(225, 225, 225)
-                        .addComponent(bt_sales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -105,7 +99,7 @@ public class MainUser extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(63, 63, 63)
-                .addComponent(bt_sales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(118, Short.MAX_VALUE))
         );
 
@@ -137,10 +131,10 @@ public class MainUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bt_salesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salesActionPerformed
+    private void btSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalesActionPerformed
         Sale b = new Sale();
         b.setVisible(true);
-    }//GEN-LAST:event_bt_salesActionPerformed
+    }//GEN-LAST:event_btSalesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,7 +172,7 @@ public class MainUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bt_sales;
+    private javax.swing.JButton btSales;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
