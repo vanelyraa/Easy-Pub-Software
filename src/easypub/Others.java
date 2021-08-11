@@ -5,103 +5,62 @@
  */
 package easypub;
 
-
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- *
- * @author vanel
- */
 public class Others extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Others
-     */
     int createId;
+    Connection cnct;
+    Statement stat = null;
+    ResultSet resst = null;
+    PreparedStatement prepst = null;
 
     public Others() {
         initComponents();
-        setResizable(false);
-        getUserId();
+        cnct = ConnectDB.connect();
+        setResizable(false);       
         SaleSelect();
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+    }   
 
-    }
-
-    Connection cnct = null;
-    Statement stat = null;
-    ResultSet resst = null;
-
-    public void getUserId() {
+    public void SaleSelect() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
-            resst = stat.executeQuery("select MAX(user) from login");
-            resst.next();
-            resst.getString("MAX(user)");
-
-            if (resst.getString("MAX(user)") == null) {
-                txUseuId.setText("U001");
-            } else {
-                long userID = Long.parseLong(resst.getString("MAX(user)").substring(1, resst.getString("MAX(user)").length()));
-                userID++;
-                txUseuId.setText("U" + String.format("%03d", userID));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    
-     public void SaleSelect() {
-        try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("SELECT `date`, `sale_id`, `product_name`, `sales_price`, `quantity`, `total` FROM `sale_item`");
-            jTable1.setModel(DbUtils.resultSetToTableModel(resst));
+            resst = stat.executeQuery("SELECT date, sale_id, product_name, sales_price, quantity, total FROM sale_item");
+            tbSaleRep.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     
-     public void createExcel(String myfile){
-         try{
-             File path = new File(myfile);
-             Desktop.getDesktop().open(path);
-             
-         }catch(IOException io){
-             System.out.println(io);
-         }
-     }
+
+    public void createExcel(String myfile) {
+        try {
+            File path = new File(myfile);
+            Desktop.getDesktop().open(path);
+        } catch (IOException io) {
+            System.out.println(io);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -111,37 +70,38 @@ public class Others extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txUseuId = new javax.swing.JTextField();
+        tfUserId = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        txusername = new javax.swing.JTextField();
+        tfName = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txemail = new javax.swing.JTextField();
+        tfEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txpassword = new javax.swing.JTextField();
-        btCreateU = new javax.swing.JButton();
-        txlname = new javax.swing.JTextField();
+        tfPassword = new javax.swing.JTextField();
+        btCreate = new javax.swing.JButton();
+        tfLname = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        usertp = new javax.swing.JComboBox<>();
+        cbUserType = new javax.swing.JComboBox<>();
+        btClearUser = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
-        btGenRep1 = new javax.swing.JButton();
-        btGenRep2 = new javax.swing.JButton();
-        btGenRep3 = new javax.swing.JButton();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        btGenSale = new javax.swing.JButton();
+        btPrintSale = new javax.swing.JButton();
+        btClearSale = new javax.swing.JButton();
+        dtFrom = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        dtTo = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbSaleRep = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        btGenRep5 = new javax.swing.JButton();
-        btGenRep6 = new javax.swing.JButton();
+        btPrintStock = new javax.swing.JButton();
+        btClearStock = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
+        tbRepStock = new javax.swing.JTable();
+        tfSearch = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
 
@@ -158,71 +118,74 @@ public class Others extends javax.swing.JFrame {
 
         jLabel3.setText("Name");
 
-        txUseuId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txUseuIdActionPerformed(evt);
-            }
-        });
-
         jLabel11.setText("Last name");
 
         jLabel6.setText("Email");
 
         jLabel7.setText("Password");
 
-        btCreateU.setBackground(new java.awt.Color(0, 102, 51));
-        btCreateU.setForeground(new java.awt.Color(204, 255, 204));
-        btCreateU.setText("Create");
-        btCreateU.addMouseListener(new java.awt.event.MouseAdapter() {
+        btCreate.setBackground(new java.awt.Color(0, 102, 51));
+        btCreate.setForeground(new java.awt.Color(204, 255, 204));
+        btCreate.setText("Create");
+        btCreate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btCreateUMouseClicked(evt);
-            }
-        });
-        btCreateU.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCreateUActionPerformed(evt);
+                btCreateMouseClicked(evt);
             }
         });
 
         jLabel13.setText("User type");
 
-        usertp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "user" }));
+        cbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "user" }));
+
+        btClearUser.setBackground(new java.awt.Color(0, 102, 51));
+        btClearUser.setForeground(new java.awt.Color(204, 255, 204));
+        btClearUser.setText("Clear");
+        btClearUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btClearUserMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(151, 151, 151))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btClearUser, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(276, 276, 276))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(263, 263, 263))
-                    .addComponent(txusername, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txemail, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txlname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btCreateU, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfEmail, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txUseuId, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfUserId, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usertp, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(txpassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbUserType, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfLname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfPassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(56, 56, 56))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(151, 151, 151))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,92 +198,88 @@ public class Others extends javax.swing.JFrame {
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(usertp, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txUseuId)
-                        .addGap(3, 3, 3)))
+                    .addComponent(cbUserType, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfUserId))
+                .addGap(3, 3, 3)
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txusername, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txlname, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfLname, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txemail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
-                .addComponent(btCreateU, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btClearUser, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txUseuId, txemail, txlname, txpassword, txusername, usertp});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cbUserType, tfEmail, tfLname, tfName, tfPassword, tfUserId});
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btClearUser, btCreate});
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jLabel9.setText("Reports");
 
-        btGenRep1.setBackground(new java.awt.Color(0, 102, 51));
-        btGenRep1.setForeground(new java.awt.Color(204, 255, 204));
-        btGenRep1.setText("Search");
-        btGenRep1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btGenSale.setBackground(new java.awt.Color(0, 102, 51));
+        btGenSale.setForeground(new java.awt.Color(204, 255, 204));
+        btGenSale.setText("Search");
+        btGenSale.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btGenRep1MouseClicked(evt);
-            }
-        });
-        btGenRep1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGenRep1ActionPerformed(evt);
+                btGenSaleMouseClicked(evt);
             }
         });
 
-        btGenRep2.setBackground(new java.awt.Color(0, 102, 51));
-        btGenRep2.setForeground(new java.awt.Color(204, 255, 204));
-        btGenRep2.setText("Print");
-        btGenRep2.addActionListener(new java.awt.event.ActionListener() {
+        btPrintSale.setBackground(new java.awt.Color(0, 102, 51));
+        btPrintSale.setForeground(new java.awt.Color(204, 255, 204));
+        btPrintSale.setText("Print");
+        btPrintSale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGenRep2ActionPerformed(evt);
+                btPrintSaleActionPerformed(evt);
             }
         });
 
-        btGenRep3.setBackground(new java.awt.Color(0, 102, 51));
-        btGenRep3.setForeground(new java.awt.Color(204, 255, 204));
-        btGenRep3.setText("Clear");
-        btGenRep3.addMouseListener(new java.awt.event.MouseAdapter() {
+        btClearSale.setBackground(new java.awt.Color(0, 102, 51));
+        btClearSale.setForeground(new java.awt.Color(204, 255, 204));
+        btClearSale.setText("Clear");
+        btClearSale.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btGenRep3MouseClicked(evt);
-            }
-        });
-        btGenRep3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGenRep3ActionPerformed(evt);
+                btClearSaleMouseClicked(evt);
             }
         });
 
-        jDateChooser1.setDateFormatString("yyyy-MM-dd");
+        dtFrom.setDateFormatString("yyyy-MM-dd");
 
         jLabel1.setText("From");
 
         jLabel10.setText("To");
 
-        jDateChooser2.setDateFormatString("yyyy-MM-dd");
+        dtTo.setDateFormatString("yyyy-MM-dd");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbSaleRep.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Date", "Sale ID", "Product", "Price", "Quantity", "Total"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbSaleRep);
+        if (tbSaleRep.getColumnModel().getColumnCount() > 0) {
+            tbSaleRep.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -329,7 +288,7 @@ public class Others extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -337,35 +296,37 @@ public class Others extends javax.swing.JFrame {
                                 .addGap(63, 63, 63)
                                 .addComponent(jLabel10))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dtFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(139, 139, 139)
-                                .addComponent(btGenRep1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btGenRep2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btGenRep3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(dtTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btGenSale, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btPrintSale, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10)
+                        .addComponent(btClearSale, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btClearSale, btGenSale, btPrintSale});
+
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btGenRep1)
-                        .addComponent(btGenRep2)
-                        .addComponent(btGenRep3))
+                        .addComponent(btPrintSale)
+                        .addComponent(btClearSale)
+                        .addComponent(btGenSale))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(dtFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dtTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -373,48 +334,43 @@ public class Others extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("SALES", jPanel4);
 
-        jLabel14.setText("Item");
+        jLabel14.setText("Category");
 
-        btGenRep5.setBackground(new java.awt.Color(0, 102, 51));
-        btGenRep5.setForeground(new java.awt.Color(204, 255, 204));
-        btGenRep5.setText("Print");
-        btGenRep5.addActionListener(new java.awt.event.ActionListener() {
+        btPrintStock.setBackground(new java.awt.Color(0, 102, 51));
+        btPrintStock.setForeground(new java.awt.Color(204, 255, 204));
+        btPrintStock.setText("Print");
+        btPrintStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGenRep5ActionPerformed(evt);
+                btPrintStockActionPerformed(evt);
             }
         });
 
-        btGenRep6.setBackground(new java.awt.Color(0, 102, 51));
-        btGenRep6.setForeground(new java.awt.Color(204, 255, 204));
-        btGenRep6.setText("Clear");
-        btGenRep6.addMouseListener(new java.awt.event.MouseAdapter() {
+        btClearStock.setBackground(new java.awt.Color(0, 102, 51));
+        btClearStock.setForeground(new java.awt.Color(204, 255, 204));
+        btClearStock.setText("Clear");
+        btClearStock.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btGenRep6MouseClicked(evt);
+                btClearStockMouseClicked(evt);
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tbRepStock.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Product", "Quanity", "Category"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tbRepStock);
 
-        jTextField1.setPreferredSize(new java.awt.Dimension(60, 25));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        tfSearch.setPreferredSize(new java.awt.Dimension(60, 25));
+        tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField1KeyPressed(evt);
+                tfSearchKeyPressed(evt);
             }
         });
 
@@ -425,17 +381,16 @@ public class Others extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(176, 176, 176)
-                                .addComponent(btGenRep5, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btGenRep6, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 36, Short.MAX_VALUE)))
+                        .addComponent(jLabel14)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btPrintStock, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btClearStock, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -443,17 +398,21 @@ public class Others extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btGenRep5)
-                        .addComponent(btGenRep6)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel14)
-                        .addGap(26, 26, 26)))
-                .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btClearStock))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btPrintStock, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btClearStock, btPrintStock});
 
         jTabbedPane1.addTab("STOCK", jPanel5);
 
@@ -528,200 +487,158 @@ public class Others extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btCreateUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCreateUActionPerformed
-
-    }//GEN-LAST:event_btCreateUActionPerformed
-
-    private void btCreateUMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCreateUMouseClicked
-        try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            PreparedStatement create = cnct.prepareStatement("insert into login values(?,?,?,?,?,?)");
-            create.setString(1, txUseuId.getText());
-            create.setString(2, txpassword.getText());
-            create.setString(3, usertp.getSelectedItem().toString());
-            create.setString(4, txusername.getText());
-            create.setString(5, txlname.getText());
-            create.setString(6, txemail.getText());
-
-            create.executeUpdate();
+    private void btCreateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCreateMouseClicked
+        try {            
+            prepst = cnct.prepareStatement("insert into login (user, password,type,user_name,user_lname,user_email)values(?,?,?,?,?,?)");
+            prepst.setString(1, tfUserId.getText());
+            prepst.setString(2, tfPassword.getText());
+            prepst.setString(3, cbUserType.getSelectedItem().toString());
+            prepst.setString(4, tfName.getText().toUpperCase());
+            prepst.setString(5, tfLname.getText().toUpperCase());
+            prepst.setString(6, tfEmail.getText().toLowerCase());
+            prepst.executeUpdate();
             JOptionPane.showMessageDialog(this, "User created sucesfully");
-
-            cnct.close();
-
-            txUseuId.setText("");
-            txpassword.setText("");
-            txUseuId.setText("");
-            txusername.setText("");
-            txemail.setText("");
-
+            btClearUserMouseClicked(evt);
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }//GEN-LAST:event_btCreateMouseClicked
 
-    }//GEN-LAST:event_btCreateUMouseClicked
-
-    private void txUseuIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txUseuIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txUseuIdActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void btGenRep3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenRep3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btGenRep3ActionPerformed
-
-    private void btGenRep1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btGenRep1MouseClicked
-        String fromDate = ((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText();
-        String toDate = ((JTextField)jDateChooser2.getDateEditor().getUiComponent()).getText();
-        
-        if(fromDate.length()>0 && toDate.isEmpty()){
+    private void btGenSaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btGenSaleMouseClicked
+        String fromDate = ((JTextField) dtFrom.getDateEditor().getUiComponent()).getText();
+        String toDate = ((JTextField) dtTo.getDateEditor().getUiComponent()).getText();
+        if (fromDate.length() > 0 && toDate.isEmpty()) {
             try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("SELECT `sale_id`, `product_name`, `sales_price`, `quantity`, `total` FROM `sale_item`");
-            jTable1.setModel(DbUtils.resultSetToTableModel(resst));
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }else if(fromDate.length()>0 && toDate.length()>0){
+                stat = cnct.createStatement();
+                resst = stat.executeQuery("SELECT sale_id, product_name, sales_price, quantity, total FROM sale_item");
+                tbSaleRep.setModel(DbUtils.resultSetToTableModel(resst));
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (fromDate.length() > 0 && toDate.length() > 0) {
             try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("SELECT `sale_id`, `product_name`, `sales_price`, `quantity`, `total` FROM `sale_item`where date between"+fromDate+"and"+ toDate);
-            jTable1.setModel(DbUtils.resultSetToTableModel(resst));
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }else{
+                stat = cnct.createStatement();
+                resst = stat.executeQuery("SELECT sale_id, product_name, sales_price, quantity, total FROM sale_item where date between" + fromDate + "and" + toDate);
+                tbSaleRep.setModel(DbUtils.resultSetToTableModel(resst));
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
             JOptionPane.showMessageDialog(rootPane, "Select Date");
         }
-    }//GEN-LAST:event_btGenRep1MouseClicked
+    }//GEN-LAST:event_btGenSaleMouseClicked
 
-    private void btGenRep1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenRep1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btGenRep1ActionPerformed
-
-    private void btGenRep3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btGenRep3MouseClicked
-((JTextField)jDateChooser1.getDateEditor().getUiComponent()).setText("");
-((JTextField)jDateChooser2.getDateEditor().getUiComponent()).setText("");
-SaleSelect();
-
-        
-        
-    }//GEN-LAST:event_btGenRep3MouseClicked
-
-    private void btGenRep6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btGenRep6MouseClicked
-        jTextField1.setText("");
+    private void btClearSaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearSaleMouseClicked
+        ((JTextField) dtFrom.getDateEditor().getUiComponent()).setText("");
+        ((JTextField) dtTo.getDateEditor().getUiComponent()).setText("");
         SaleSelect();
-    }//GEN-LAST:event_btGenRep6MouseClicked
+    }//GEN-LAST:event_btClearSaleMouseClicked
 
-    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
-       String cat = jTextField1.getText();
-       
-       if(jTextField1.getText().length()>0){
-        try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("SELECT `date`, `product_name`, `transaction`, `quantity` FROM `stock` where category =?");
-            jTable1.setModel(DbUtils.resultSetToTableModel(resst));
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+    private void btClearStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearStockMouseClicked
+        tfSearch.setText("");
+        SaleSelect();
+    }//GEN-LAST:event_btClearStockMouseClicked
+
+    private void tfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyPressed
+        String cat = tfSearch.getText();
+        if (tfSearch.getText().length() > 0) {
+            try {
+                stat = cnct.createStatement();
+                resst = stat.executeQuery("SELECT product_name, quantity FROM product where category =?");
+                tbSaleRep.setModel(DbUtils.resultSetToTableModel(resst));
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            SaleSelect();
         }
-       }else{
-          SaleSelect();
-       }
-    }//GEN-LAST:event_jTextField1KeyPressed
+    }//GEN-LAST:event_tfSearchKeyPressed
 
-    private void btGenRep5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenRep5ActionPerformed
-       try{
-        
-        JFileChooser printExcel = new JFileChooser();
-       printExcel.showSaveDialog(this);
-       File saveExcel = printExcel.getSelectedFile();
-       if(saveExcel != null){
-           saveExcel = new File(saveExcel.toString()+".xlsx");
-           Workbook workb = new XSSFWorkbook();
-           Sheet sheet = workb.createSheet("report");
-       
-           
-           Row myRow = sheet.createRow(0);
-           for(int i=0;i<jTable2.getColumnCount();i++){
-               Cell myCell = myRow.createCell(i);
-               myCell.setCellValue(jTable2.getColumnName(i));
-           }
-            for(int j=0;j<jTable2.getRowCount();j++){
-               Row myRow2 = sheet.createRow(j);
-               for(int k=0;k<jTable2.getColumnCount();k++){
-               Cell myCell = myRow2.createCell(k);
-               
-               if(jTable2.getValueAt(j,k)!=null){
-               myCell.setCellValue(jTable2.getValueAt(j,k).toString());
-               }
-           }
-               
-           }
-           FileOutputStream oust = new FileOutputStream(new File(saveExcel.toString()));
-       workb.write(oust);
-       workb.close();
-       oust.close();
-       createExcel(saveExcel.toString());
-       }else{
-           JOptionPane.showMessageDialog(null, "Error on triyng to generate archive");
-       }
-    
-       }catch(FileNotFoundException ex){
-           System.out.println(ex);
-       }catch(IOException io){
-           System.out.println(io);
-       }
-               
-    }//GEN-LAST:event_btGenRep5ActionPerformed
+    private void btPrintStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPrintStockActionPerformed
+        try {
+            JFileChooser printExcel = new JFileChooser();
+            printExcel.showSaveDialog(this);
+            File saveExcel = printExcel.getSelectedFile();
+            if (saveExcel != null) {
+                saveExcel = new File(saveExcel.toString() + ".xlsx");
+                Workbook workb = new XSSFWorkbook();
+                Sheet sheet = workb.createSheet("report");
+                Row myRow = sheet.createRow(0);
+                for (int i = 0; i < tbRepStock.getColumnCount(); i++) {
+                    Cell myCell = myRow.createCell(i);
+                    myCell.setCellValue(tbRepStock.getColumnName(i));
+                }
+                for (int j = 0; j < tbRepStock.getRowCount(); j++) {
+                    Row myRow2 = sheet.createRow(j);
+                    for (int k = 0; k < tbRepStock.getColumnCount(); k++) {
+                        Cell myCell = myRow2.createCell(k);
 
-    private void btGenRep2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenRep2ActionPerformed
-       try{
-        
-        JFileChooser printExcel = new JFileChooser();
-       printExcel.showSaveDialog(this);
-       File saveExcel = printExcel.getSelectedFile();
-       if(saveExcel != null){
-           saveExcel = new File(saveExcel.toString()+".xlsx");
-           Workbook workb = new XSSFWorkbook();
-           Sheet sheet = workb.createSheet("report");
-       
-           
-           Row myRow = sheet.createRow(0);
-           for(int i=0;i<jTable1.getColumnCount();i++){
-               Cell myCell = myRow.createCell(i);
-               myCell.setCellValue(jTable1.getColumnName(i));
-           }
-            for(int j=0;j<jTable1.getRowCount();j++){
-               Row myRow2 = sheet.createRow(j);
-               for(int k=0;k<jTable1.getColumnCount();k++){
-               Cell myCell = myRow2.createCell(k);
-               
-               if(jTable1.getValueAt(j,k)!=null){
-               myCell.setCellValue(jTable1.getValueAt(j,k).toString());
-               }
-           }
-               
-           }
-           FileOutputStream oust = new FileOutputStream(new File(saveExcel.toString()));
-       workb.write(oust);
-       workb.close();
-       oust.close();
-       createExcel(saveExcel.toString());
-       }else{
-           JOptionPane.showMessageDialog(null, "Error on triyng to generate archive");
-       }
-    
-       }catch(FileNotFoundException ex){
-           System.out.println(ex);
-       }catch(IOException io){
-           System.out.println(io);
-       }
-    }//GEN-LAST:event_btGenRep2ActionPerformed
+                        if (tbRepStock.getValueAt(j, k) != null) {
+                            myCell.setCellValue(tbRepStock.getValueAt(j, k).toString());
+                        }
+                    }
+                }
+                FileOutputStream oust = new FileOutputStream(new File(saveExcel.toString()));
+                workb.write(oust);
+                workb.close();
+                oust.close();
+                createExcel(saveExcel.toString());
+            } else {
+                JOptionPane.showMessageDialog(null, "Error on triyng to generate archive");
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex);
+        } catch (IOException io) {
+            System.out.println(io);
+        }
+    }//GEN-LAST:event_btPrintStockActionPerformed
+
+    private void btPrintSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPrintSaleActionPerformed
+        try {
+            JFileChooser printExcel = new JFileChooser();
+            printExcel.showSaveDialog(this);
+            File saveExcel = printExcel.getSelectedFile();
+            if (saveExcel != null) {
+                saveExcel = new File(saveExcel.toString() + ".xlsx");
+                Workbook workb = new XSSFWorkbook();
+                Sheet sheet = workb.createSheet("report");
+                Row myRow = sheet.createRow(0);
+                for (int i = 0; i < tbSaleRep.getColumnCount(); i++) {
+                    Cell myCell = myRow.createCell(i);
+                    myCell.setCellValue(tbSaleRep.getColumnName(i));
+                }
+                for (int j = 0; j < tbSaleRep.getRowCount(); j++) {
+                    Row myRow2 = sheet.createRow(j);
+                    for (int k = 0; k < tbSaleRep.getColumnCount(); k++) {
+                        Cell myCell = myRow2.createCell(k);
+
+                        if (tbSaleRep.getValueAt(j, k) != null) {
+                            myCell.setCellValue(tbSaleRep.getValueAt(j, k).toString());
+                        }
+                    }
+                }
+                FileOutputStream oust = new FileOutputStream(new File(saveExcel.toString()));
+                workb.write(oust);
+                workb.close();
+                oust.close();
+                createExcel(saveExcel.toString());
+            } else {
+                JOptionPane.showMessageDialog(null, "Error on triyng to generate archive");
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex);
+        } catch (IOException io) {
+            System.out.println(io);
+        }
+    }//GEN-LAST:event_btPrintSaleActionPerformed
+
+    private void btClearUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearUserMouseClicked
+        tfUserId.setText("");
+        tfPassword.setText("");
+        tfUserId.setText("");
+        tfName.setText("");
+        tfEmail.setText("");
+    }//GEN-LAST:event_btClearUserMouseClicked
 
     /**
      * @param args the command line arguments
@@ -759,14 +676,16 @@ SaleSelect();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btCreateU;
-    private javax.swing.JButton btGenRep1;
-    private javax.swing.JButton btGenRep2;
-    private javax.swing.JButton btGenRep3;
-    private javax.swing.JButton btGenRep5;
-    private javax.swing.JButton btGenRep6;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JButton btClearSale;
+    private javax.swing.JButton btClearStock;
+    private javax.swing.JButton btClearUser;
+    private javax.swing.JButton btCreate;
+    private javax.swing.JButton btGenSale;
+    private javax.swing.JButton btPrintSale;
+    private javax.swing.JButton btPrintStock;
+    private javax.swing.JComboBox<String> cbUserType;
+    private com.toedter.calendar.JDateChooser dtFrom;
+    private com.toedter.calendar.JDateChooser dtTo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -787,43 +706,14 @@ SaleSelect();
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField txUseuId;
-    private javax.swing.JTextField txemail;
-    private javax.swing.JTextField txlname;
-    private javax.swing.JTextField txpassword;
-    private javax.swing.JTextField txusername;
-    private javax.swing.JComboBox<String> usertp;
+    private javax.swing.JTable tbRepStock;
+    private javax.swing.JTable tbSaleRep;
+    private javax.swing.JTextField tfEmail;
+    private javax.swing.JTextField tfLname;
+    private javax.swing.JTextField tfName;
+    private javax.swing.JTextField tfPassword;
+    private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfUserId;
     // End of variables declaration//GEN-END:variables
 
-    /* private void registerUser(String uName, String lName, String email, String uPassword) {
-            try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-                
-                try {
-                    PreparedStatement newUser = cnct.prepareStatement("INSERT INTO login (user, password, type, user_name, user_lname, user_email ) VALUES (?,?,?,?,?,?)");
-                    newUser.setString(1, uPassword);
-                    newUser.setString(2, uName);
-                    newUser.setString(3, lName);
-                    newUser.setString(4, email);
-                    
-                    int rss = newUser.executeUpdate();
-                    
-                    JOptionPane.showMessageDialog(this, "New user registered", "Sucessfully", JOptionPane.ERROR_MESSAGE);
-                    
-                    txUseuId.setText("");
-                    txusername.setText("");
-                    txemail.setText("");
-                    txpassword.setText("");
-                } catch (SQLException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            } catch (SQLException ex) {
-                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
-    }*/
 }
