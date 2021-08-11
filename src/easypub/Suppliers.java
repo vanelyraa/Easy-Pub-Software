@@ -5,77 +5,68 @@
  */
 package easypub;
 
-
 import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
-
 
 /**
  *
  * @author vanel
  */
-
 public class Suppliers extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Supplier
-     */
-    public Suppliers() {
-        initComponents();
-        setResizable(false);
-        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-        getSupplierId();
-        SupplierSelect();
-        
-    }
-    
-    Connection cnct = null;
+    Connection cnct;
     Statement stat = null;
     ResultSet resst = null;
     PreparedStatement prepst = null;
-    
+    DefaultTableModel tableSup;
+
+    public Suppliers() {
+        initComponents();
+        cnct = ConnectDB.connect();
+        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        supplierSelect();
+
+    }
+
     public void getSupplierId() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
-            resst = stat.executeQuery("select MAX(supplier_ID) from product");
+            resst = stat.executeQuery("select MAX(supplier_ID) from supplier");
             resst.next();
             resst.getString("MAX(supplier_ID)");
-
             if (resst.getString("MAX(supplier_ID)") == null) {
-                txsupplier_id.setText("S001");
+                tfSupplierId.setText("S001");
             } else {
                 long prodID = Long.parseLong(resst.getString("MAX(supplier_ID)").substring(1, resst.getString("MAX(supplier_ID)").length()));
                 prodID++;
-                txsupplier_id.setText("S" + String.format("%03d", prodID));
+                tfSupplierId.setText("S" + String.format("%03d", prodID));
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-    
-    public void SupplierSelect() {
+
+    public void supplierSelect() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
-            resst = stat.executeQuery("select supplier_ID, supplier_name, adress, country, eircode, email, phone, contact from supplier");
-            SupTable.setModel(DbUtils.resultSetToTableModel(resst));
+            resst = stat.executeQuery("select supplier_ID, supplier_name, email, phone, contact from supplier");
+            tbSupplier.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,29 +78,23 @@ public class Suppliers extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        SupTable = new javax.swing.JTable();
-        bt_save_sup = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        tbSupplier = new javax.swing.JTable();
+        btSave = new javax.swing.JButton();
+        btEdit = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        txsupplier_id = new javax.swing.JTextField();
+        tfSupplierId = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txadress = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txeircode = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        txemail = new javax.swing.JTextField();
+        tfEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txphone = new javax.swing.JTextField();
+        tfPhone = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txcontact = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        txcountry = new javax.swing.JTextField();
-        txsupplier_name = new javax.swing.JTextField();
+        tfContact = new javax.swing.JTextField();
+        tfSupplierName = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
 
@@ -120,102 +105,78 @@ public class Suppliers extends javax.swing.JFrame {
 
         jLabel1.setText("Search");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+        tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfSearchKeyReleased(evt);
             }
         });
 
-        SupTable.setModel(new javax.swing.table.DefaultTableModel(
+        tbSupplier.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Supplier_ID", "Suppliers_name", "Adress", "Country", "Eircode", "Email", "Phone", "Contact"
+                "Supplier ID", "Name", "Email", "Phone", "Contact"
             }
         ));
-        SupTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbSupplier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                SupTableMouseClicked(evt);
+                tbSupplierMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(SupTable);
+        jScrollPane1.setViewportView(tbSupplier);
 
-        bt_save_sup.setBackground(new java.awt.Color(0, 102, 51));
-        bt_save_sup.setForeground(new java.awt.Color(204, 255, 204));
-        bt_save_sup.setText("Save");
-        bt_save_sup.addMouseListener(new java.awt.event.MouseAdapter() {
+        btSave.setBackground(new java.awt.Color(0, 102, 51));
+        btSave.setForeground(new java.awt.Color(204, 255, 204));
+        btSave.setText("Save");
+        btSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bt_save_supMouseClicked(evt);
-            }
-        });
-        bt_save_sup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_save_supActionPerformed(evt);
+                btSaveMouseClicked(evt);
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(0, 102, 51));
-        jButton5.setForeground(new java.awt.Color(204, 255, 204));
-        jButton5.setText("Edit");
-        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+        btEdit.setBackground(new java.awt.Color(0, 102, 51));
+        btEdit.setForeground(new java.awt.Color(204, 255, 204));
+        btEdit.setText("Edit");
+        btEdit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton5MouseClicked(evt);
-            }
-        });
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btEditMouseClicked(evt);
             }
         });
 
-        jButton7.setBackground(new java.awt.Color(0, 102, 51));
-        jButton7.setForeground(new java.awt.Color(204, 255, 204));
-        jButton7.setText("Delete");
-        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+        btDelete.setBackground(new java.awt.Color(0, 102, 51));
+        btDelete.setForeground(new java.awt.Color(204, 255, 204));
+        btDelete.setText("Delete");
+        btDelete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton7MouseClicked(evt);
-            }
-        });
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btDeleteMouseClicked(evt);
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(0, 102, 51));
-        jButton6.setForeground(new java.awt.Color(204, 255, 204));
-        jButton6.setText("Clear");
-        jButton6.setActionCommand("Clear data");
-        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+        btClear.setBackground(new java.awt.Color(0, 102, 51));
+        btClear.setForeground(new java.awt.Color(204, 255, 204));
+        btClear.setText("Clear");
+        btClear.setActionCommand("Clear data");
+        btClear.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton6MouseClicked(evt);
-            }
-        });
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btClearMouseClicked(evt);
             }
         });
 
         jLabel6.setText("ID");
 
+        tfSupplierId.setEnabled(false);
+
         jLabel2.setText("Name");
-
-        jLabel4.setText("Adress");
-
-        jLabel5.setText("Eircode");
 
         jLabel9.setText("Email");
 
         jLabel7.setText("Phone");
 
         jLabel8.setText("Contact");
-
-        jLabel10.setText("Country");
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 51));
 
@@ -229,9 +190,9 @@ public class Suppliers extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(336, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(321, 321, 321))
+                .addContainerGap(382, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(299, 299, 299))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,73 +206,52 @@ public class Suppliers extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(568, 568, 568)
-                        .addComponent(bt_save_sup, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton7)
-                        .addGap(14, 14, 14)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(241, 241, 241))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(14, 14, 14)))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txsupplier_id, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(64, 64, 64)
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txsupplier_name, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(txemail, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(50, 50, 50)
-                                                .addComponent(jLabel7))
-                                            .addComponent(txadress, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(txphone, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(70, 70, 70)
-                                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txcontact, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(48, 48, 48)
-                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txeircode, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(69, 69, 69)
-                                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txcountry, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 876, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel1)
+                                .addGap(16, 16, 16)
+                                .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel6))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(tfSupplierId, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(54, 54, 54)
+                                            .addComponent(jLabel2)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(tfSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(53, 53, 53)
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(tfContact, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(50, 50, 50)
+                                            .addComponent(jLabel7)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(tfPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btDelete)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btClear, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 876, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,40 +259,40 @@ public class Suppliers extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txsupplier_id, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txsupplier_name, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txadress, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txeircode, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txcountry, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txcontact, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txphone, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txemail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bt_save_sup)
-                    .addComponent(jButton5)
-                    .addComponent(jButton7)
-                    .addComponent(jButton6))
-                .addGap(23, 23, 23))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfSupplierId, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfContact, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(63, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btDelete)
+                            .addComponent(btClear, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46))))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {tfContact, tfEmail, tfPhone, tfSearch, tfSupplierId, tfSupplierName});
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btClear, btDelete, btEdit, btSave});
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 900, 600);
@@ -361,141 +301,95 @@ public class Suppliers extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bt_save_supActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_save_supActionPerformed
-          
-    }//GEN-LAST:event_bt_save_supActionPerformed
+    private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
+        tfSupplierId.setText("");
+        tfSupplierName.setText("");
+        tfEmail.setText("");
+        tfPhone.setText("");
+        tfContact.setText("");
+    }//GEN-LAST:event_btClearMouseClicked
 
-    private void SupTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupTableMouseClicked
-        DefaultTableModel tableProd = (DefaultTableModel)SupTable.getModel();
-        int rowIndex = SupTable.getSelectedRow();
-        txsupplier_id.setText(tableProd.getValueAt(rowIndex, 0).toString());
-        txsupplier_name.setText(tableProd.getValueAt(rowIndex, 1).toString());
-        
-        txadress.setText(tableProd.getValueAt(rowIndex, 2).toString());
-        txcountry.setText(tableProd.getValueAt(rowIndex, 3).toString());
-        txeircode.setText(tableProd.getValueAt(rowIndex, 4).toString());
-        txemail.setText(tableProd.getValueAt(rowIndex, 5).toString());
-        txphone.setText(tableProd.getValueAt(rowIndex, 6).toString());
-        txcontact.setText(tableProd.getValueAt(rowIndex, 7).toString());
-        
-        bt_save_sup.setEnabled(false);
-    }//GEN-LAST:event_SupTableMouseClicked
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        
-           
-        
-        
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-       
-    }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
-        if (txsupplier_id.getText().isEmpty())/*||txproduct_name.getText().isEmpty()|| dropsup.getSelectedItem()==null|| txcost.getText().isEmpty()|| txsaleprice.getText().isEmpty()|| txleadtime.getText().isEmpty()|| txunit.getText().isEmpty()|| txminqty.getText().isEmpty()|| dropcategory.getSelectedItem()==null)*/ {
-            JOptionPane.showMessageDialog(this, "Select the supplier to be edited");
+    private void btDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDeleteMouseClicked
+        if (tfSupplierId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select the supplier ID to be deleted");
         } else {
             try {
+                prepst = cnct.prepareStatement("Delete from supplier where supplier_ID=?");
+                prepst.setString(1, tfSupplierId.getText());
+                int warningDel = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?", "Warning", JOptionPane.YES_NO_OPTION);
+                if (warningDel == JOptionPane.YES_OPTION) {
+                    prepst.execute();
+                    JOptionPane.showMessageDialog(this, "Supplier deleted sucesfully");
+                    supplierSelect();
+                }
+                btClearMouseClicked(evt);
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btDeleteMouseClicked
 
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-
-                prepst = cnct.prepareStatement("update supplier SET  supplier_name= ?, adress= ?, country= ?, eircode= ?, email= ?, phone= ?, contact= ? where supplier_ID= ?");
-                        
-
-                prepst.setString(1, txsupplier_id.getText());
-            prepst.setString(2, txsupplier_name.getText());
-            prepst.setString(3, txadress.getText());
-            prepst.setString(4, txcountry.getText());
-            prepst.setString(5, txeircode.getText());
-            prepst.setString(6, txemail.getText());
-            prepst.setString(7, txphone.getText());
-            prepst.setString(8, txcontact.getText());
-            
-
-                int row1 = prepst.executeUpdate();
-
+    private void btEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditMouseClicked
+        if (tfSupplierId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select the supplier ID to be edited");
+        } else {
+            try {
+                prepst = cnct.prepareStatement("update supplier SET supplier_name = ?, email = ?, phone = ?, contact = ? where supplier_ID = ?");
+                prepst.setString(1, tfSupplierId.getText());
+                prepst.setString(2, tfSupplierName.getText().toUpperCase());
+                prepst.setString(3, tfEmail.getText().toLowerCase());
+                prepst.setString(4, tfPhone.getText());
+                prepst.setString(5, tfContact.getText().toUpperCase());
+                int row = prepst.executeUpdate();
+                supplierSelect();
                 JOptionPane.showMessageDialog(this, "Supplier updated sucesfully");
-                cnct.close();
-                SupplierSelect();
+                btClearMouseClicked(evt);
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }//GEN-LAST:event_btEditMouseClicked
 
-    }//GEN-LAST:event_jButton5MouseClicked
-
-    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
-        if (txsupplier_id.getText().isEmpty())/*||txproduct_name.getText().isEmpty()|| dropsup.getSelectedItem()==null|| txcost.getText().isEmpty()|| txsaleprice.getText().isEmpty()|| txleadtime.getText().isEmpty()|| txunit.getText().isEmpty()|| txminqty.getText().isEmpty()|| dropcategory.getSelectedItem()==null)*/ {
-            JOptionPane.showMessageDialog(this, "Select the supplier to be deleted");
+    private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
+        if (tfSupplierName.getText().isEmpty() || tfEmail.getText().isEmpty() || tfPhone.getText().isEmpty() || tfContact.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled");
+        } else if (!tfSupplierId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Supplier ID already exists");
         } else {
             try {
-
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-
-                
-                prepst = cnct.prepareStatement("Delete from supplier where supplier_ID= ?");
-                        
-
-                prepst.setString(1, txsupplier_id.getText());
-             prepst.execute();
-             SupplierSelect();
-
-                JOptionPane.showMessageDialog(this, "Supplier deleted sucesfully");
-                
+                getSupplierId();
+                prepst = cnct.prepareStatement("insert into supplier (supplier_ID, supplier_name, email, phone, contact) values(?,?,?,?,?)");
+                prepst.setString(1, tfSupplierId.getText());
+                prepst.setString(2, tfSupplierName.getText().toUpperCase());
+                prepst.setString(3, tfEmail.getText().toLowerCase());
+                prepst.setString(4, tfPhone.getText());
+                prepst.setString(5, tfContact.getText().toUpperCase());
+                int row = prepst.executeUpdate();
+                supplierSelect();
+                JOptionPane.showMessageDialog(this, "Supplier created sucesfully");
+                btClearMouseClicked(evt);
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_jButton7MouseClicked
+    }//GEN-LAST:event_btSaveMouseClicked
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
-        txsupplier_id.setText("");
-        txsupplier_name.setText("");        
-        txadress.setText("");
-        txcountry.setText("");
-        txeircode.setText("");
-        txemail.setText("");
-        txphone.setText("");
-        txcontact.setText("");
-    }//GEN-LAST:event_jButton6MouseClicked
+    private void tbSupplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbSupplierMouseClicked
+        tableSup = (DefaultTableModel) tbSupplier.getModel();
+        int rowIndex = tbSupplier.getSelectedRow();
+        tfSupplierId.setText(tableSup.getValueAt(rowIndex, 0).toString());
+        tfSupplierName.setText(tableSup.getValueAt(rowIndex, 1).toString());
+        tfEmail.setText(tableSup.getValueAt(rowIndex, 2).toString());
+        tfPhone.setText(tableSup.getValueAt(rowIndex, 3).toString());
+        tfContact.setText(tableSup.getValueAt(rowIndex, 4).toString());
+    }//GEN-LAST:event_tbSupplierMouseClicked
 
-    private void bt_save_supMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_save_supMouseClicked
-        try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            prepst = cnct.prepareStatement("insert into supplier values(?,?,?,?,?,?,?,?)");
-            prepst.setString(1, txsupplier_id.getText());
-            prepst.setString(2, txsupplier_name.getText());
-            prepst.setString(3, txadress.getText());
-            prepst.setString(4, txcountry.getText());
-            prepst.setString(5, txeircode.getText());
-            prepst.setString(6, txemail.getText());
-            prepst.setString(7, txphone.getText());
-            prepst.setString(8, txcontact.getText());
-           
-            
-
-            int row = prepst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Supplier created sucesfully");
-           
-            cnct.close();
-            SupplierSelect();
-            
-            jButton6MouseClicked(evt);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-          
-    }//GEN-LAST:event_bt_save_supMouseClicked
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
+        tableSup = (DefaultTableModel) tbSupplier.getModel();
+        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(tableSup);
+        tbSupplier.setRowSorter(sort);
+        sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
+    }//GEN-LAST:event_tfSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -536,17 +430,13 @@ public class Suppliers extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable SupTable;
-    private javax.swing.JButton bt_save_sup;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton btClear;
+    private javax.swing.JButton btDelete;
+    private javax.swing.JButton btEdit;
+    private javax.swing.JButton btSave;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -554,14 +444,12 @@ public class Suppliers extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField txadress;
-    private javax.swing.JTextField txcontact;
-    private javax.swing.JTextField txcountry;
-    private javax.swing.JTextField txeircode;
-    private javax.swing.JTextField txemail;
-    private javax.swing.JTextField txphone;
-    private javax.swing.JTextField txsupplier_id;
-    private javax.swing.JTextField txsupplier_name;
+    private javax.swing.JTable tbSupplier;
+    private javax.swing.JTextField tfContact;
+    private javax.swing.JTextField tfEmail;
+    private javax.swing.JTextField tfPhone;
+    private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfSupplierId;
+    private javax.swing.JTextField tfSupplierName;
     // End of variables declaration//GEN-END:variables
 }
