@@ -28,6 +28,7 @@ public class Category extends javax.swing.JFrame {
     PreparedStatement prepst = null;
     Statement stat = null;
     ResultSet resst = null;
+    DefaultTableModel tableCat;
 
     public Category() {
         initComponents();
@@ -35,17 +36,14 @@ public class Category extends javax.swing.JFrame {
         setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         categorySelect();
-        
     }
 
     public void getCatId() {
         try {
-
             stat = cnct.createStatement();
             resst = stat.executeQuery("select MAX(category_ID) from category");
             resst.next();
             resst.getString("MAX(category_ID)");
-
             if (resst.getString("MAX(category_ID)") == null) {
                 tfCatId.setText("C001");
             } else {
@@ -53,7 +51,6 @@ public class Category extends javax.swing.JFrame {
                 catID++;
                 tfCatId.setText("C" + String.format("%03d", catID));
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,7 +62,7 @@ public class Category extends javax.swing.JFrame {
 
             stat = cnct.createStatement();
             resst = stat.executeQuery("select category_ID, category_name from category");
-            categoryTb.setModel(DbUtils.resultSetToTableModel(resst));
+            tbCategory.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -86,7 +83,7 @@ public class Category extends javax.swing.JFrame {
         btCatDel = new javax.swing.JButton();
         btCatClear = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        categoryTb = new javax.swing.JTable();
+        tbCategory = new javax.swing.JTable();
         tfCatName = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         tfCatId = new javax.swing.JTextField();
@@ -137,7 +134,7 @@ public class Category extends javax.swing.JFrame {
             }
         });
 
-        categoryTb.setModel(new javax.swing.table.DefaultTableModel(
+        tbCategory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -145,15 +142,15 @@ public class Category extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Category_ID", "Name"
+                "Category ID", "Name"
             }
         ));
-        categoryTb.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbCategory.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                categoryTbMouseClicked(evt);
+                tbCategoryMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(categoryTb);
+        jScrollPane1.setViewportView(tbCategory);
 
         jLabel10.setText("Category name");
 
@@ -261,9 +258,10 @@ public class Category extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCatAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCatAddMouseClicked
-
         if (tfCatName.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Type the new category name");
+            JOptionPane.showMessageDialog(this, "Insert the new category name");
+        } else if (!tfCatId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Category already exists");
         } else {
             try {
                 getCatId();
@@ -271,12 +269,9 @@ public class Category extends javax.swing.JFrame {
                 prepst.setString(1, tfCatId.getText());
                 prepst.setString(2, tfCatName.getText().toUpperCase());
                 int row = prepst.executeUpdate();
-
                 categorySelect();
                 JOptionPane.showMessageDialog(this, "New category registered");
-
                 btCatClearMouseClicked(evt);
-
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -284,21 +279,16 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_btCatAddMouseClicked
 
     private void btCatEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCatEditMouseClicked
-        if (tfCatName.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Select the category to edit");
+        if (tfCatId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select the category ID to be edited");
         } else {
             try {
-
                 prepst = cnct.prepareStatement("update category SET category_name = ? where category_ID = ?");
-
                 prepst.setString(1, tfCatName.getText().toUpperCase());
                 prepst.setString(2, tfCatId.getText());
-
                 int row1 = prepst.executeUpdate();
-
                 categorySelect();
                 JOptionPane.showMessageDialog(this, "Category updated sucesfully");
-
                 btCatClearMouseClicked(evt);
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
@@ -308,20 +298,19 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_btCatEditMouseClicked
 
     private void btCatDelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCatDelMouseClicked
-        if (tfCatName.getText().isEmpty()) {
+        if (tfCatId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the category to be deleted");
         } else {
             try {
-
                 prepst = cnct.prepareStatement("Delete from category where category_ID=?");
                 prepst.setString(1, tfCatId.getText());
-                prepst.execute();
-
-                JOptionPane.showMessageDialog(null, "Category deleted sucesfully");
-                categorySelect();
-
+                int warningDel = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?", "Warning", JOptionPane.YES_NO_OPTION);
+                if (warningDel == JOptionPane.YES_OPTION) {
+                    prepst.execute();
+                    JOptionPane.showMessageDialog(null, "Category deleted sucesfully");
+                    categorySelect();
+                }
                 btCatClearMouseClicked(evt);
-
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -333,17 +322,18 @@ public class Category extends javax.swing.JFrame {
         tfCatName.setText("");
     }//GEN-LAST:event_btCatClearMouseClicked
 
-    private void categoryTbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_categoryTbMouseClicked
-        DefaultTableModel tableCat = (DefaultTableModel) categoryTb.getModel();
-        int rowIndex = categoryTb.getSelectedRow();
+    private void tbCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbCategoryMouseClicked
+        tableCat = (DefaultTableModel) tbCategory.getModel();
+        int rowIndex = tbCategory.getSelectedRow();
         tfCatId.setText(tableCat.getValueAt(rowIndex, 0).toString());
         tfCatName.setText(tableCat.getValueAt(rowIndex, 1).toString());
-    }//GEN-LAST:event_categoryTbMouseClicked
+
+    }//GEN-LAST:event_tbCategoryMouseClicked
 
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
-        DefaultTableModel model = (DefaultTableModel) categoryTb.getModel();
-        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(model);
-        categoryTb.setRowSorter(sort);
+        tableCat = (DefaultTableModel) tbCategory.getModel();
+        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(tableCat);
+        tbCategory.setRowSorter(sort);
         sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
 
     }//GEN-LAST:event_tfSearchKeyReleased
@@ -388,7 +378,6 @@ public class Category extends javax.swing.JFrame {
     private javax.swing.JButton btCatClear;
     private javax.swing.JButton btCatDel;
     private javax.swing.JButton btCatEdit;
-    private javax.swing.JTable categoryTb;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel14;
@@ -396,6 +385,7 @@ public class Category extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tbCategory;
     private javax.swing.JTextField tfCatId;
     private javax.swing.JTextField tfCatName;
     private javax.swing.JTextField tfSearch;
