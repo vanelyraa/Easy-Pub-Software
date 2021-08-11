@@ -10,10 +10,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-/**
- *
- * @author vanel
- */
 public class ConnectDB {
 
     public static Connection connect() {
@@ -25,7 +21,7 @@ public class ConnectDB {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            cnct = DriverManager.getConnection(url, user, password);            
+            cnct = DriverManager.getConnection(url, user, password);
         } catch (SQLException ex) {
         } catch (ClassNotFoundException e) {
             System.out.println(e);
