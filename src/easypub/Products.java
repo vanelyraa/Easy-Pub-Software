@@ -7,14 +7,15 @@ package easypub;
 
 import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -23,152 +24,109 @@ import net.proteanit.sql.DbUtils;
  */
 public class Products extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Supplier
-     */
-    public Products() {
-        initComponents(); 
-        setResizable(false);
-        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-        Category();
-        getProductId();
-         ProductSelect();
-    }
-    
-    Connection cnct = null;
+    Connection cnct;
     Statement stat = null;
     ResultSet resst = null;
     PreparedStatement prepst = null;
-    
-    
-    
+    DefaultTableModel tableProd;
+
+    public Products() {
+        initComponents();
+        cnct = ConnectDB.connect();
+        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        CategoryCombo();
+        SupplierCombo();
+        ProductSelect();
+    }
+
     public void getProductId() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
             resst = stat.executeQuery("select MAX(product_ID) from product");
             resst.next();
             resst.getString("MAX(product_ID)");
-
             if (resst.getString("MAX(product_ID)") == null) {
-                txproduct_id.setText("P000000001");
+                tfproductId.setText("P000000001");
             } else {
                 long prodID = Long.parseLong(resst.getString("MAX(product_ID)").substring(1, resst.getString("MAX(product_ID)").length()));
                 prodID++;
-                txproduct_id.setText("P" + String.format("%09d", prodID));
+                tfproductId.setText("P" + String.format("%09d", prodID));
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-    
+
     public void ProductSelect() {
         try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             stat = cnct.createStatement();
-            resst = stat.executeQuery("select product_ID, product_name, supplier_name, cost, quantity, sales_price, lead_time, unit, min_qty, category from product");
-            ProdTable.setModel(DbUtils.resultSetToTableModel(resst));
+            resst = stat.executeQuery("select product_ID, product_name, supplier_name, cost, quantity, sales_price, lead_time, unit, min_qty, serving, category from product");
+            tbProduct.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public class CategoryDropB{
+
+    public class Category {
+
         String id;
         String catgr;
-        
-        
-    
-    
-    public CategoryDropB(String id,String catgr){
-        this.id= id;
-        this.catgr=catgr;
-    
-}
-    
-    public String toString(){
-        return catgr;
-    }
-    }
-    
-    public void Category(){
-   
-            try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-                
-                stat = cnct.createStatement();
-                resst = stat.executeQuery("select * from category");
-            
-            
-            dropcategory.removeAllItems();
-            while(resst.next())
-            {
-           String name = resst.getString("category_ID");
-             dropcategory.addItem(name);
-            }
-            }catch (SQLException ex) {
-                Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
-            }   
-             
+
+        public Category(String id, String catgr) {
+            this.id = id;
+            this.catgr = catgr;
         }
-    
-    public class SupplierDropB{
+
+        public String toString() {
+            return catgr;
+        }
+    }
+
+    public void CategoryCombo() {
+        try {
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select * from category");
+            cbCategory.removeAllItems();
+            while (resst.next()) {
+                String name = resst.getString("category_name");
+                cbCategory.addItem(name);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public class Supplier {
+
         String supId;
         String name;
-     
-    
-    public SupplierDropB(String supId,String name){
-        this.supId= supId;
-        this.name=name;    
-}
 
-        
-       
-    
-    public String toString(){
-        return name;
-    }
-    }
-    
-    public void SupplierDb(){
-  /* try{
-         cnct = DriverManager.getConnection("jdbc:mysql://localhost:3308/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-         stat = cnct.createStatement();
-         resst = stat.executeQuery("select * from supplier");
-         dropsup.removeAllItems();
-         while(resst.next()){
-             String name = resst.getString("supplier_name");
-             dropsup.addItem(name);
-         }
-   }catch (SQLException ex) {
-                Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
-            }
-   }*/
-         
-            try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-                prepst = cnct.prepareStatement("select * from supplier");
-            
-            resst = prepst.executeQuery();
-            dropsup.removeAllItems();
-            while(resst.next())
-            {
-            dropsup.addItem(new SupplierDropB(resst.getString(1),resst.getString(2)));
-            }
-            }catch (SQLException ex) {
-                Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
-            }  
-             
+        public Supplier(String supId, String name) {
+            this.supId = supId;
+            this.name = name;
         }
-    
-    //32:48
-  
-	
-       
-    
-   
+
+        public String toString() {
+            return name;
+        }
+    }
+
+    public void SupplierCombo() {
+        try {
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select * from supplier");
+            cbSupplier.removeAllItems();
+            while (resst.next()) {
+                String name = resst.getString("supplier_name");
+                cbSupplier.addItem(name);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -176,37 +134,41 @@ public class Products extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        ProdTable = new javax.swing.JTable();
+        tbProduct = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
-        txproduct_id = new javax.swing.JTextField();
+        tfproductId = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        dropcategory = new javax.swing.JComboBox();
-        txleadtime = new javax.swing.JTextField();
-        txminqty = new javax.swing.JTextField();
+        cbCategory = new javax.swing.JComboBox();
+        tfLeadTime = new javax.swing.JTextField();
+        tfMinQty = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txcost = new javax.swing.JTextField();
-        txsaleprice = new javax.swing.JTextField();
-        txunit = new javax.swing.JTextField();
+        tfCost = new javax.swing.JTextField();
+        tfSalePrice = new javax.swing.JTextField();
+        tfUnit = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        dropsup = new javax.swing.JComboBox();
+        cbSupplier = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
-        txproduct_name = new javax.swing.JTextField();
+        tfName = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        bt_save_prod = new javax.swing.JButton();
-        btEditProd = new javax.swing.JButton();
-        btDeleteProd = new javax.swing.JButton();
-        btClearProd = new javax.swing.JButton();
+        btSave = new javax.swing.JButton();
+        btEdit = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        btClear = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        tfSearch = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        tfServing = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
-        ProdTable.setModel(new javax.swing.table.DefaultTableModel(
+        tbProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -217,14 +179,16 @@ public class Products extends javax.swing.JFrame {
                 "ID", "Product", "Supplier", "Cost", "Sale price", "Lead time", "Unit", "Reorder", "Category"
             }
         ));
-        ProdTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ProdTableMouseClicked(evt);
+                tbProductMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(ProdTable);
+        jScrollPane1.setViewportView(tbProduct);
 
         jLabel11.setText("ID");
+
+        tfproductId.setEnabled(false);
 
         jLabel2.setText("Name");
 
@@ -242,12 +206,7 @@ public class Products extends javax.swing.JFrame {
 
         jLabel4.setText("Supplier");
 
-        txproduct_name.setPreferredSize(new java.awt.Dimension(7, 30));
-        txproduct_name.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txproduct_nameActionPerformed(evt);
-            }
-        });
+        tfName.setPreferredSize(new java.awt.Dimension(7, 30));
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 51));
 
@@ -268,65 +227,60 @@ public class Products extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        bt_save_prod.setBackground(new java.awt.Color(0, 102, 51));
-        bt_save_prod.setForeground(new java.awt.Color(204, 255, 204));
-        bt_save_prod.setText("Save");
-        bt_save_prod.addMouseListener(new java.awt.event.MouseAdapter() {
+        btSave.setBackground(new java.awt.Color(0, 102, 51));
+        btSave.setForeground(new java.awt.Color(204, 255, 204));
+        btSave.setText("Save");
+        btSave.setPreferredSize(new java.awt.Dimension(57, 30));
+        btSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bt_save_prodMouseClicked(evt);
-            }
-        });
-        bt_save_prod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_save_prodActionPerformed(evt);
+                btSaveMouseClicked(evt);
             }
         });
 
-        btEditProd.setBackground(new java.awt.Color(0, 102, 51));
-        btEditProd.setForeground(new java.awt.Color(204, 255, 204));
-        btEditProd.setText("Edit");
-        btEditProd.addMouseListener(new java.awt.event.MouseAdapter() {
+        btEdit.setBackground(new java.awt.Color(0, 102, 51));
+        btEdit.setForeground(new java.awt.Color(204, 255, 204));
+        btEdit.setText("Edit");
+        btEdit.setPreferredSize(new java.awt.Dimension(51, 30));
+        btEdit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btEditProdMouseClicked(evt);
-            }
-        });
-        btEditProd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btEditProdActionPerformed(evt);
+                btEditMouseClicked(evt);
             }
         });
 
-        btDeleteProd.setBackground(new java.awt.Color(0, 102, 51));
-        btDeleteProd.setForeground(new java.awt.Color(204, 255, 204));
-        btDeleteProd.setText("Delete");
-        btDeleteProd.addMouseListener(new java.awt.event.MouseAdapter() {
+        btDelete.setBackground(new java.awt.Color(0, 102, 51));
+        btDelete.setForeground(new java.awt.Color(204, 255, 204));
+        btDelete.setText("Delete");
+        btDelete.setPreferredSize(new java.awt.Dimension(63, 30));
+        btDelete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btDeleteProdMouseClicked(evt);
-            }
-        });
-        btDeleteProd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btDeleteProdActionPerformed(evt);
+                btDeleteMouseClicked(evt);
             }
         });
 
-        btClearProd.setBackground(new java.awt.Color(0, 102, 51));
-        btClearProd.setForeground(new java.awt.Color(204, 255, 204));
-        btClearProd.setText("Clear");
-        btClearProd.addMouseListener(new java.awt.event.MouseAdapter() {
+        btClear.setBackground(new java.awt.Color(0, 102, 51));
+        btClear.setForeground(new java.awt.Color(204, 255, 204));
+        btClear.setText("Clear");
+        btClear.setPreferredSize(new java.awt.Dimension(57, 30));
+        btClear.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btClearProdMouseClicked(evt);
+                btClearMouseClicked(evt);
             }
         });
-        btClearProd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btClearProdActionPerformed(evt);
+
+        jLabel12.setText("Search");
+
+        tfSearch.setPreferredSize(new java.awt.Dimension(7, 30));
+        tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfSearchKeyReleased(evt);
             }
         });
+
+        jLabel13.setText("Serving");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -339,104 +293,132 @@ public class Products extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txsaleprice, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                                .addComponent(txproduct_id)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(39, 39, 39)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dropcategory, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(46, 46, 46)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfproductId, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfSalePrice, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(48, 48, 48))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txproduct_name, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dropsup, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txunit, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(48, 48, 48)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txleadtime, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(33, 33, 33)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txcost, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(537, 537, 537)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tfUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(53, 53, 53)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tfLeadTime, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(49, 49, 49)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tfCost, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(46, 46, 46)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tfMinQty, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(40, 40, 40)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                                            .addComponent(tfServing)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(189, 189, 189)
+                                        .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btClear, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txminqty, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bt_save_prod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(14, 14, 14)
-                                .addComponent(btEditProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btDeleteProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(12, 12, 12)
-                                .addComponent(btClearProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(43, 43, 43)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)))))
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel13, tfCost, tfLeadTime, tfMinQty, tfSalePrice, tfServing, tfUnit});
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btClear, btDelete, btEdit, btSave});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txproduct_id, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dropcategory, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txproduct_name, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dropsup, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txsaleprice, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txunit, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txleadtime, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txcost, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txminqty, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bt_save_prod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btEditProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btDeleteProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btClearProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfproductId, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel10))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(tfCost, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfMinQty, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfServing, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfLeadTime, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfSalePrice, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(24, 24, 24))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cbCategory, cbSupplier, jLabel10, jLabel11, jLabel13, jLabel2, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9, tfCost, tfLeadTime, tfMinQty, tfName, tfSalePrice, tfServing, tfUnit, tfproductId});
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btClear, btDelete, btEdit, btSave});
 
         getContentPane().add(jPanel1);
 
@@ -444,137 +426,119 @@ public class Products extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bt_save_prodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_save_prodActionPerformed
-       
-      
-        
-    }//GEN-LAST:event_bt_save_prodActionPerformed
+    private void tbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProductMouseClicked
+        tableProd = (DefaultTableModel) tbProduct.getModel();
+        int rowIndex = tbProduct.getSelectedRow();
+        tfproductId.setText(tableProd.getValueAt(rowIndex, 0).toString());        
+        tfName.setText(tableProd.getValueAt(rowIndex, 1).toString());
+        Object comboSup = tableProd.getValueAt(rowIndex, 2);
+        cbSupplier.addItem(comboSup);
+        cbSupplier.setSelectedItem(comboSup);        
+        tfCost.setText(tableProd.getValueAt(rowIndex, 3).toString());
+        tfSalePrice.setText(tableProd.getValueAt(rowIndex, 5).toString());
+        tfLeadTime.setText(tableProd.getValueAt(rowIndex, 6).toString());
+        tfUnit.setText(tableProd.getValueAt(rowIndex, 7).toString());
+        tfMinQty.setText(tableProd.getValueAt(rowIndex, 8).toString());
+        tfServing.setText(tableProd.getValueAt(rowIndex, 9).toString());
+        Object comboCat = tableProd.getValueAt(rowIndex, 10);
+        cbCategory.addItem(comboCat);
+        cbCategory.setSelectedItem(comboCat);         
+    }//GEN-LAST:event_tbProductMouseClicked
 
-    private void ProdTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProdTableMouseClicked
-       DefaultTableModel tableProd = (DefaultTableModel)ProdTable.getModel();
-        int rowIndex = ProdTable.getSelectedRow();
-        txproduct_id.setText(tableProd.getValueAt(rowIndex, 0).toString());
-        txproduct_name.setText(tableProd.getValueAt(rowIndex, 1).toString());
-        dropsup.setSelectedItem(tableProd.getValueAt(rowIndex, 2).toString());
-        txcost.setText(tableProd.getValueAt(rowIndex, 3).toString());
-        txsaleprice.setText(tableProd.getValueAt(rowIndex, 4).toString());
-        txleadtime.setText(tableProd.getValueAt(rowIndex, 5).toString());
-        txunit.setText(tableProd.getValueAt(rowIndex, 6).toString());
-        txminqty.setText(tableProd.getValueAt(rowIndex, 7).toString());
-        dropcategory.setSelectedItem(tableProd.getValueAt(rowIndex, 8).toString());
-        
-        bt_save_prod.setEnabled(false);
-    }//GEN-LAST:event_ProdTableMouseClicked
-
-    private void btEditProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditProdActionPerformed
-      
-    }//GEN-LAST:event_btEditProdActionPerformed
-
-    private void btDeleteProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteProdActionPerformed
-        
-    }//GEN-LAST:event_btDeleteProdActionPerformed
-
-    private void btClearProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearProdActionPerformed
-        
-    }//GEN-LAST:event_btClearProdActionPerformed
-
-    private void bt_save_prodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_save_prodMouseClicked
-        try {
-            cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-            prepst = cnct.prepareStatement("insert into product values(?,?,?,?,?,?,?,?,?,?,?)");
-            prepst.setString(1, txproduct_id.getText());
-            prepst.setString(2, txproduct_name.getText());
-            prepst.setString(3, dropsup.getSelectedItem().toString());
-            prepst.setString(4, txcost.getText());
-            prepst.setString(5, txsaleprice.getText());
-            prepst.setString(6, txleadtime.getText());
-            prepst.setString(7, txunit.getText());
-            prepst.setString(8, txminqty.getText());
-            prepst.setString(9, dropcategory.getSelectedItem().toString());
-            
-
-            int row = prepst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Product created sucesfully");
-           
-            cnct.close();
-            ProductSelect();
-            
-            btClearProdMouseClicked(evt);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_bt_save_prodMouseClicked
-
-    private void btEditProdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditProdMouseClicked
-       if (txproduct_id.getText().isEmpty())/*||txproduct_name.getText().isEmpty()|| dropsup.getSelectedItem()==null|| txcost.getText().isEmpty()|| txsaleprice.getText().isEmpty()|| txleadtime.getText().isEmpty()|| txunit.getText().isEmpty()|| txminqty.getText().isEmpty()|| dropcategory.getSelectedItem()==null)*/ {
-            JOptionPane.showMessageDialog(this, "Select the category to be edited");
+    private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
+        if (tfName.getText().isEmpty()||cbSupplier.getSelectedItem()==null||tfCost.getText().isEmpty()||tfSalePrice.getText().isEmpty()||tfLeadTime.getText().isEmpty()||tfUnit.getText().isEmpty()||tfMinQty.getText().isEmpty()||tfServing.getText().isEmpty()||cbCategory.getSelectedItem()==null) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled");
+        } else if (!tfproductId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Product ID already exists");
         } else {
             try {
-
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-
-                prepst = cnct.prepareStatement("update product SET product_name = ?, supplier_name = ?, cost = ?, Quantity = ?, sales_price= ?, lead_time= ?, unit= ?, min_qty= ?, category = ? where product_ID = ?");
-
-                prepst.setString(1, txproduct_id.getText());
-            prepst.setString(2, txproduct_name.getText());
-            prepst.setString(3, dropsup.getSelectedItem().toString());
-            prepst.setString(4, txcost.getText());
-            prepst.setString(5, txsaleprice.getText());
-            prepst.setString(6, txleadtime.getText());
-            prepst.setString(7, txunit.getText());
-            prepst.setString(8, txminqty.getText());
-            prepst.setString(9, dropcategory.getSelectedItem().toString());
-
-                int row1 = prepst.executeUpdate();
-
-                JOptionPane.showMessageDialog(this, "Category updated sucesfully");
-                cnct.close();
+                getProductId();
+                prepst = cnct.prepareStatement("insert into product (product_name, supplier_name, cost, sales_price, lead_time, unit, min_qty, serving, category) values(?,?,?,?,?,?,?,?,?,?,?)");
+                prepst.setString(1, tfproductId.getText());
+                prepst.setString(2, tfName.getText().toUpperCase());
+                prepst.setString(3, cbSupplier.getSelectedItem().toString());
+                prepst.setString(4, tfCost.getText());
+                prepst.setString(5, tfSalePrice.getText());
+                prepst.setString(6, tfLeadTime.getText());
+                prepst.setString(7, tfUnit.getText().toUpperCase());
+                prepst.setString(8, tfMinQty.getText());
+                prepst.setString(9, tfServing.getText());
+                prepst.setString(10, cbCategory.getSelectedItem().toString());
+                int row = prepst.executeUpdate();
                 ProductSelect();
+                JOptionPane.showMessageDialog(this, "Product created sucesfully");
+                btClearMouseClicked(evt);
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }//GEN-LAST:event_btSaveMouseClicked
 
-    }//GEN-LAST:event_btEditProdMouseClicked
+    private void btEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditMouseClicked
+        if (tfproductId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select the product ID to be edited");
+        } else {
+            try {
+                prepst = cnct.prepareStatement("update product SET product_name = ?, supplier_name = ?, cost = ?, Quantity = ?, sales_price= ?, lead_time= ?, unit= ?, min_qty= ?, category = ? where product_ID = ?");
+                prepst.setString(1, tfproductId.getText());
+                prepst.setString(2, tfName.getText().toUpperCase());
+                prepst.setString(3, cbSupplier.getSelectedItem().toString());
+                prepst.setString(4, tfCost.getText());
+                prepst.setString(5, tfSalePrice.getText());
+                prepst.setString(6, tfLeadTime.getText());
+                prepst.setString(7, tfUnit.getText().toUpperCase());
+                prepst.setString(8, tfMinQty.getText());
+                 prepst.setString(9, tfServing.getText());
+                prepst.setString(10, cbCategory.getSelectedItem().toString());
+                int row1 = prepst.executeUpdate();
+                ProductSelect();
+                JOptionPane.showMessageDialog(this, "Category updated sucesfully");
+                btClearMouseClicked(evt);
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btEditMouseClicked
 
-    private void btDeleteProdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDeleteProdMouseClicked
-        if (txproduct_id.getText().isEmpty()) {
+    private void btDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDeleteMouseClicked
+        if (tfproductId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the product to be deleted");
         } else {
             try {
-                cnct = DriverManager.getConnection("jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
-
                 prepst = cnct.prepareStatement("Delete from product where product_ID=?");
-                prepst.setString(1, txproduct_id.getText());
-                int warningDel=JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?","Warning",JOptionPane.YES_NO_OPTION);
-                if(warningDel==JOptionPane.YES_OPTION){
-                prepst.execute();
-                ProductSelect();
-                JOptionPane.showMessageDialog(null, "Product deleted sucesfully");
+                prepst.setString(1, tfproductId.getText());
+                int warningDel = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?", "Warning", JOptionPane.YES_NO_OPTION);
+                if (warningDel == JOptionPane.YES_OPTION) {
+                    prepst.execute();
+                    ProductSelect();
+                    JOptionPane.showMessageDialog(null, "Product deleted sucesfully");
                 }
-
+                btClearMouseClicked(evt);
             } catch (SQLException ex) {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_btDeleteProdMouseClicked
+    }//GEN-LAST:event_btDeleteMouseClicked
 
-    private void btClearProdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearProdMouseClicked
-        txproduct_id.setText("");
-            txproduct_name.setText("");
-            dropsup.setSelectedItem(-1);
-            txcost.setText("");
-            txsaleprice.setText("");
-            txleadtime.setText("");
-            txunit.setText("");
-            txminqty.setText("");
-            dropcategory.setSelectedItem(-1);
-    }//GEN-LAST:event_btClearProdMouseClicked
+    private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
+        tfproductId.setText("");
+        tfName.setText("");
+        cbSupplier.setSelectedItem(-1);
+        tfCost.setText("");
+        tfSalePrice.setText("");
+        tfLeadTime.setText("");
+        tfUnit.setText("");
+        tfMinQty.setText("");
+        tfServing.setText("");
+        cbCategory.setSelectedItem(-1);
+    }//GEN-LAST:event_btClearMouseClicked
 
-    private void txproduct_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txproduct_nameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txproduct_nameActionPerformed
+    private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
+        tableProd = (DefaultTableModel) tbProduct.getModel();
+        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(tableProd);
+        tbProduct.setRowSorter(sort);
+        sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
+    }//GEN-LAST:event_tfSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -613,15 +577,16 @@ public class Products extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable ProdTable;
-    private javax.swing.JButton btClearProd;
-    private javax.swing.JButton btDeleteProd;
-    private javax.swing.JButton btEditProd;
-    private javax.swing.JButton bt_save_prod;
-    private javax.swing.JComboBox dropcategory;
-    private javax.swing.JComboBox dropsup;
+    private javax.swing.JButton btClear;
+    private javax.swing.JButton btDelete;
+    private javax.swing.JButton btEdit;
+    private javax.swing.JButton btSave;
+    private javax.swing.JComboBox cbCategory;
+    private javax.swing.JComboBox cbSupplier;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -634,12 +599,15 @@ public class Products extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField txcost;
-    private javax.swing.JTextField txleadtime;
-    private javax.swing.JTextField txminqty;
-    private javax.swing.JTextField txproduct_id;
-    private javax.swing.JTextField txproduct_name;
-    private javax.swing.JTextField txsaleprice;
-    private javax.swing.JTextField txunit;
+    private javax.swing.JTable tbProduct;
+    private javax.swing.JTextField tfCost;
+    private javax.swing.JTextField tfLeadTime;
+    private javax.swing.JTextField tfMinQty;
+    private javax.swing.JTextField tfName;
+    private javax.swing.JTextField tfSalePrice;
+    private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfServing;
+    private javax.swing.JTextField tfUnit;
+    private javax.swing.JTextField tfproductId;
     // End of variables declaration//GEN-END:variables
 }
