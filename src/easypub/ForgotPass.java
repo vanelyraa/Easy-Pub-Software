@@ -5,11 +5,7 @@
  */
 package easypub;
 
-
-
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
@@ -30,16 +26,15 @@ import javax.swing.JOptionPane;
 public class ForgotPass extends javax.swing.JPanel {
 
     int randCode;
+    Connection cnct = null;
+
     /**
      * Creates new form ForgotPass
      */
     public ForgotPass() {
         initComponents();
+        cnct = ConnectDB.connect();
     }
-    
-    Connection cnct = null;
-    Statement stat = null;
-    ResultSet resst = null;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,93 +47,106 @@ public class ForgotPass extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        verify = new javax.swing.JButton();
-        send = new javax.swing.JButton();
+        tfEmail = new javax.swing.JTextField();
+        tfVerCode = new javax.swing.JTextField();
+        btVerify = new javax.swing.JButton();
+        btSend = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
-        setLayout(new java.awt.GridLayout());
+        setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Forgot Password?");
+        jPanel1.setBackground(new java.awt.Color(0, 102, 51));
 
         jLabel2.setText("Enter your email");
 
         jLabel3.setText("Verification code");
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        btVerify.setBackground(new java.awt.Color(204, 255, 204));
+        btVerify.setText("Verify");
+        btVerify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                btVerifyActionPerformed(evt);
             }
         });
 
-        verify.setBackground(new java.awt.Color(204, 255, 204));
-        verify.setText("Verify");
-        verify.addActionListener(new java.awt.event.ActionListener() {
+        btSend.setBackground(new java.awt.Color(204, 255, 204));
+        btSend.setText("Send");
+        btSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                verifyActionPerformed(evt);
+                btSendActionPerformed(evt);
             }
         });
 
-        send.setBackground(new java.awt.Color(204, 255, 204));
-        send.setText("Send");
-        send.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendActionPerformed(evt);
-            }
-        });
+        jPanel3.setBackground(new java.awt.Color(204, 255, 204));
+
+        jLabel1.setBackground(new java.awt.Color(0, 102, 51));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 51));
+        jLabel1.setText("Forgot Password?");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(42, 42, 42))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(19, 19, 19)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(13, 13, 13)
-                                    .addComponent(send, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(52, 52, 52)
-                                .addComponent(verify, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(19, 19, 19)
+                                .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(tfVerCode, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(13, 13, 13)
+                            .addComponent(btSend, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel1)))
+                        .addGap(52, 52, 52)
+                        .addComponent(btVerify, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(18, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(45, 45, 45)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(send)
+                .addComponent(btSend)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfVerCode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(verify)
+                .addComponent(btVerify)
                 .addGap(29, 29, 29))
         );
 
@@ -156,81 +164,75 @@ public class ForgotPass extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         add(jPanel1);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void verifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifyActionPerformed
-        if(Integer.valueOf(jTextField2.getText())==randCode){
-            ResetPass res = new ResetPass(jTextField1.getText());
+    private void btVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVerifyActionPerformed
+        if (Integer.valueOf(tfVerCode.getText()) == randCode) {
+            ResetPass res = new ResetPass(tfEmail.getText());
             res.setVisible(true);
             this.setVisible(false);
-        }else{
-            JOptionPane.showMessageDialog(null,"Code do not match");
+        } else {
+            JOptionPane.showMessageDialog(null, "Code do not match");
         }
-        
-    }//GEN-LAST:event_verifyActionPerformed
 
-    private void sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendActionPerformed
-        
+    }//GEN-LAST:event_btVerifyActionPerformed
+
+    private void btSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSendActionPerformed
+
         try {
             Random rand = new Random();
             randCode = rand.nextInt(999999);
             String myHost = "smtp.gmail.com";
             String myUser = "tsnemailsndr@gmail.com";
             String password = "vQ#Tgez@=KRFM2E4";
-            String email = jTextField1.getText();
+            String email = tfEmail.getText();
             String text = "Reseting code";
-            String verify = "Your verification code is"+randCode;
+            String verify = "Your verification code is" + randCode;
             boolean sDebug = false;
             Properties prop = System.getProperties();
-            prop.put("mail.smtp.starttls.enable","true");
-            prop.put("mail.smtp.host","host");
-            prop.put("mail.smtp.port","587");
-            prop.put("mail.smtp.auth","true");
+            prop.put("mail.smtp.starttls.enable", "true");
+            prop.put("mail.smtp.host", "host");
+            prop.put("mail.smtp.port", "587");
+            prop.put("mail.smtp.auth", "true");
             prop.put("mail.smtp.starttls.required", "true");
             java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
             Session mailSession = Session.getDefaultInstance(prop, null);
             mailSession.setDebug(sDebug);
             Message msg = new MimeMessage(mailSession);
             msg.setFrom(new InternetAddress(myUser));
-            InternetAddress [] address = {new InternetAddress(email)};
+            InternetAddress[] address = {new InternetAddress(email)};
             msg.setRecipients(Message.RecipientType.TO, address);
             msg.setSubject(email);
             msg.setText(text);
             Transport transp = mailSession.getTransport("smtp");
-            transp.connect(myHost,myUser,password);
-            transp.sendMessage(msg,msg.getAllRecipients());
+            transp.connect(myHost, myUser, password);
+            transp.sendMessage(msg, msg.getAllRecipients());
             transp.close();
-            JOptionPane.showMessageDialog(null,"Code sent to user");
+            JOptionPane.showMessageDialog(null, "Code sent to user");
         } catch (AddressException ex) {
             Logger.getLogger(ForgotPass.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
             Logger.getLogger(ForgotPass.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-            
- 
-        
-                        
-    }//GEN-LAST:event_sendActionPerformed
+
+
+    }//GEN-LAST:event_btSendActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btSend;
+    private javax.swing.JButton btVerify;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JButton send;
-    private javax.swing.JButton verify;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JTextField tfEmail;
+    private javax.swing.JTextField tfVerCode;
     // End of variables declaration//GEN-END:variables
 }
