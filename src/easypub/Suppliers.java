@@ -113,10 +113,7 @@ public class Suppliers extends javax.swing.JFrame {
 
         tbSupplier.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Supplier ID", "Name", "Email", "Phone", "Contact"
