@@ -17,18 +17,18 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
 
-    Connection cnct = null;
+    Connection cnct;
     Statement stat = null;
     ResultSet resst = null;
     PreparedStatement prepst = null;
+   
 
     public Login() {
         initComponents();
         cnct = ConnectDB.connect();
-
         setTitle("EasyPub Login");
+        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
@@ -192,19 +192,20 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSubmitActionPerformed
-        String username = tfUsername.getText();
+        String username = tfUsername.getText().toUpperCase();
         String password = String.valueOf(tfPassword.getPassword());
         String utype = cbUserType.getSelectedItem().toString();
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Login failed, user or password empty");
+        if (username.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Login failed, user empty");
+        }                
+        if ( password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Login failed, password empty");
         } else {
             try {
-
                 prepst = cnct.prepareStatement("Select * from login WHERE user = ? and password = ? and type=?");
                 prepst.setString(1, username);
                 prepst.setString(2, password);
                 prepst.setString(3, utype);
-
                 resst = prepst.executeQuery();
                 if (resst.next()) {
                     JOptionPane.showMessageDialog(this, "Login succesfull");
@@ -220,12 +221,10 @@ public class Login extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "Login Username or password not found");
                 }
-
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }//GEN-LAST:event_btSubmitActionPerformed
 
     private void btForgotPassMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btForgotPassMouseMoved
@@ -233,9 +232,10 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btForgotPassMouseMoved
 
     private void btForgotPassMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btForgotPassMousePressed
-        ForgotPass sdcode = new ForgotPass();
-        sdcode.setVisible(true);
+          ForgotPassw sdcode = new ForgotPassw();   
+    
         this.setVisible(false);
+        sdcode.setVisible(true);
     }//GEN-LAST:event_btForgotPassMousePressed
 
     /**
