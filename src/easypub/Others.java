@@ -19,6 +19,8 @@ import javax.swing.JTextField;
 import net.proteanit.sql.DbUtils;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.apache.poi.ss.usermodel.Cell;
@@ -120,7 +122,19 @@ public class Others extends javax.swing.JFrame {
 
         jLabel11.setText("Last name");
 
+        tfName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfNameKeyReleased(evt);
+            }
+        });
+
         jLabel6.setText("Email");
+
+        tfEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfEmailKeyReleased(evt);
+            }
+        });
 
         jLabel7.setText("Password");
 
@@ -639,6 +653,28 @@ public class Others extends javax.swing.JFrame {
         tfName.setText("");
         tfEmail.setText("");
     }//GEN-LAST:event_btClearUserMouseClicked
+
+    private void tfNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyReleased
+       String PATTERN="^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$";
+             Pattern pat = Pattern.compile(PATTERN);
+             Matcher match=pat.matcher(tfName.getText());
+        if(match.matches()){
+            JOptionPane.showMessageDialog(null, "Character not permitted");
+    }else{
+          tfName.setText(null);
+        }
+    }//GEN-LAST:event_tfNameKeyReleased
+
+    private void tfEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEmailKeyReleased
+        String PATTERN="^(.+)@(.+)$";
+             Pattern pat = Pattern.compile(PATTERN);
+             Matcher match=pat.matcher(tfEmail.getText());
+        if(match.matches()){
+            JOptionPane.showMessageDialog(null, "Email incorrect please check");
+    }else{
+          tfEmail.setText(null);
+        }
+    }//GEN-LAST:event_tfEmailKeyReleased
 
     /**
      * @param args the command line arguments
