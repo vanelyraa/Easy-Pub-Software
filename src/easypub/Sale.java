@@ -42,7 +42,6 @@ public class Sale extends javax.swing.JFrame {
     public void ProductComboBox() {
 
         try {
-
             stat = cnct.createStatement();
             resst = stat.executeQuery("select * from product");
 
@@ -54,7 +53,6 @@ public class Sale extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void fillTable() {
@@ -76,7 +74,6 @@ public class Sale extends javax.swing.JFrame {
         }
 
         tfTotal.setText(Integer.toString(sum));
-
         cbProduct.setSelectedItem(-1);
         tfPrice.setText("");
         tfQty.setText("");
@@ -89,12 +86,15 @@ public class Sale extends javax.swing.JFrame {
             LocalDateTime now = LocalDateTime.now();
             String today = dtf.format(now);
 
+            String prod = cbProduct.getSelectedItem().toString();
+            String salePr= tfPrice.getText();
             String tot = tfTotal.getText();
             String cash = tfCash.getText();
             String change = tfChange.getText();
+            String qty = tfQty.getText();
             int saleID = 0;
 
-            prepst = cnct.prepareStatement("insert into sale(date, total, cash) values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            prepst = cnct.prepareStatement("insert into sale(date, total, cash) values("+tot+","+cash+","+change+")", Statement.RETURN_GENERATED_KEYS);
             prepst.setString(1, today);
             prepst.setString(2, tfTotal.getText());
             prepst.setString(3, tfCash.getText());
@@ -105,11 +105,11 @@ public class Sale extends javax.swing.JFrame {
                 saleID = resst.getInt(1);
             }
 
-            PreparedStatement prepst1 = cnct.prepareStatement("insert into sale_item(date, sale_id, product_name, sales_price, quantity, total), values(?,?,?,?,?,?)");
+            PreparedStatement prepst1 = cnct.prepareStatement("insert into sale_item(date, sale_id, product_name, sales_price, quantity, total), values("+today+","+saleID+","+prod+","+salePr+","+qty+","+tot+")");
 
             String prodName = "";
             String price = "";
-            String qty = "";
+            
             int total = 0;
 
             for (int i = 0; i < tbSale.getRowCount(); i++) {
@@ -126,7 +126,7 @@ public class Sale extends javax.swing.JFrame {
             prepst1.setInt(6, total);
             prepst1.executeUpdate();
 
-            PreparedStatement prepst2 = cnct.prepareStatement("uupdate product set quantity = quantity+ ? where product_name = ?");
+            PreparedStatement prepst2 = cnct.prepareStatement("update product set quantity = quantity+ ? where product_name = ?");
 
             for (int i = 0; i < tbSale.getRowCount(); i++) {
                 prodName = (String) tbSale.getValueAt(i, 0);
@@ -210,6 +210,11 @@ public class Sale extends javax.swing.JFrame {
         tfPrice.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
 
         tfQty.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        tfQty.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfQtyKeyReleased(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel7.setText("Price");
@@ -244,6 +249,11 @@ public class Sale extends javax.swing.JFrame {
         jLabel3.setText("Cash");
 
         tfCash.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        tfCash.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfCashKeyReleased(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Total");
@@ -252,10 +262,7 @@ public class Sale extends javax.swing.JFrame {
 
         tbSale.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Product", "Price", "Quantity", "Total"
@@ -424,12 +431,6 @@ public class Sale extends javax.swing.JFrame {
 
     private void btPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPayActionPerformed
 
-        int cash = Integer.parseInt(tfCash.getText());
-        int total = Integer.parseInt(tfTotal.getText());
-        int change = Integer.parseInt(tfChange.getText());
-        change = total - cash;
-
-        tfCash.setText(String.valueOf(change));
         add();
 
 
@@ -456,6 +457,7 @@ public class Sale extends javax.swing.JFrame {
 
     private void btAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddActionPerformed
         fillTable();
+        
         cbProduct.setSelectedItem(-1);
         tfPrice.setText("");
         tfQty.setText("");
@@ -479,6 +481,20 @@ public class Sale extends javax.swing.JFrame {
             Logger.getLogger(Sale.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_cbProductPopupMenuWillBecomeInvisible
+
+    private void tfQtyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQtyKeyReleased
+         
+    }//GEN-LAST:event_tfQtyKeyReleased
+
+    private void tfCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCashKeyReleased
+        int cash = Integer.parseInt(tfCash.getText());
+        int total = Integer.parseInt(tfTotal.getText());
+        int change = Integer.parseInt(tfChange.getText());
+        change = total - cash;
+
+        tfCash.setText(String.valueOf(change));
+       
+    }//GEN-LAST:event_tfCashKeyReleased
 
     /**
      * @param args the command line arguments
