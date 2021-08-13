@@ -10,10 +10,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -26,13 +30,14 @@ public class Stock extends javax.swing.JFrame {
     Statement stat = null;
     ResultSet resst = null;
     PreparedStatement prepst = null;
-    DefaultTableModel tableProd;
+    DefaultTableModel StockTable;
 
     public Stock() {
         initComponents();
         cnct = ConnectDB.connect();
         setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        StockSelect();
 
     }
 
@@ -40,19 +45,8 @@ public class Stock extends javax.swing.JFrame {
         try {
 
             stat = cnct.createStatement();
-            resst = stat.executeQuery("select date, product_name, transaction, quantity from stock");
+            resst = stat.executeQuery("select product_ID, product_name, quantity from product");
             tbStock.setModel(DbUtils.resultSetToTableModel(resst));
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void LowStockSelect() {
-        try {
-
-            stat = cnct.createStatement();
-            resst = stat.executeQuery("select product_ID, product_name, quantity, min_qty, from product");
-            jTable2.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,7 +63,7 @@ public class Stock extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btSearch = new javax.swing.JTextField();
+        tfSearch = new javax.swing.JTextField();
         btUpdate = new javax.swing.JButton();
         btClear = new javax.swing.JButton();
         tfQty = new javax.swing.JTextField();
@@ -81,21 +75,23 @@ public class Stock extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbStock = new javax.swing.JTable();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
         tfActQty = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         tfProduct = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbStock = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(950, 600));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setText("Search");
+
+        tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfSearchKeyReleased(evt);
+            }
+        });
 
         btUpdate.setBackground(new java.awt.Color(0, 102, 51));
         btUpdate.setForeground(new java.awt.Color(204, 255, 204));
@@ -136,6 +132,12 @@ public class Stock extends javax.swing.JFrame {
         jLabel3.setText("Stock");
         jPanel2.add(jLabel3);
 
+        tfActQty.setEnabled(false);
+
+        jLabel8.setText("Actual quantity");
+
+        tfProduct.setEnabled(false);
+
         tbStock.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -154,30 +156,6 @@ public class Stock extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tbStock);
 
-        jTabbedPane1.addTab("STOCK", jScrollPane1);
-        jTabbedPane1.addTab("LOW STOCK", jTabbedPane2);
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Product ID", "Product name", "Reorder point", "Quantity"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable2);
-
-        jTabbedPane1.addTab("LOW STOCK", jScrollPane3);
-
-        tfActQty.setEnabled(false);
-
-        jLabel8.setText("Actual quantity");
-
-        tfProduct.setEnabled(false);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -187,8 +165,8 @@ public class Stock extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 685, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cbTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,7 +190,7 @@ public class Stock extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 30, Short.MAX_VALUE))
         );
 
@@ -225,10 +203,10 @@ public class Stock extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(btSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tfProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,14 +233,16 @@ public class Stock extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btClear)
                             .addComponent(btUpdate))
-                        .addGap(14, 14, 14))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btClear, btUpdate});
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btSearch, cbTransaction, tfActQty, tfProdId, tfProduct, tfQty});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cbTransaction, tfActQty, tfProdId, tfProduct, tfQty, tfSearch});
 
         getContentPane().add(jPanel1);
 
@@ -273,9 +253,12 @@ public class Stock extends javax.swing.JFrame {
     private void btUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btUpdateMouseClicked
         int qty = Integer.parseInt(tfQty.getText());
         try {
-
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDateTime now = LocalDateTime.now();
+            String today = dtf.format(now);
             prepst = cnct.prepareStatement("insert into stock values(?,?,?,?)");
 
+            prepst.setString(1, today);
             prepst.setString(2, tfProduct.getText());
             prepst.setString(3, cbTransaction.getSelectedItem().toString());
             prepst.setString(4, tfQty.getText());
@@ -283,9 +266,19 @@ public class Stock extends javax.swing.JFrame {
             int row = prepst.executeUpdate();
             JOptionPane.showMessageDialog(this, "Stock updated sucesfully");
 
-            cnct.close();
-            StockSelect();
+            String prodID = tfProdId.getText();
+            String qtyNew = tfQty.getText();
+            String actQty = tfActQty.getText();
+            String transac = cbTransaction.getSelectedItem().toString();
+            long totQty = Long.valueOf(qtyNew) + Long.valueOf(actQty);
+            //PreparedStatement prepst1 = cnct.prepareStatement("update product set quantity"+totQty+"where product_ID"+prodID);
+            // int row1 = prepst1.executeUpdate();
+            stat = cnct.createStatement();
+            stat.execute("insert into stock (date,product_ID, transaction,quantity)" + "values('" + today + "','" + prodID + "','" + transac + "','" + totQty + "')");
+            stat.execute("update product set quantity='" + totQty + "' where product_ID='" + prodID + "'");
+            stat.close();
 
+            StockSelect();
             btClearMouseClicked(evt);
 
         } catch (SQLException ex) {
@@ -294,19 +287,27 @@ public class Stock extends javax.swing.JFrame {
     }//GEN-LAST:event_btUpdateMouseClicked
 
     private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
-        
+        tfProdId.setText("");
+        tfProduct.setText("");
         cbTransaction.setSelectedItem(-1);
+        tfActQty.setText("");
         tfQty.setText("");
     }//GEN-LAST:event_btClearMouseClicked
 
     private void tbStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbStockMouseClicked
-        tableProd = (DefaultTableModel) tbStock.getModel();
+        StockTable = (DefaultTableModel) tbStock.getModel();
         int rowIndex = tbStock.getSelectedRow();
-
-        tfProduct.setText(tableProd.getValueAt(rowIndex, 1).toString());
-        cbTransaction.setSelectedItem(tableProd.getValueAt(rowIndex, 2).toString());
-        tfQty.setText(tableProd.getValueAt(rowIndex, 3).toString());
+        tfProdId.setText(tbStock.getValueAt(rowIndex, 0).toString());
+        tfProduct.setText(tbStock.getValueAt(rowIndex, 1).toString());
+        tfActQty.setText(tbStock.getValueAt(rowIndex, 2).toString());
     }//GEN-LAST:event_tbStockMouseClicked
+
+    private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
+        StockTable = (DefaultTableModel) tbStock.getModel();
+        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(StockTable);
+        tbStock.setRowSorter(sort);
+        sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
+    }//GEN-LAST:event_tfSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -352,7 +353,6 @@ public class Stock extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btClear;
-    private javax.swing.JTextField btSearch;
     private javax.swing.JButton btUpdate;
     private javax.swing.JComboBox<String> cbTransaction;
     private javax.swing.JLabel jLabel1;
@@ -365,14 +365,11 @@ public class Stock extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable tbStock;
     private javax.swing.JTextField tfActQty;
     private javax.swing.JTextField tfProdId;
     private javax.swing.JTextField tfProduct;
     private javax.swing.JTextField tfQty;
+    private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 }
