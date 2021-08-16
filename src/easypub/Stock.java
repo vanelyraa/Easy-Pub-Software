@@ -23,6 +23,7 @@ import net.proteanit.sql.DbUtils;
 /**
  *
  * @author vanel
+ * Area where user manages stock
  */
 public class Stock extends javax.swing.JFrame {
 
@@ -38,12 +39,11 @@ public class Stock extends javax.swing.JFrame {
         setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         StockSelect();
-
     }
 
+    //method to update table with database  data
     public void StockSelect() {
         try {
-
             stat = cnct.createStatement();
             resst = stat.executeQuery("select product_ID, product_name, quantity from product");
             tbStock.setModel(DbUtils.resultSetToTableModel(resst));
@@ -251,6 +251,8 @@ public class Stock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btUpdateMouseClicked
+        //method updates stock when update button is pressed
+        //update stock and product table in database
         int qty = Integer.parseInt(tfQty.getText());
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -287,6 +289,7 @@ public class Stock extends javax.swing.JFrame {
     }//GEN-LAST:event_btUpdateMouseClicked
 
     private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
+       //clear info from textfields when button clicked
         tfProdId.setText("");
         tfProduct.setText("");
         cbTransaction.setSelectedItem(-1);
@@ -295,6 +298,7 @@ public class Stock extends javax.swing.JFrame {
     }//GEN-LAST:event_btClearMouseClicked
 
     private void tbStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbStockMouseClicked
+        //fill textfields when table is clicked
         StockTable = (DefaultTableModel) tbStock.getModel();
         int rowIndex = tbStock.getSelectedRow();
         tfProdId.setText(tbStock.getValueAt(rowIndex, 0).toString());
@@ -303,6 +307,7 @@ public class Stock extends javax.swing.JFrame {
     }//GEN-LAST:event_tbStockMouseClicked
 
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
+        //field searches user input throught table
         StockTable = (DefaultTableModel) tbStock.getModel();
         TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(StockTable);
         tbStock.setRowSorter(sort);
