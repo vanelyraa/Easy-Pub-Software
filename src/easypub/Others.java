@@ -29,6 +29,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ *
+ * @author vanel
+ * Page where new users can be created and reports generated
+ */
+
 public class Others extends javax.swing.JFrame {
 
     int createId;
@@ -45,6 +51,7 @@ public class Others extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
     }   
 
+    //retrieve data from database to jtable
     public void SaleSelect() {
         try {
             stat = cnct.createStatement();
@@ -55,6 +62,7 @@ public class Others extends javax.swing.JFrame {
         }
     }
 
+    //create reports in excel
     public void createExcel(String myfile) {
         try {
             File path = new File(myfile);
@@ -502,6 +510,7 @@ public class Others extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCreateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCreateMouseClicked
+        //method creates new user and save on database
         try {            
             prepst = cnct.prepareStatement("insert into login (user, password,type,user_name,user_lname,user_email)values(?,?,?,?,?,?)");
             prepst.setString(1, tfUserId.getText());
@@ -519,6 +528,8 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_btCreateMouseClicked
 
     private void btGenSaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btGenSaleMouseClicked
+        //retrieve sales records from database to jtable
+     
         String fromDate = ((JTextField) dtFrom.getDateEditor().getUiComponent()).getText();
         String toDate = ((JTextField) dtTo.getDateEditor().getUiComponent()).getText();
         if (fromDate.length() > 0 && toDate.isEmpty()) {
@@ -543,17 +554,20 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_btGenSaleMouseClicked
 
     private void btClearSaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearSaleMouseClicked
+        //clear data from textfields
         ((JTextField) dtFrom.getDateEditor().getUiComponent()).setText("");
         ((JTextField) dtTo.getDateEditor().getUiComponent()).setText("");
         SaleSelect();
     }//GEN-LAST:event_btClearSaleMouseClicked
 
     private void btClearStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearStockMouseClicked
+        //clear data from textfields
         tfSearch.setText("");
         SaleSelect();
     }//GEN-LAST:event_btClearStockMouseClicked
 
     private void tfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyPressed
+        //user input on this field will search in jtable
         String cat = tfSearch.getText();
         if (tfSearch.getText().length() > 0) {
             try {
@@ -569,6 +583,7 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_tfSearchKeyPressed
 
     private void btPrintStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPrintStockActionPerformed
+        //prints report from table to excel
         try {
             JFileChooser printExcel = new JFileChooser();
             printExcel.showSaveDialog(this);
@@ -608,6 +623,7 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_btPrintStockActionPerformed
 
     private void btPrintSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPrintSaleActionPerformed
+        //prints report from table to excel
         try {
             JFileChooser printExcel = new JFileChooser();
             printExcel.showSaveDialog(this);
@@ -647,6 +663,7 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_btPrintSaleActionPerformed
 
     private void btClearUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearUserMouseClicked
+        //clear all data from textfields
         tfUserId.setText("");
         tfPassword.setText("");
         tfUserId.setText("");
@@ -655,7 +672,8 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_btClearUserMouseClicked
 
     private void tfNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyReleased
-       String PATTERN="^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$";
+      //checks user input on name field using regex (only letters and some characters used on names)
+        String PATTERN="^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$";
              Pattern pat = Pattern.compile(PATTERN);
              Matcher match=pat.matcher(tfName.getText());
         if(match.matches()){
@@ -666,6 +684,7 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNameKeyReleased
 
     private void tfEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEmailKeyReleased
+       //checks user input on email field using regex (email format)
         String PATTERN="^(.+)@(.+)$";
              Pattern pat = Pattern.compile(PATTERN);
              Matcher match=pat.matcher(tfEmail.getText());
