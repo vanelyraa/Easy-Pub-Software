@@ -21,6 +21,7 @@ import net.proteanit.sql.DbUtils;
 /**
  *
  * @author vanel
+ * Page where user manages products
  */
 public class Products extends javax.swing.JFrame {
 
@@ -40,6 +41,7 @@ public class Products extends javax.swing.JFrame {
         ProductSelect();
     }
 
+    //method to generate custom Product ID
     public void getProductId() {
         try {
             stat = cnct.createStatement();
@@ -58,6 +60,7 @@ public class Products extends javax.swing.JFrame {
         }
     }
 
+    //method to update table with database  data
     public void ProductSelect() {
         try {
             stat = cnct.createStatement();
@@ -68,6 +71,7 @@ public class Products extends javax.swing.JFrame {
         }
     }
 
+    //class, constructor and to string method to combobox
     public class Category {
 
         String id;
@@ -83,6 +87,7 @@ public class Products extends javax.swing.JFrame {
         }
     }
 
+    //method to fill combobox with Categories from database
     public void CategoryCombo() {
         try {
             stat = cnct.createStatement();
@@ -112,6 +117,7 @@ public class Products extends javax.swing.JFrame {
         }
     }
 
+     //method to fill combobox with Suppliers from database
     public void SupplierCombo() {
         try {
             stat = cnct.createStatement();
@@ -427,6 +433,7 @@ public class Products extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProductMouseClicked
+        //method fill textfields with table data
         tableProd = (DefaultTableModel) tbProduct.getModel();
         int rowIndex = tbProduct.getSelectedRow();
         tfproductId.setText(tableProd.getValueAt(rowIndex, 0).toString());        
@@ -446,6 +453,7 @@ public class Products extends javax.swing.JFrame {
     }//GEN-LAST:event_tbProductMouseClicked
 
     private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
+        //Save info on database when button save in clicked
         if (tfName.getText().isEmpty()||cbSupplier.getSelectedItem()==null||tfCost.getText().isEmpty()||tfSalePrice.getText().isEmpty()||tfLeadTime.getText().isEmpty()||tfUnit.getText().isEmpty()||tfMinQty.getText().isEmpty()||tfServing.getText().isEmpty()||cbCategory.getSelectedItem()==null) {
             JOptionPane.showMessageDialog(this, "All fields must be filled");
         } else if (!tfproductId.getText().isEmpty()) {
@@ -475,6 +483,7 @@ public class Products extends javax.swing.JFrame {
     }//GEN-LAST:event_btSaveMouseClicked
 
     private void btEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditMouseClicked
+        //save any edition made by the user to database
         if (tfproductId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the product ID to be edited");
         } else {
@@ -501,6 +510,7 @@ public class Products extends javax.swing.JFrame {
     }//GEN-LAST:event_btEditMouseClicked
 
     private void btDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDeleteMouseClicked
+        //delete info on databse when user selects an ID from table
         if (tfproductId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the product to be deleted");
         } else {
@@ -518,9 +528,11 @@ public class Products extends javax.swing.JFrame {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
     }//GEN-LAST:event_btDeleteMouseClicked
 
     private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
+        //clear ll dtaaon textfields
         tfproductId.setText("");
         tfName.setText("");
         cbSupplier.setSelectedItem(-1);
