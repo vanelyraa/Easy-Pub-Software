@@ -21,6 +21,7 @@ import net.proteanit.sql.DbUtils;
 /**
  *
  * @author vanel
+ * Area where the user can manage suppliers on the system
  */
 public class Suppliers extends javax.swing.JFrame {
 
@@ -36,9 +37,9 @@ public class Suppliers extends javax.swing.JFrame {
         setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         supplierSelect();
-
     }
 
+    //method to generate custom ID
     public void getSupplierId() {
         try {
             stat = cnct.createStatement();
@@ -57,6 +58,7 @@ public class Suppliers extends javax.swing.JFrame {
         }
     }
 
+    //method to update table with database  data
     public void supplierSelect() {
         try {
             stat = cnct.createStatement();
@@ -299,6 +301,7 @@ public class Suppliers extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
+        //clear all info from fields
         tfSupplierId.setText("");
         tfSupplierName.setText("");
         tfEmail.setText("");
@@ -307,6 +310,8 @@ public class Suppliers extends javax.swing.JFrame {
     }//GEN-LAST:event_btClearMouseClicked
 
     private void btDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDeleteMouseClicked
+                //method to delete a supplier by clicking button 
+
         if (tfSupplierId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the supplier ID to be deleted");
         } else {
@@ -327,6 +332,7 @@ public class Suppliers extends javax.swing.JFrame {
     }//GEN-LAST:event_btDeleteMouseClicked
 
     private void btEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEditMouseClicked
+        //method to edit a supplier by clicking button 
         if (tfSupplierId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the supplier ID to be edited");
         } else {
@@ -348,6 +354,7 @@ public class Suppliers extends javax.swing.JFrame {
     }//GEN-LAST:event_btEditMouseClicked
 
     private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
+        //method to add a new supplier by clicking button 
         if (tfSupplierName.getText().isEmpty() || tfEmail.getText().isEmpty() || tfPhone.getText().isEmpty() || tfContact.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "All fields must be filled");
         } else if (!tfSupplierId.getText().isEmpty()) {
@@ -372,6 +379,7 @@ public class Suppliers extends javax.swing.JFrame {
     }//GEN-LAST:event_btSaveMouseClicked
 
     private void tbSupplierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbSupplierMouseClicked
+        //fill jtextfield with info from table
         tableSup = (DefaultTableModel) tbSupplier.getModel();
         int rowIndex = tbSupplier.getSelectedRow();
         tfSupplierId.setText(tableSup.getValueAt(rowIndex, 0).toString());
@@ -382,6 +390,7 @@ public class Suppliers extends javax.swing.JFrame {
     }//GEN-LAST:event_tbSupplierMouseClicked
 
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
+        //field searches user input throught table
         tableSup = (DefaultTableModel) tbSupplier.getModel();
         TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(tableSup);
         tbSupplier.setRowSorter(sort);
