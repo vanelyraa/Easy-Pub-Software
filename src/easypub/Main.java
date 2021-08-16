@@ -10,6 +10,7 @@ import javax.swing.WindowConstants;
 /**
  *
  * @author vanel
+ * Dashboard for admin users
  */
 public class Main extends javax.swing.JFrame {
 
@@ -194,6 +195,7 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //buttons to redirect user to the page desired
     private void btSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSuppliersActionPerformed
         Suppliers a = new Suppliers();
         a.setVisible(true);
