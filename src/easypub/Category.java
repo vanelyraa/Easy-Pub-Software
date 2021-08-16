@@ -21,6 +21,7 @@ import net.proteanit.sql.DbUtils;
 /**
  *
  * @author vanel
+ * Area where the user can manage categories on the system
  */
 public class Category extends javax.swing.JFrame {
 
@@ -38,6 +39,7 @@ public class Category extends javax.swing.JFrame {
         categorySelect();
     }
 
+    //method to generate custom Category ID
     public void getCatId() {
         try {
             stat = cnct.createStatement();
@@ -57,9 +59,9 @@ public class Category extends javax.swing.JFrame {
 
     }
 
+    //method to update table with database  data
     public void categorySelect() {
         try {
-
             stat = cnct.createStatement();
             resst = stat.executeQuery("select category_ID, category_name from category");
             tbCategory.setModel(DbUtils.resultSetToTableModel(resst));
@@ -258,6 +260,7 @@ public class Category extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCatAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCatAddMouseClicked
+       //method to add a new category by clicking button 
         if (tfCatName.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Insert the new category name");
         } else if (!tfCatId.getText().isEmpty()) {
@@ -279,6 +282,7 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_btCatAddMouseClicked
 
     private void btCatEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCatEditMouseClicked
+        //method to edit a category by clicking button 
         if (tfCatId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the category ID to be edited");
         } else {
@@ -298,6 +302,7 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_btCatEditMouseClicked
 
     private void btCatDelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCatDelMouseClicked
+        //method to delete a category by clicking button 
         if (tfCatId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Select the category to be deleted");
         } else {
@@ -318,11 +323,13 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_btCatDelMouseClicked
 
     private void btCatClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCatClearMouseClicked
+        //clear all info from fields
         tfCatId.setText("");
         tfCatName.setText("");
     }//GEN-LAST:event_btCatClearMouseClicked
 
     private void tbCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbCategoryMouseClicked
+        //fill jtextfield with info from table
         tableCat = (DefaultTableModel) tbCategory.getModel();
         int rowIndex = tbCategory.getSelectedRow();
         tfCatId.setText(tableCat.getValueAt(rowIndex, 0).toString());
@@ -331,6 +338,7 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_tbCategoryMouseClicked
 
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
+        //field searches user input throught table
         tableCat = (DefaultTableModel) tbCategory.getModel();
         TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(tableCat);
         tbCategory.setRowSorter(sort);
