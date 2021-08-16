@@ -15,6 +15,7 @@ public class Receipt extends javax.swing.JFrame {
 
     /**
      * Creates new form Receipt
+     * Receipt to be printed to user
      */
     public Receipt() {
         initComponents();
@@ -23,6 +24,7 @@ public class Receipt extends javax.swing.JFrame {
     String rtot;
     String rcash;
 
+    //String representation of receipt, retrives data from table
     public Receipt(String tot, String cash, TableModel model) {
         initComponents();
         this.rtot = tot;
