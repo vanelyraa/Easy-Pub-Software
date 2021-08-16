@@ -7,6 +7,12 @@ package easypub;
 
 import javax.swing.WindowConstants;
 
+/**
+ *
+ * @author vanel
+ * Dashboard for users not admin
+ */
+
 
 public class MainUser extends javax.swing.JFrame {
    
@@ -131,6 +137,7 @@ public class MainUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //redirect user to Point of Sale page
     private void btSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalesActionPerformed
         Sale b = new Sale();
         b.setVisible(true);
