@@ -21,6 +21,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 /**
  *
  * @author vanel
+ * Page where users record sales in real time
  */
 public class Sale extends javax.swing.JFrame {
 
@@ -39,6 +40,7 @@ public class Sale extends javax.swing.JFrame {
         AutoCompleteDecorator.decorate(cbProduct);
     }
 
+    //retrieves data from database to fill combobox
     public void ProductComboBox() {
 
         try {
@@ -55,6 +57,7 @@ public class Sale extends javax.swing.JFrame {
         }
     }
 
+    //fill table with info selected by the user
     public void fillTable() {
         String prod = (cbProduct.getSelectedItem().toString());
         int price = Integer.parseInt(tfPrice.getText());
@@ -80,6 +83,8 @@ public class Sale extends javax.swing.JFrame {
         cbProduct.requestFocus();
     }
 
+    //method to add data to database
+    //inserts data to sale table, sale_item table and updates product quantity
     public void add() {
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -147,6 +152,7 @@ public class Sale extends javax.swing.JFrame {
 
     }
 
+    //method to print receipt
     public void printReceipt() {
         String tot = tfTotal.getText();
         String cash = tfCash.getText();
@@ -210,11 +216,6 @@ public class Sale extends javax.swing.JFrame {
         tfPrice.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
 
         tfQty.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        tfQty.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfQtyKeyReleased(evt);
-            }
-        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel7.setText("Price");
@@ -430,10 +431,7 @@ public class Sale extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPayActionPerformed
-
         add();
-
-
     }//GEN-LAST:event_btPayActionPerformed
 
     private void btPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPrintActionPerformed
@@ -441,18 +439,19 @@ public class Sale extends javax.swing.JFrame {
     }//GEN-LAST:event_btPrintActionPerformed
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        //button clear table data
         saleTable = (DefaultTableModel) tbSale.getModel();
         saleTable.setRowCount(0);
     }//GEN-LAST:event_btClearActionPerformed
 
     private void btRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoveActionPerformed
+        //remove items from table
         try {
             saleTable = (DefaultTableModel) tbSale.getModel();
             int row = tbSale.getSelectedRow();
             saleTable.removeRow(row);
         } catch (Exception ex) {
         }
-
     }//GEN-LAST:event_btRemoveActionPerformed
 
     private void btAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddActionPerformed
@@ -464,6 +463,7 @@ public class Sale extends javax.swing.JFrame {
     }//GEN-LAST:event_btAddActionPerformed
 
     private void cbProductPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbProductPopupMenuWillBecomeInvisible
+        //fill textfield after jcombo selection
         try {
             String getProd = (String) cbProduct.getSelectedItem();
 
@@ -482,11 +482,8 @@ public class Sale extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbProductPopupMenuWillBecomeInvisible
 
-    private void tfQtyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQtyKeyReleased
-         
-    }//GEN-LAST:event_tfQtyKeyReleased
-
     private void tfCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCashKeyReleased
+        //calculates change when pay button is pressed
         int cash = Integer.parseInt(tfCash.getText());
         int total = Integer.parseInt(tfTotal.getText());
         int change = Integer.parseInt(tfChange.getText());
