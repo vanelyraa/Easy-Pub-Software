@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author vanel
+ * Login area page
  */
 public class Login extends javax.swing.JFrame {
 
@@ -192,6 +193,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSubmitActionPerformed
+        //method button submit, checks with database user input and return message if login succesfull or not
         String username = tfUsername.getText().toUpperCase();
         String password = String.valueOf(tfPassword.getPassword());
         String utype = cbUserType.getSelectedItem().toString();
@@ -228,11 +230,13 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btSubmitActionPerformed
 
     private void btForgotPassMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btForgotPassMouseMoved
+        //changes the cursor form an arrow to a hand when mouse is on top of forgot password label
         btForgotPass.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_btForgotPassMouseMoved
 
     private void btForgotPassMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btForgotPassMousePressed
-          ForgotPassw sdcode = new ForgotPassw();   
+        //if forgot password is pressesd, system goes to Forgot Password page 
+        ForgotPassw sdcode = new ForgotPassw();   
     
         this.setVisible(false);
         sdcode.setVisible(true);
