@@ -42,15 +42,6 @@
                   <Component id="jScrollPane1" min="-2" pref="505" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="btCatAdd" linkSize="1" max="32767" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="btCatEdit" linkSize="1" min="-2" pref="76" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="btCatDel" linkSize="1" min="-2" pref="76" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="btCatClear" linkSize="1" pref="77" max="32767" attributes="0"/>
-                      </Group>
                       <Component id="jLabel10" min="-2" pref="84" max="-2" attributes="0"/>
                       <Component id="jLabel14" min="-2" pref="77" max="-2" attributes="0"/>
                       <Component id="tfCatId" alignment="0" min="-2" pref="133" max="-2" attributes="0"/>
@@ -58,6 +49,15 @@
                       <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                           <Component id="tfSearch" alignment="0" max="32767" attributes="0"/>
                           <Component id="tfCatName" alignment="0" pref="310" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="btCatAdd" linkSize="1" max="32767" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="btCatEdit" linkSize="1" min="-2" pref="76" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="btCatDel" linkSize="1" min="-2" pref="76" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="btCatClear" linkSize="1" pref="77" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -82,7 +82,7 @@
                           <Component id="jLabel10" linkSize="3" min="-2" pref="28" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="tfCatName" linkSize="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btCatAdd" linkSize="2" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                               <Component id="btCatEdit" linkSize="2" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
@@ -164,7 +164,7 @@
             <Component class="javax.swing.JTable" name="tbCategory">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="2" rowCount="4">
+                  <Table columnCount="2" rowCount="0">
                     <Column editable="true" title="Category ID" type="java.lang.Object"/>
                     <Column editable="true" title="Name" type="java.lang.Object"/>
                   </Table>
@@ -202,7 +202,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="tfCatId">
           <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
