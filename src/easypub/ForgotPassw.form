@@ -234,6 +234,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="tfQuestion">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
@@ -248,6 +251,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="tfPassword">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
