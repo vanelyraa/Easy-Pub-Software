@@ -17,14 +17,15 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author vanel
- * Page where user inserts login and answers Security Question to recover password
+ * @author vanel Page where user inserts login and answers Security Question to
+ * recover password
  */
 public class ForgotPassw extends javax.swing.JFrame {
 
     Connection cnct;
     ResultSet resst = null;
     PreparedStatement prepst = null;
+
     /**
      * Creates new form ForgotPassw
      */
@@ -33,7 +34,6 @@ public class ForgotPassw extends javax.swing.JFrame {
         cnct = ConnectDB.connect();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -116,9 +116,13 @@ public class ForgotPassw extends javax.swing.JFrame {
 
         jLabel4.setText("Security Question:");
 
+        tfQuestion.setEditable(false);
+
         jLabel5.setText("Password");
 
         jLabel6.setText("Answer:");
+
+        tfPassword.setEditable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -219,64 +223,64 @@ public class ForgotPassw extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVerifyActionPerformed
-       //method checks on database if user answer is correct, it checks with database
+        //method checks on database if user answer is correct, it checks with database
         String answer = tfAnswer.getText();
-       if(answer.equals("")){
-           JOptionPane.showMessageDialog(null, "Asnwer is mandatory");
-       }else{
-           try {
-               prepst = cnct.prepareStatement("SELECT * FROM `login` WHERE `answer`='"+answer+"'");
-               resst = prepst.executeQuery();
-               if(resst.next()){
-                   String passw = resst.getString(2);
-                   tfPassword.setText("Your password is: "+passw);
-               }else{
-                 JOptionPane.showMessageDialog(null, "Asnwer is not correct");  
-               }
-           } catch (SQLException ex) {
-               Logger.getLogger(ForgotPassw.class.getName()).log(Level.SEVERE, null, ex);
-           }          
-       }
+        if (answer.equals("")) {
+            JOptionPane.showMessageDialog(null, "Asnwer is mandatory");
+        } else {
+            try {
+                prepst = cnct.prepareStatement("SELECT * FROM `login` WHERE `answer`='" + answer + "'");
+                resst = prepst.executeQuery();
+                if (resst.next()) {
+                    String passw = resst.getString(2);
+                    tfPassword.setText("Your password is: " + passw);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Asnwer is not correct");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ForgotPassw.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btVerifyActionPerformed
 
     private void btBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBackActionPerformed
-       //when button is pressed it goes back to login area
+        //when button is pressed it goes back to login area
         Login login = new Login();
-       login.setVisible(true);
-       this.dispose();
+        login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btBackActionPerformed
 
     private void tfUserFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfUserFocusGained
-      //check if user typed and make text red
-        if(tfUser.getText().trim().equals("Enter username")){
-          tfUser.setText("");          
-      }
-      tfUser.setForeground(Color.RED);
+        //check if user typed and make text red
+        if (tfUser.getText().trim().equals("Enter username")) {
+            tfUser.setText("");
+        }
+        tfUser.setForeground(Color.RED);
     }//GEN-LAST:event_tfUserFocusGained
 
     private void tfUserFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfUserFocusLost
-     //if user did not type, clear other textfields
-        if(tfUser.getText().trim().equals("")){
-        tfUser.setText("Enter username") ;
-        tfQuestion.setText("");
-        tfAnswer.setText("");
-        tfPassword.setText("");
-     }
-     tfUser.setForeground(Color.GREEN);
+        //if user did not type, clear other textfields
+        if (tfUser.getText().trim().equals("")) {
+            tfUser.setText("Enter username");
+            tfQuestion.setText("");
+            tfAnswer.setText("");
+            tfPassword.setText("");
+        }
+        tfUser.setForeground(Color.GREEN);
     }//GEN-LAST:event_tfUserFocusLost
 
     private void tfUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfUserKeyPressed
         //method to find in database and fill question textfield
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            try { 
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
                 prepst = cnct.prepareStatement("Select * from login where user = ?");
-                prepst.setString(1,tfUser.getText());
+                prepst.setString(1, tfUser.getText());
                 resst = prepst.executeQuery();
-               if(resst.next()){
-                  tfQuestion.setText(resst.getString("question"));
-               }else{
-                JOptionPane.showMessageDialog(null,"User not found");   
-               }
+                if (resst.next()) {
+                    tfQuestion.setText(resst.getString("question"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "User not found");
+                }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
