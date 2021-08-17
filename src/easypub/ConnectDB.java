@@ -7,13 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 public class ConnectDB {
 
     public static Connection connect() {
 
         Connection cnct = null;
-        String url = "jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL";//database adress
+        String url = "jdbc:mysql://localhost:3306/easypubdatabase?zeroDateTimeBehavior=CONVERT_TO_NULL";//database address
         String user = "root";
         String password = "";
 
