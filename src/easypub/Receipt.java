@@ -14,26 +14,25 @@ import javax.swing.table.TableModel;
 public class Receipt extends javax.swing.JFrame {
 
     /**
-     * Creates new form Receipt
-     * Receipt to be printed to user
+     * Creates new form Receipt Receipt to be printed to user
      */
     public Receipt() {
         initComponents();
+        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
     }
 
     String rtot;
-    String rcash;
 
     //String representation of receipt, retrives data from table
-    public Receipt(String tot, String cash, TableModel model) {
+    public Receipt(String tot, TableModel model) {
         initComponents();
         this.rtot = tot;
-        this.rcash = cash;
 
-        txtprint.setText(txtprint.getText() + "***********************************\n");
-        txtprint.setText(txtprint.getText() + "**************RECEIPT**************\n");
+        txtprint.setText(txtprint.getText() + "*****************************************************\n");
+        txtprint.setText(txtprint.getText() + "**************************RECEIPT********************\n");
         txtprint.setText(txtprint.getText() + "\n");
-        txtprint.setText(txtprint.getText() + "Product" + "\t" + "Price" + "\t" + "Price" + "\t" + "Total");
+        txtprint.setText(txtprint.getText() + "Product" + "\t" + "Price" + "\t" + "Price" + "\t" + "Total" + "\n");
         txtprint.setText(txtprint.getText() + "\n");
 
         for (int i = 0; i < model.getRowCount(); i++) {
@@ -42,16 +41,16 @@ public class Receipt extends javax.swing.JFrame {
             String qty = (String) model.getValueAt(i, 2);
             int total = (int) model.getValueAt(i, 3);
 
-            txtprint.setText(txtprint.getText() + product + "\t" + price + "\t" + qty + "\t" + total);
+            txtprint.setText(txtprint.getText() + product + "\t" + price + "\t" + qty + "\t" + total + "\n");
         }
         txtprint.setText(txtprint.getText() + "\n");
         txtprint.setText(txtprint.getText() + "\n");
 
         txtprint.setText(txtprint.getText() + "          " + "Total: " + tot + "\n");
 
-        txtprint.setText(txtprint.getText() + "***********************************\n");
-        txtprint.setText(txtprint.getText() + "***********************************\n");
-        txtprint.setText(txtprint.getText() + "*************THANK YOU!************\n");
+        txtprint.setText(txtprint.getText() + "***************************************************\n");
+        txtprint.setText(txtprint.getText() + "***************************************************\n");
+        txtprint.setText(txtprint.getText() + "**********************THANK YOU!*******************\n");
     }
 
     /**
@@ -67,7 +66,6 @@ public class Receipt extends javax.swing.JFrame {
         txtprint = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(200, 300));
 
         txtprint.setColumns(20);
         txtprint.setRows(5);
@@ -77,7 +75,7 @@ public class Receipt extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
