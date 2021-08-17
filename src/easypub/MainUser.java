@@ -9,13 +9,10 @@ import javax.swing.WindowConstants;
 
 /**
  *
- * @author vanel
- * Dashboard for users not admin
+ * @author vanel Dashboard for users not admin
  */
-
-
 public class MainUser extends javax.swing.JFrame {
-   
+
     public MainUser() {
         initComponents();
         setResizable(false);
