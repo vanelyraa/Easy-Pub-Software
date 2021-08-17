@@ -13,8 +13,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author vanel
- * Login area page
+ * @author vanel Login area page
  */
 public class Login extends javax.swing.JFrame {
 
@@ -22,15 +21,12 @@ public class Login extends javax.swing.JFrame {
     Statement stat = null;
     ResultSet resst = null;
     PreparedStatement prepst = null;
-   
 
     public Login() {
         initComponents();
         cnct = ConnectDB.connect();
         setTitle("EasyPub Login");
-        
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);        
         setVisible(true);
         setResizable(false);
         pack();
@@ -194,13 +190,13 @@ public class Login extends javax.swing.JFrame {
 
     private void btSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSubmitActionPerformed
         //method button submit, checks with database user input and return message if login succesfull or not
-        String username = tfUsername.getText().toUpperCase();
+        String username = tfUsername.getText();
         String password = String.valueOf(tfPassword.getPassword());
         String utype = cbUserType.getSelectedItem().toString();
-        if (username.isEmpty()){
+        if (username.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Login failed, user empty");
-        }                
-        if ( password.isEmpty()) {
+        }
+        if (password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Login failed, password empty");
         } else {
             try {
@@ -221,7 +217,8 @@ public class Login extends javax.swing.JFrame {
                         setVisible(false);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Login Username or password not found");
+                    JOptionPane.showMessageDialog(this, "Login failed,username, password or usertype do not match");
+                    tfPassword.setText("");
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -236,8 +233,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btForgotPassMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btForgotPassMousePressed
         //if forgot password is pressesd, system goes to Forgot Password page 
-        ForgotPassw sdcode = new ForgotPassw();   
-    
+        ForgotPassw sdcode = new ForgotPassw();
         this.setVisible(false);
         sdcode.setVisible(true);
     }//GEN-LAST:event_btForgotPassMousePressed
