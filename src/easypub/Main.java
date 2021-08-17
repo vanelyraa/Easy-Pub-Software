@@ -9,8 +9,7 @@ import javax.swing.WindowConstants;
 
 /**
  *
- * @author vanel
- * Dashboard for admin users
+ * @author vanel Dashboard for admin users
  */
 public class Main extends javax.swing.JFrame {
 
