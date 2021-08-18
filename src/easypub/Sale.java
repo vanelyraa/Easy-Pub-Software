@@ -7,13 +7,10 @@ package easypub;
 
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -62,43 +59,43 @@ public class Sale extends javax.swing.JFrame {
 
     //fill table with info selected by the user
     public void fillTable() {
-        try {
-            int actQty = resst.getInt("quantity");
-            String prod = (cbProduct.getSelectedItem().toString());
-            int price = Integer.parseInt(tfPrice.getText());
-            int qty = Integer.parseInt(tfQty.getText());
-            int total = qty * price;
+        if (tfQty.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field quantity is mandatory");
+        } else {
+            try {
+                int actQty = resst.getInt("quantity");
+                String prod = (cbProduct.getSelectedItem().toString());
+                double price = Double.valueOf(tfPrice.getText());
+                int qty = Integer.parseInt(tfQty.getText());
+                double total = qty * price;
 
-            if (qty >= actQty) {
-                JOptionPane.showMessageDialog(this, "Not enough quantity, available: " + actQty);
-            } else {
-                saleTable = (DefaultTableModel) tbSale.getModel();
-                saleTable.addRow(new Object[]{
-                    cbProduct.getSelectedItem(),
-                    tfPrice.getText(),
-                    tfQty.getText(),
-                    total,});
-                int sum = 0;
+                if (qty >= actQty) {
+                    JOptionPane.showMessageDialog(this, "Not enough quantity, available: " + actQty);
+                } else {
+                    saleTable = (DefaultTableModel) tbSale.getModel();
+                    saleTable.addRow(new Object[]{
+                        cbProduct.getSelectedItem(),
+                        tfPrice.getText(),
+                        tfQty.getText(),
+                        total,});
+                    double sum = 0;
 
-                for (int i = 0; i < tbSale.getRowCount(); i++) {
-                    sum = sum + Integer.parseInt(tbSale.getValueAt(i, 3).toString());
+                    for (int i = 0; i < tbSale.getRowCount(); i++) {
+                        sum = sum + Double.valueOf(tbSale.getValueAt(i, 3).toString());
+                    }
+                    tfTotal.setText(String.valueOf(sum));
+                    tfPrice.setText("");
+                    tfQty.setText("");
+                    cbProduct.requestFocus();
                 }
-
-                tfTotal.setText(Integer.toString(sum));
-                //cbProduct.setSelectedItem("Select");
-                tfPrice.setText("");
-                tfQty.setText("");
-                cbProduct.requestFocus();
+            } catch (SQLException ex) {
+                Logger.getLogger(Sale.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Sale.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     //method to add data to database
     //inserts data to sale table, sale_item table and updates product quantity
     public void add() {
-
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         String today = dtf.format(now);
@@ -117,13 +114,12 @@ public class Sale extends javax.swing.JFrame {
             if (resst1.next()) {
                 saleID = resst1.getInt(1);
             }
-
             int rows = tbSale.getRowCount();
             for (int i = 0; i < tbSale.getRowCount(); i++) {
                 String prodName = (String) tbSale.getValueAt(i, 0);
                 String price = (String) tbSale.getValueAt(i, 1);
                 String qty = (String) tbSale.getValueAt(i, 2);
-                int total = (int) tbSale.getValueAt(i, 3);
+                Double total = (Double) tbSale.getValueAt(i, 3);
 
                 String query1 = "INSERT INTO sale_item(sale_ID, product_name, sales_price, quantity, total) VALUES (?,?,?,?,?)";
                 prepst = cnct.prepareStatement(query1);
@@ -132,10 +128,9 @@ public class Sale extends javax.swing.JFrame {
                 prepst.setString(2, prodName);
                 prepst.setString(3, price);
                 prepst.setString(4, qty);
-                prepst.setInt(5, total);
+                prepst.setDouble(5, total);
                 prepst.executeUpdate();
                 prepst.addBatch();
-
             }
 
             for (int i = 0; i < tbSale.getRowCount(); i++) {
@@ -151,29 +146,23 @@ public class Sale extends javax.swing.JFrame {
                 prepst.setLong(1, qtyNew);
                 prepst.setString(2, prodName);
                 prepst.execute();
-
             }
-
             JOptionPane.showMessageDialog(this, "Sale completed");
-
         } catch (SQLException ex) {
             Logger.getLogger(Sale.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     //method to print receipt
     public void printReceipt() {
-        String tot = tfTotal.getText();
-
+        Double tot = Double.valueOf(tfTotal.getText());
         new Receipt(tot, tbSale.getModel()).setVisible(true);
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+    public void limitChar() {
+        tfQty.setDocument(new TextFieldLength(10));
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -449,25 +438,19 @@ public class Sale extends javax.swing.JFrame {
     }//GEN-LAST:event_btClearActionPerformed
 
     private void btRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoveActionPerformed
-        //remove items from table
-
+        //remove selected item from table and recalculate total
         saleTable = (DefaultTableModel) tbSale.getModel();
         int row = tbSale.getSelectedRow();
         saleTable.removeRow(row);
-        int sum = 0;
+        Double sum = 0.0;
         for (int i = 0; i < tbSale.getRowCount(); i++) {
-
-            sum = sum + Integer.parseInt(tbSale.getValueAt(i, 3).toString());
+            sum = sum + Double.valueOf(tbSale.getValueAt(i, 3).toString());
         }
-
-        tfTotal.setText(Integer.toString(sum));
-
-
+        tfTotal.setText(Double.toString(sum));
     }//GEN-LAST:event_btRemoveActionPerformed
 
     private void btAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddActionPerformed
         fillTable();
-
         tfPrice.setText("");
         tfQty.setText("");
     }//GEN-LAST:event_btAddActionPerformed
@@ -476,18 +459,14 @@ public class Sale extends javax.swing.JFrame {
         //fill textfield after jcombo selection
         try {
             String getProd = (String) cbProduct.getSelectedItem();
-
             prepst = cnct.prepareStatement("select * from product where product_name = ?");
             prepst.setString(1, getProd);
             resst = prepst.executeQuery();
-
             if (resst.next()) {
-
                 tfPrice.setText(resst.getString("sales_price"));
                 tfServing.setText(resst.getString("serving"));
                 tfQty.requestFocus();
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(Sale.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -495,12 +474,12 @@ public class Sale extends javax.swing.JFrame {
 
     private void tfQtyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQtyKeyTyped
         char valid = evt.getKeyChar();
-       if(!Character.isDigit(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Numbers only");
-       } else{
-           validMsg.setText(null);
-       }
+        if (!Character.isDigit(valid) || (valid == KeyEvent.VK_BACK_SPACE) || valid == KeyEvent.VK_DELETE) {
+            evt.consume();
+            validMsg.setText("Numbers only");
+        } else {
+            validMsg.setText(null);
+        }
     }//GEN-LAST:event_tfQtyKeyTyped
 
     /**
