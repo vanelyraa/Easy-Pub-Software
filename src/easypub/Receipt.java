@@ -22,10 +22,10 @@ public class Receipt extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
     }
 
-    String rtot;
+    Double rtot;
 
     //String representation of receipt, retrives data from table
-    public Receipt(String tot, TableModel model) {
+    public Receipt(Double tot, TableModel model) {
         initComponents();
         this.rtot = tot;
 
@@ -39,7 +39,7 @@ public class Receipt extends javax.swing.JFrame {
             String product = (String) model.getValueAt(i, 0);
             String price = (String) model.getValueAt(i, 1);
             String qty = (String) model.getValueAt(i, 2);
-            int total = (int) model.getValueAt(i, 3);
+            Double total = (Double) model.getValueAt(i, 3);
 
             txtprint.setText(txtprint.getText() + product + "\t" + price + "\t" + qty + "\t" + total + "\n");
         }
