@@ -23,8 +23,7 @@ import net.proteanit.sql.DbUtils;
 
 /**
  *
- * @author vanel
- * Area where user manages stock
+ * @author vanel Area where user manages stock
  */
 public class Stock extends javax.swing.JFrame {
 
@@ -53,7 +52,28 @@ public class Stock extends javax.swing.JFrame {
         }
     }
 
-    
+    public void limitChar() {
+        tfQty.setDocument(new TextFieldLength(10));
+    }
+
+    public void getStockTrId() {
+        try {
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("select MAX(ID) from stock");
+            resst.next();
+            resst.getString("MAX(ID)");
+            if (resst.getString("MAX(ID)") == null) {
+                tfTrNum.setText("T001");
+            } else {
+                long prodID = Long.parseLong(resst.getString("MAX(ID)").substring(1, resst.getString("MAX(ID)").length()));
+                prodID++;
+                tfTrNum.setText("T" + String.format("%03d", prodID));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -78,6 +98,8 @@ public class Stock extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbStock = new javax.swing.JTable();
         validMsg = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        tfTrNum = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(950, 600));
@@ -166,6 +188,10 @@ public class Stock extends javax.swing.JFrame {
         validMsg.setForeground(new java.awt.Color(255, 0, 0));
         validMsg.setBorder(null);
 
+        jLabel5.setText("Transaction number");
+
+        tfTrNum.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -178,7 +204,10 @@ public class Stock extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cbTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                                .addComponent(tfTrNum, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfProdId, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -194,9 +223,10 @@ public class Stock extends javax.swing.JFrame {
                                         .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(tfQty, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
                                     .addGap(34, 34, 34)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(tfActQty, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel8))))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(tfActQty, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                                        .addComponent(jLabel8)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addComponent(tfProduct)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -211,7 +241,7 @@ public class Stock extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -230,15 +260,22 @@ public class Stock extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cbTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfTrNum, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(validMsg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(85, 85, 85))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tfActQty, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -266,55 +303,69 @@ public class Stock extends javax.swing.JFrame {
     private void btUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btUpdateMouseClicked
         //method updates stock when update button is pressed
         //update stock and product table in database
-        int qty = Integer.parseInt(tfQty.getText());
-        try {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDateTime now = LocalDateTime.now();
-            String today = dtf.format(now);
-            prepst = cnct.prepareStatement("insert into stock values(?,?,?,?)");
-
-            prepst.setString(1, today);
-            prepst.setString(2, tfProduct.getText());
-            prepst.setString(3, cbTransaction.getSelectedItem().toString());
-            prepst.setString(4, tfQty.getText());
-
-            int row = prepst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Stock updated sucesfully");
-
-            String prodID = tfProdId.getText();
-            String qtyNew = tfQty.getText();
-            String actQty = tfActQty.getText();
-            String transac = cbTransaction.getSelectedItem().toString();
+        if (tfProdId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Select the supplier ID to be edited");
+        } else if (tfQty.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Field quantity is mandatory");
+            } else {
+            int qty = Integer.parseInt(tfQty.getText());
+            int stockID = 0;
             
-            if(transac.equals("goods receipt")){
-            long totQty = Long.valueOf(qtyNew) + Long.valueOf(actQty);
-             stat = cnct.createStatement();
-            stat.execute("insert into stock (date,product_ID, transaction,quantity)" + "values('" + today + "','" + prodID + "','" + transac + "','" + totQty + "')");
-            stat.execute("update product set quantity='" + totQty + "' where product_ID='" + prodID + "'");
-            stat.close();
+                try {
+                    getStockTrId();
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDateTime now = LocalDateTime.now();
+                    String today = dtf.format(now);
+                    /*String query = "insert into stock values(?,?,?,?,?)";
+                prepst = cnct.prepareStatement(query);
 
-            StockSelect();
-            btClearMouseClicked(evt);
-            }else{
-             long totQty = Long.valueOf(actQty) - Long.valueOf(qtyNew);   
+                prepst.setString(1, tfTrNum.getText());
+                prepst.setString(2, today);
+                prepst.setString(3, tfProduct.getText());
+                prepst.setString(4, cbTransaction.getSelectedItem().toString());
+                prepst.setString(5, tfQty.getText());
+
+                prepst.executeUpdate();   */
+
+                    String trNum = tfTrNum.getText();
+                    String prodID = tfProdId.getText();
+                    String qtyNew = tfQty.getText();
+                    String actQty = tfActQty.getText();
+                    String transac = cbTransaction.getSelectedItem().toString();
+                    long totWas = Long.valueOf(actQty) - Long.valueOf(qtyNew);
+                    long totQty = Long.valueOf(qtyNew) + Long.valueOf(actQty);
+
+                    stat = cnct.createStatement();
+                    stat.execute("insert into stock (ID,date,product_ID, transaction,quantity)" + "values('" + trNum + "','" + today + "','" + prodID + "','" + transac + "','" + qtyNew + "')");
+
+                    if (transac.equals("waste")) {
+
+                        stat.execute("update product set quantity='" + totWas + "' where product_ID='" + prodID + "'");
+                        StockSelect();
+                    } else {
+
+                        stat.execute("update product set quantity='" + totQty + "' where product_ID='" + prodID + "'");
+                        // prepst.addBatch();
+                        StockSelect();
+                    }
+
+                    StockSelect();
+                    JOptionPane.showMessageDialog(this, "Stock updated sucesfully");
+                    btClearMouseClicked(evt);
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             
-            stat = cnct.createStatement();
-            stat.execute("insert into stock (date,product_ID, transaction,quantity)" + "values('" + today + "','" + prodID + "','" + transac + "','" + totQty + "')");
-            stat.execute("update product set quantity='" + totQty + "' where product_ID='" + prodID + "'");
-            stat.close();
-
-            StockSelect();
-            btClearMouseClicked(evt);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btUpdateMouseClicked
 
     private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
-       //clear info from textfields when button clicked
+        //clear info from textfields when button clicked
         tfProdId.setText("");
         tfProduct.setText("");
+        tfTrNum.setText("");
         cbTransaction.setSelectedItem(-1);
         tfActQty.setText("");
         tfQty.setText("");
@@ -337,14 +388,15 @@ public class Stock extends javax.swing.JFrame {
         sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
     }//GEN-LAST:event_tfSearchKeyReleased
 
+    //textfield validation only digits
     private void tfQtyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQtyKeyTyped
         char valid = evt.getKeyChar();
-       if(!Character.isDigit(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Numbers only");
-       } else{
-           validMsg.setText(null);
-       }
+        if (!Character.isDigit(valid) || (valid == KeyEvent.VK_BACK_SPACE) || valid == KeyEvent.VK_DELETE) {
+            evt.consume();
+            validMsg.setText("Numbers only");
+        } else {
+            validMsg.setText(null);
+        }
     }//GEN-LAST:event_tfQtyKeyTyped
 
     /**
@@ -397,6 +449,7 @@ public class Stock extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -409,6 +462,7 @@ public class Stock extends javax.swing.JFrame {
     private javax.swing.JTextField tfProduct;
     private javax.swing.JTextField tfQty;
     private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfTrNum;
     private javax.swing.JTextField validMsg;
     // End of variables declaration//GEN-END:variables
 }
