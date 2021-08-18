@@ -225,7 +225,9 @@ public class ForgotPassw extends javax.swing.JFrame {
     private void btVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVerifyActionPerformed
         //method checks on database if user answer is correct, it checks with database
         String answer = tfAnswer.getText();
-        if (answer.equals("")) {
+        if (tfUser.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "User is mandatory");
+        } else if (answer.equals("")) {
             JOptionPane.showMessageDialog(null, "Asnwer is mandatory");
         } else {
             try {
