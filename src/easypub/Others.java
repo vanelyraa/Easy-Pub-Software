@@ -20,10 +20,14 @@ import javax.swing.JTextField;
 import net.proteanit.sql.DbUtils;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.text.AbstractDocument;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -32,10 +36,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
- * @author vanel
- * Page where new users can be created and reports generated
+ * @author vanel Page where new users can be created and reports generated
  */
-
 public class Others extends javax.swing.JFrame {
 
     int createId;
@@ -47,18 +49,31 @@ public class Others extends javax.swing.JFrame {
     public Others() {
         initComponents();
         cnct = ConnectDB.connect();
-        setResizable(false);       
+        setResizable(false);
         SaleSelect();
         limitChar();
+        SaleSelect();
+        RepProdSelect();
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-    }   
+    }
 
     //retrieve data from database to jtable
     public void SaleSelect() {
         try {
             stat = cnct.createStatement();
-            resst = stat.executeQuery("SELECT date, sale_id, product_name, sales_price, quantity, total FROM sale_item");
+            resst = stat.executeQuery("SELECT sale_ID, date,  product_name, sales_price, quantity, total FROM sale_item");
             tbSaleRep.setModel(DbUtils.resultSetToTableModel(resst));
+        } catch (SQLException ex) {
+            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+     //retrieve data from database to jtable
+   public void RepProdSelect() {
+        try {
+            stat = cnct.createStatement();
+            resst = stat.executeQuery("SELECT product_ID,product_name, quantity, category FROM product");
+            tbRepStock.setModel(DbUtils.resultSetToTableModel(resst));
         } catch (SQLException ex) {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,7 +88,7 @@ public class Others extends javax.swing.JFrame {
             System.out.println(io);
         }
     }
-    
+
     //limit characters of jtextfields
     public void limitChar() {
         tfUserId.setDocument(new TextFieldLength(10));
@@ -83,8 +98,17 @@ public class Others extends javax.swing.JFrame {
         tfEmail.setDocument(new TextFieldLength(50));
         tfQuest.setDocument(new TextFieldLength(50));
         tfAnswer.setDocument(new TextFieldLength(50));
-       
-        
+    }
+
+    public static boolean ValidEmail(String email) {
+        boolean isValid = true;
+        try {
+            InternetAddress mailAd = new InternetAddress(email);
+            mailAd.validate();
+        } catch (AddressException ex) {
+            isValid = false;
+        }
+        return isValid;
     }
 
     @SuppressWarnings("unchecked")
@@ -110,10 +134,10 @@ public class Others extends javax.swing.JFrame {
         tfQuest = new javax.swing.JTextField();
         tfAnswer = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        validMsg = new javax.swing.JTextField();
-        validMsg1 = new javax.swing.JTextField();
         validMsg2 = new javax.swing.JTextField();
         tfEmail = new javax.swing.JTextField();
+        validMsg = new javax.swing.JTextField();
+        validMsg1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -154,8 +178,8 @@ public class Others extends javax.swing.JFrame {
         jLabel11.setText("Last name");
 
         tfName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tfNameKeyTyped(evt);
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfNameKeyPressed(evt);
             }
         });
 
@@ -173,8 +197,8 @@ public class Others extends javax.swing.JFrame {
         });
 
         tfLname.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tfLnameKeyTyped(evt);
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfLnameKeyPressed(evt);
             }
         });
 
@@ -195,18 +219,6 @@ public class Others extends javax.swing.JFrame {
 
         jLabel16.setText("Answer");
 
-        validMsg.setEditable(false);
-        validMsg.setBackground(java.awt.Color.white);
-        validMsg.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        validMsg.setForeground(new java.awt.Color(255, 0, 0));
-        validMsg.setBorder(null);
-
-        validMsg1.setEditable(false);
-        validMsg1.setBackground(java.awt.Color.white);
-        validMsg1.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        validMsg1.setForeground(new java.awt.Color(255, 0, 0));
-        validMsg1.setBorder(null);
-
         validMsg2.setEditable(false);
         validMsg2.setBackground(java.awt.Color.white);
         validMsg2.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
@@ -224,6 +236,18 @@ public class Others extends javax.swing.JFrame {
             }
         });
 
+        validMsg.setEditable(false);
+        validMsg.setBackground(java.awt.Color.white);
+        validMsg.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        validMsg.setForeground(new java.awt.Color(255, 0, 0));
+        validMsg.setBorder(null);
+
+        validMsg1.setEditable(false);
+        validMsg1.setBackground(java.awt.Color.white);
+        validMsg1.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        validMsg1.setForeground(new java.awt.Color(255, 0, 0));
+        validMsg1.setBorder(null);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -232,11 +256,11 @@ public class Others extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(validMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(332, 332, 332))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -263,20 +287,23 @@ public class Others extends javax.swing.JFrame {
                                     .addComponent(tfName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tfPassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(validMsg, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(56, 56, 56))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(validMsg2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(validMsg1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(83, 83, 83)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfEmail))
-                        .addGap(56, 56, 56))))
+                        .addGap(56, 56, 56))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(validMsg1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -375,13 +402,10 @@ public class Others extends javax.swing.JFrame {
 
         tbSaleRep.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Date", "Sale ID", "Product", "Price", "Quantity", "Total"
+                "Sale ID", "Date", "Product", "Price", "Quantity", "Total"
             }
         ));
         jScrollPane1.setViewportView(tbSaleRep);
@@ -464,18 +488,20 @@ public class Others extends javax.swing.JFrame {
 
         tbRepStock.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "Product", "Quanity", "Category"
+                "Product ID", "Name", "Quanity", "Category"
             }
         ));
         jScrollPane2.setViewportView(tbRepStock);
 
         tfSearch.setPreferredSize(new java.awt.Dimension(60, 25));
+        tfSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfSearchFocusLost(evt);
+            }
+        });
         tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfSearchKeyPressed(evt);
@@ -516,8 +542,8 @@ public class Others extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(66, 66, 66))
         );
@@ -544,9 +570,8 @@ public class Others extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(17, 17, 17)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel3.setBackground(new java.awt.Color(0, 102, 51));
@@ -599,21 +624,37 @@ public class Others extends javax.swing.JFrame {
 
     private void btCreateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCreateMouseClicked
         //method creates new user and save on database
-        try {            
-            prepst = cnct.prepareStatement("insert into login (user, password,type,question, answer, user_name,user_lname,user_email)values(?,?,?,?,?,?,?,?)");
-            prepst.setString(1, tfUserId.getText());
-            prepst.setString(2, tfPassword.getText());
-            prepst.setString(3, cbUserType.getSelectedItem().toString());
-            prepst.setString(4, tfQuest.getText().toUpperCase());
-            prepst.setString(4, tfAnswer.getText().toUpperCase());
-            prepst.setString(4, tfName.getText().toUpperCase());
-            prepst.setString(5, tfLname.getText().toUpperCase());
-            prepst.setString(6, tfEmail.getText());
-            prepst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "User created sucesfully");
-            btClearUserMouseClicked(evt);
-        } catch (SQLException ex) {
-            Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+        if (tfUserId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field User ID is mandatory");
+        } else if (tfPassword.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field Password is mandatory");
+        } else if (tfQuest.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field Question is mandatory");
+        } else if (tfAnswer.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field Answer is mandatory");
+        } else if (tfName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field Name is mandatory");
+        } else if (tfLname.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field Last name is mandatory");
+        } else if (tfEmail.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field email is mandatory");
+        } else {
+            try {
+                prepst = cnct.prepareStatement("insert into login (user, password,type,question, answer, user_name,user_lname,user_email)values(?,?,?,?,?,?,?,?)");
+                prepst.setString(1, tfUserId.getText());
+                prepst.setString(2, tfPassword.getText());
+                prepst.setString(3, cbUserType.getSelectedItem().toString());
+                prepst.setString(4, tfQuest.getText().toUpperCase());
+                prepst.setString(5, tfAnswer.getText().toUpperCase());
+                prepst.setString(6, tfName.getText().toUpperCase());
+                prepst.setString(7, tfLname.getText().toUpperCase());
+                prepst.setString(8, tfEmail.getText());
+                prepst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "User created sucesfully");
+                btClearUserMouseClicked(evt);
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btCreateMouseClicked
 
@@ -656,19 +697,12 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_btClearStockMouseClicked
 
     private void tfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyPressed
-        //user input on this field will search in jtable
-        String cat = tfSearch.getText().toUpperCase();
-        if (tfSearch.getText().length() > 0) {
-            try {
-                stat = cnct.createStatement();
-                resst = stat.executeQuery("SELECT product_name, quantity FROM product where category =?");
-                tbSaleRep.setModel(DbUtils.resultSetToTableModel(resst));
-            } catch (SQLException ex) {
-                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            SaleSelect();
-        }
+       
+        
+       
+         /*RowFilter rowFilter = RowFilter.regexFilter(tfSearch.getText(), 3);
+                
+ tbRepStock.getRowSorter().setRowFilter(rowFilter);*/
     }//GEN-LAST:event_tfSearchKeyPressed
 
     private void btPrintStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPrintStockActionPerformed
@@ -756,37 +790,64 @@ public class Others extends javax.swing.JFrame {
         tfUserId.setText("");
         tfPassword.setText("");
         tfUserId.setText("");
+        tfAnswer.setText("");
+        tfQuest.setText("");
         tfName.setText("");
+        tfLname.setText("");
         tfEmail.setText("");
     }//GEN-LAST:event_btClearUserMouseClicked
 
-    private void tfNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyTyped
-       char valid = evt.getKeyChar();
-       if(!Character.isLetter(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Letters only");
-       } else{
-           validMsg.setText(null);
-       }
-    }//GEN-LAST:event_tfNameKeyTyped
-
-    private void tfLnameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLnameKeyTyped
-        char valid = evt.getKeyChar();
-       if(!Character.isLetter(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Letters only");
-       } else{
-           validMsg.setText(null);
-       }
-    }//GEN-LAST:event_tfLnameKeyTyped
-
     private void tfEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEmailKeyTyped
-        // TODO add your handling code here:
+        String toCheck = tfEmail.getText();
+        if (ValidEmail(toCheck) == false) {
+            validMsg2.setText("Invalid email format");
+        } else {
+            validMsg2.setText(null);
+        }
     }//GEN-LAST:event_tfEmailKeyTyped
 
     private void tfEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfEmailFocusLost
-        // TODO add your handling code here:
+        if (validMsg2.getText().equals("Invalid email format")) {
+            tfEmail.setText("");
+        }
     }//GEN-LAST:event_tfEmailFocusLost
+
+    private void tfNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyPressed
+        char isNum = evt.getKeyChar();
+        if(Character.isDigit(isNum)){
+                tfName.setText("");
+                JOptionPane.showMessageDialog(null, "No numbers allowed !");                
+        }
+    }//GEN-LAST:event_tfNameKeyPressed
+
+    private void tfLnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLnameKeyPressed
+        char isNum = evt.getKeyChar();
+        if(Character.isDigit(isNum)){
+                tfLname.setText("");
+                JOptionPane.showMessageDialog(null, "No numbers allowed !");                
+        }
+    }//GEN-LAST:event_tfLnameKeyPressed
+
+    private void tfSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfSearchFocusLost
+     /*  String cat = tfSearch.getText().toUpperCase();
+        if (tfSearch.getText().length() > 0) {
+            try {
+                stat = cnct.createStatement();
+                resst = stat.executeQuery("SELECT product_ID, product_name, quantity FROM product where column category ='"+cat);
+                tbRepStock.setModel(DbUtils.resultSetToTableModel(resst));
+            } catch (SQLException ex) {
+                Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            SaleSelect();
+        }*/
+     
+      //user input on this field will search in jtable
+        DefaultTableModel tableRep = (DefaultTableModel) tbSaleRep.getModel();
+        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<>(tableRep);
+        tbSaleRep.setRowSorter(sort);
+        sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
+    }//GEN-LAST:event_tfSearchFocusLost
 
     /**
      * @param args the command line arguments
