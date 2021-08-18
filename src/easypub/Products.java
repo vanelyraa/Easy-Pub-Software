@@ -21,8 +21,7 @@ import net.proteanit.sql.DbUtils;
 
 /**
  *
- * @author vanel
- * Page where user manages products
+ * @author vanel Page where user manages products
  */
 public class Products extends javax.swing.JFrame {
 
@@ -72,7 +71,7 @@ public class Products extends javax.swing.JFrame {
             Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     //method to fill combobox with Categories from database
     public void CategoryCombo() {
         try {
@@ -88,7 +87,7 @@ public class Products extends javax.swing.JFrame {
         }
     }
 
-     //method to fill combobox with Suppliers from database
+    //method to fill combobox with Suppliers from database
     public void SupplierCombo() {
         try {
             stat = cnct.createStatement();
@@ -101,6 +100,18 @@ public class Products extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    //limit number of char in text field according to database
+    public void limitChar() {
+        tfCost.setDocument(new TextFieldLength(10));
+        tfSalePrice.setDocument(new TextFieldLength(10));
+        tfName.setDocument(new TextFieldLength(50));
+        tfLeadTime.setDocument(new TextFieldLength(100));
+        tfUnit.setDocument(new TextFieldLength(4));
+        tfMinQty.setDocument(new TextFieldLength(10));
+        tfServing.setDocument(new TextFieldLength(5));
+        tfQty.setDocument(new TextFieldLength(10));
     }
 
     @SuppressWarnings("unchecked")
@@ -154,7 +165,7 @@ public class Products extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Product", "Supplier", "Cost", "Sale price", "Lead time", "Unit", "Reorder", "Category"
+                "ID", "Product", "Supplier", "Cost", "Quantity", "Sale price", "Lead time", "Unit", "Reorder", "Serving", "Category"
             }
         ));
         tbProduct.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -186,7 +197,7 @@ public class Products extends javax.swing.JFrame {
 
         jLabel9.setText("Lead time(days)");
 
-        jLabel10.setText("Min. qty");
+        jLabel10.setText("Reorder point");
 
         tfCost.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -351,9 +362,9 @@ public class Products extends javax.swing.JFrame {
                                             .addComponent(tfCost, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(402, 402, 402)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tfMinQty, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(tfMinQty, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                 .addGap(32, 32, 32)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
@@ -467,12 +478,13 @@ public class Products extends javax.swing.JFrame {
         //method fill textfields with table data
         tableProd = (DefaultTableModel) tbProduct.getModel();
         int rowIndex = tbProduct.getSelectedRow();
-        tfproductId.setText(tableProd.getValueAt(rowIndex, 0).toString());        
+        tfproductId.setText(tableProd.getValueAt(rowIndex, 0).toString());
         tfName.setText(tableProd.getValueAt(rowIndex, 1).toString());
         Object comboSup = tableProd.getValueAt(rowIndex, 2);
         cbSupplier.addItem(comboSup);
-        cbSupplier.setSelectedItem(comboSup);        
+        cbSupplier.setSelectedItem(comboSup);
         tfCost.setText(tableProd.getValueAt(rowIndex, 3).toString());
+        tfQty.setText(tableProd.getValueAt(rowIndex, 4).toString());
         tfSalePrice.setText(tableProd.getValueAt(rowIndex, 5).toString());
         tfLeadTime.setText(tableProd.getValueAt(rowIndex, 6).toString());
         tfUnit.setText(tableProd.getValueAt(rowIndex, 7).toString());
@@ -480,19 +492,33 @@ public class Products extends javax.swing.JFrame {
         tfServing.setText(tableProd.getValueAt(rowIndex, 9).toString());
         Object comboCat = tableProd.getValueAt(rowIndex, 10);
         cbCategory.addItem(comboCat);
-        cbCategory.setSelectedItem(comboCat);         
+        cbCategory.setSelectedItem(comboCat);
     }//GEN-LAST:event_tbProductMouseClicked
 
     private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
         //Save info on database when button save in clicked
-        if (tfName.getText().isEmpty()||cbSupplier.getSelectedItem()==null||tfCost.getText().isEmpty()||tfSalePrice.getText().isEmpty()||tfLeadTime.getText().isEmpty()||tfUnit.getText().isEmpty()||tfMinQty.getText().isEmpty()||tfServing.getText().isEmpty()||cbCategory.getSelectedItem()==null) {
-            JOptionPane.showMessageDialog(this, "All fields must be filled");
+        if (tfName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field Name is mandatory");
+        } else if (tfCost.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field cost is mandatory");
+        } else if (tfSalePrice.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field price is mandatory");
+        } else if (tfLeadTime.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field lead time is mandatory");
+        } else if (tfUnit.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field unit is mandatory");
+        } else if (tfMinQty.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field reorder point is mandatory");
+        } else if (tfServing.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field serving is mandatory");
+        } else if (tfQty.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Field quantity is mandatory");
         } else if (!tfproductId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Product ID already exists");
         } else {
             try {
                 getProductId();
-                prepst = cnct.prepareStatement("insert into product (product_name, supplier_name, cost, quantity, sales_price, lead_time, unit, min_qty, serving, category) values(?,?,?,?,?,?,?,?,?,?,?,?)");
+                prepst = cnct.prepareStatement("insert into product (product_ID, product_name,supplier_name, cost, quantity, sales_price, lead_time, unit, min_qty, serving, category) values(?,?,?,?,?,?,?,?,?,?,?)");
                 prepst.setString(1, tfproductId.getText());
                 prepst.setString(2, tfName.getText().toUpperCase());
                 prepst.setString(3, cbSupplier.getSelectedItem().toString());
@@ -529,7 +555,7 @@ public class Products extends javax.swing.JFrame {
                 prepst.setString(6, tfLeadTime.getText());
                 prepst.setString(7, tfUnit.getText().toUpperCase());
                 prepst.setString(8, tfMinQty.getText());
-                 prepst.setString(9, tfServing.getText());
+                prepst.setString(9, tfServing.getText());
                 prepst.setString(10, cbCategory.getSelectedItem().toString());
                 int row1 = prepst.executeUpdate();
                 productSelect();
@@ -560,113 +586,118 @@ public class Products extends javax.swing.JFrame {
                 Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
     }//GEN-LAST:event_btDeleteMouseClicked
 
     private void btClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btClearMouseClicked
         //clear ll dtaaon textfields
         tfproductId.setText("");
         tfName.setText("");
-        cbSupplier.setSelectedItem(-1);
         tfCost.setText("");
         tfSalePrice.setText("");
         tfLeadTime.setText("");
         tfUnit.setText("");
         tfMinQty.setText("");
         tfServing.setText("");
-        cbCategory.setSelectedItem(-1);
     }//GEN-LAST:event_btClearMouseClicked
 
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
         tableProd = (DefaultTableModel) tbProduct.getModel();
-        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(tableProd);
+        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<>(tableProd);
         tbProduct.setRowSorter(sort);
         sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
     }//GEN-LAST:event_tfSearchKeyReleased
 
+    //textfield validations
     private void tfLeadTimeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLeadTimeKeyTyped
         char valid = evt.getKeyChar();
-       if(!Character.isDigit(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Numbers only");
-       } else{
-           validMsg.setText(null);
-       }
-           
+        if (!Character.isDigit(valid) || (valid == KeyEvent.VK_BACK_SPACE) || valid == KeyEvent.VK_DELETE) {
+            evt.consume();
+            validMsg.setText("Numbers only");
+        } else {
+            validMsg.setText(null);
+        }
     }//GEN-LAST:event_tfLeadTimeKeyTyped
 
     private void tfMinQtyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfMinQtyKeyTyped
-       char valid = evt.getKeyChar();
-       if(!Character.isDigit(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Numbers only");
-       } else{
-           validMsg.setText(null);
-       }
+        char valid = evt.getKeyChar();
+        if (!Character.isDigit(valid) || (valid == KeyEvent.VK_BACK_SPACE) || valid == KeyEvent.VK_DELETE) {
+            evt.consume();
+            validMsg.setText("Numbers only");
+        } else {
+            validMsg.setText(null);
+        }
     }//GEN-LAST:event_tfMinQtyKeyTyped
 
     private void tfServingKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfServingKeyTyped
-       char valid = evt.getKeyChar();
-       if(!Character.isDigit(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Numbers only");
-       } else{
-           validMsg.setText(null);
-       }
+        char valid = evt.getKeyChar();
+        if (!Character.isDigit(valid) || (valid == KeyEvent.VK_BACK_SPACE) || valid == KeyEvent.VK_DELETE) {
+            evt.consume();
+            validMsg.setText("Numbers only");
+        } else {
+            validMsg.setText(null);
+        }
     }//GEN-LAST:event_tfServingKeyTyped
 
     private void tfUnitKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfUnitKeyTyped
         char valid = evt.getKeyChar();
-       if(!Character.isLetter(valid)||(valid==KeyEvent.VK_BACK_SPACE)||valid==KeyEvent.VK_DELETE){
-           evt.consume();
-           validMsg.setText("Letters only");
-       } else{
-           validMsg.setText(null);
-       }
+        if (!Character.isLetter(valid) || (valid == KeyEvent.VK_BACK_SPACE) || valid == KeyEvent.VK_DELETE) {
+            evt.consume();
+            validMsg.setText("Letters only");
+        } else {
+            validMsg.setText(null);
+        }
     }//GEN-LAST:event_tfUnitKeyTyped
 
     private void tfSalePriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSalePriceKeyTyped
-        char isPrice=evt.getKeyChar();
-        if((Character.isDigit(isPrice))||(isPrice==KeyEvent.VK_PERIOD)||(isPrice==KeyEvent.VK_BACK_SPACE)){
-            int isDot=0;
-            if(isPrice==KeyEvent.VK_PERIOD){ 
-                        String s=tfSalePrice.getText();
-                        int Adot=s.indexOf('.');
-                        isDot=Adot;
-                        if(Adot!=-1){
-                            getToolkit().beep();
-                            evt.consume();
-                        }
-                    }
-        }
-        else{    
+        char isPrice = evt.getKeyChar();
+        if ((Character.isDigit(isPrice)) || (isPrice == KeyEvent.VK_PERIOD) || (isPrice == KeyEvent.VK_BACK_SPACE)) {
+            int isDot = 0;
+            if (isPrice == KeyEvent.VK_PERIOD) {
+                String s = tfSalePrice.getText();
+                int Adot = s.indexOf('.');
+                isDot = Adot;
+                if (Adot != -1) {
+                    getToolkit().beep();
+                     validMsg.setText(null);
+                    evt.consume();
+                }
+            }
+        } else {
             getToolkit().beep();
+            validMsg.setText("Invalid pricing format");
             evt.consume();
         }
     }//GEN-LAST:event_tfSalePriceKeyTyped
 
     private void tfCostKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCostKeyTyped
-       char isPrice=evt.getKeyChar();
-        if((Character.isDigit(isPrice))||(isPrice==KeyEvent.VK_PERIOD)||(isPrice==KeyEvent.VK_BACK_SPACE)){
-            int isDot=0;
-            if(isPrice==KeyEvent.VK_PERIOD){ 
-                        String s=tfSalePrice.getText();
-                        int Adot=s.indexOf('.');
-                        isDot=Adot;
-                        if(Adot!=-1){
-                            getToolkit().beep();
-                            evt.consume();
-                        }
-                    }
-        }
-        else{    
+        char isPrice = evt.getKeyChar();
+        if ((Character.isDigit(isPrice)) || (isPrice == KeyEvent.VK_PERIOD) || (isPrice == KeyEvent.VK_BACK_SPACE)) {
+            int isDot = 0;
+            if (isPrice == KeyEvent.VK_PERIOD) {
+                String s = tfSalePrice.getText();
+                int Adot = s.indexOf('.');
+                isDot = Adot;
+                if (Adot != -1) {
+                    getToolkit().beep();
+                    validMsg.setText(null);
+                    evt.consume();
+                }
+            }
+        } else {
             getToolkit().beep();
+            validMsg.setText("Invalid pricing format");
             evt.consume();
         }
     }//GEN-LAST:event_tfCostKeyTyped
 
     private void tfQtyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQtyKeyTyped
-        // TODO add your handling code here:
+        char valid = evt.getKeyChar();
+        if (!Character.isDigit(valid) || (valid == KeyEvent.VK_BACK_SPACE) || valid == KeyEvent.VK_DELETE) {
+            evt.consume();
+            validMsg.setText("Numbers only");
+        } else {
+            validMsg.setText(null);
+        }
     }//GEN-LAST:event_tfQtyKeyTyped
 
     /**
