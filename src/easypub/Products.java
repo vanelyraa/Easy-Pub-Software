@@ -40,6 +40,7 @@ public class Products extends javax.swing.JFrame {
         CategoryCombo();
         SupplierCombo();
         productSelect();
+        limitChar();
     }
 
     //method to generate custom Product ID
