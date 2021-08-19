@@ -32,7 +32,7 @@ public class Receipt extends javax.swing.JFrame {
         txtprint.setText(txtprint.getText() + "*****************************************************\n");
         txtprint.setText(txtprint.getText() + "**************************RECEIPT********************\n");
         txtprint.setText(txtprint.getText() + "\n");
-        txtprint.setText(txtprint.getText() + "Product" + "\t" + "Price" + "\t" + "Price" + "\t" + "Total" + "\n");
+        txtprint.setText(txtprint.getText() + "Product" + "\t" + "Price" + "\t" + "Qty" + "\t" + "Total" + "\n");
         txtprint.setText(txtprint.getText() + "\n");
 
         for (int i = 0; i < model.getRowCount(); i++) {
