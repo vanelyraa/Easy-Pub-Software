@@ -36,6 +36,7 @@ public class Sale extends javax.swing.JFrame {
         cnct = ConnectDB.connect();
         setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        limitChar();
         ProductComboBox();
         AutoCompleteDecorator.decorate(cbProduct);
     }
