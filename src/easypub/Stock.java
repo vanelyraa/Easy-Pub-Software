@@ -39,6 +39,7 @@ public class Stock extends javax.swing.JFrame {
         setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         StockSelect();
+        limitChar();
     }
 
     //method to update table with database  data
@@ -314,18 +315,7 @@ public class Stock extends javax.swing.JFrame {
                     getStockTrId();
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDateTime now = LocalDateTime.now();
-                    String today = dtf.format(now);
-                    /*String query = "insert into stock values(?,?,?,?,?)";
-                prepst = cnct.prepareStatement(query);
-
-                prepst.setString(1, tfTrNum.getText());
-                prepst.setString(2, today);
-                prepst.setString(3, tfProduct.getText());
-                prepst.setString(4, cbTransaction.getSelectedItem().toString());
-                prepst.setString(5, tfQty.getText());
-
-                prepst.executeUpdate();   */
-
+                    String today = dtf.format(now);                  
                     String trNum = tfTrNum.getText();
                     String prodID = tfProdId.getText();
                     String qtyNew = tfQty.getText();
@@ -354,9 +344,7 @@ public class Stock extends javax.swing.JFrame {
 
                 } catch (SQLException ex) {
                     Logger.getLogger(Others.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            
+                }            
         }
     }//GEN-LAST:event_btUpdateMouseClicked
 
