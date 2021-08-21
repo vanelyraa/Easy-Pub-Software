@@ -827,7 +827,7 @@ public class Others extends javax.swing.JFrame {
     }//GEN-LAST:event_tfLnameKeyPressed
 
     private void tfSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfSearchFocusLost
-     /*  String cat = tfSearch.getText().toUpperCase();
+       String cat = tfSearch.getText().toUpperCase();
         if (tfSearch.getText().length() > 0) {
             try {
                 stat = cnct.createStatement();
@@ -838,13 +838,8 @@ public class Others extends javax.swing.JFrame {
             }
         } else {
             SaleSelect();
-        }*/
+        }    
      
-      //user input on this field will search in jtable
-        DefaultTableModel tableRep = (DefaultTableModel) tbSaleRep.getModel();
-        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<>(tableRep);
-        tbSaleRep.setRowSorter(sort);
-        sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
     }//GEN-LAST:event_tfSearchFocusLost
 
     /**
