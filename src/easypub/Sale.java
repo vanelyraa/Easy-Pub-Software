@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -30,6 +31,7 @@ public class Sale extends javax.swing.JFrame {
     ResultSet resst = null;
     PreparedStatement prepst = null;
     DefaultTableModel saleTable;
+    
 
     public Sale() {
         initComponents();
@@ -64,11 +66,12 @@ public class Sale extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Field quantity is mandatory");
         } else {
             try {
+                double total = 0;
                 int actQty = resst.getInt("quantity");
                 String prod = (cbProduct.getSelectedItem().toString());
                 double price = Double.valueOf(tfPrice.getText());
-                int qty = Integer.parseInt(tfQty.getText());
-                double total = qty * price;
+                int qty = Integer.parseInt(tfQty.getText());                
+                total = qty * price;
 
                 if (qty >= actQty) {
                     JOptionPane.showMessageDialog(this, "Not enough quantity, available: " + actQty);
@@ -83,6 +86,7 @@ public class Sale extends javax.swing.JFrame {
 
                     for (int i = 0; i < tbSale.getRowCount(); i++) {
                         sum = sum + Double.valueOf(tbSale.getValueAt(i, 3).toString());
+                       
                     }
                     tfTotal.setText(String.valueOf(sum));
                     tfPrice.setText("");
@@ -122,14 +126,15 @@ public class Sale extends javax.swing.JFrame {
                 String qty = (String) tbSale.getValueAt(i, 2);
                 Double total = (Double) tbSale.getValueAt(i, 3);
 
-                String query1 = "INSERT INTO sale_item(sale_ID, product_name, sales_price, quantity, total) VALUES (?,?,?,?,?)";
+                String query1 = "INSERT INTO sale_item(sale_ID, date, product_name, sales_price, quantity, total) VALUES (?,?,?,?,?,?)";
                 prepst = cnct.prepareStatement(query1);
 
                 prepst.setInt(1, saleID);
-                prepst.setString(2, prodName);
-                prepst.setString(3, price);
-                prepst.setString(4, qty);
-                prepst.setDouble(5, total);
+                prepst.setString(2, today);
+                prepst.setString(3, prodName);                
+                prepst.setString(4, price);
+                prepst.setString(5, qty);
+                prepst.setDouble(6, total);
                 prepst.executeUpdate();
                 prepst.addBatch();
             }
@@ -195,8 +200,7 @@ public class Sale extends javax.swing.JFrame {
         jPanel2.setBackground(java.awt.Color.white);
 
         cbProduct.setEditable(true);
-        cbProduct.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        cbProduct.setSelectedIndex(-1);
+        cbProduct.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         cbProduct.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -388,7 +392,7 @@ public class Sale extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -425,6 +429,7 @@ public class Sale extends javax.swing.JFrame {
 
     private void btPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPayActionPerformed
         add();
+        btClearActionPerformed(evt);
     }//GEN-LAST:event_btPayActionPerformed
 
     private void btPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPrintActionPerformed
