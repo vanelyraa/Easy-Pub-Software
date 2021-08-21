@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.AbstractDocument;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -385,11 +384,12 @@ public class Suppliers extends javax.swing.JFrame {
         } else {
             try {
                 prepst = cnct.prepareStatement("update supplier SET supplier_name = ?, email = ?, phone = ?, contact = ? where supplier_ID = ?");
-                prepst.setString(1, tfSupplierId.getText());
-                prepst.setString(2, tfSupplierName.getText().toUpperCase());
-                prepst.setString(3, tfEmail.getText().toLowerCase());
-                prepst.setString(4, tfPhone.getText());
-                prepst.setString(5, tfContact.getText().toUpperCase());
+
+                prepst.setString(1, tfSupplierName.getText().toUpperCase());
+                prepst.setString(2, tfEmail.getText().toLowerCase());
+                prepst.setString(3, tfPhone.getText());
+                prepst.setString(4, tfContact.getText().toUpperCase());
+                prepst.setString(5, tfSupplierId.getText());
                 int row = prepst.executeUpdate();
                 supplierSelect();
                 JOptionPane.showMessageDialog(this, "Supplier updated sucesfully");
@@ -446,7 +446,7 @@ public class Suppliers extends javax.swing.JFrame {
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
         //field searches user input throught table
         tableSup = (DefaultTableModel) tbSupplier.getModel();
-        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<DefaultTableModel>(tableSup);
+        TableRowSorter<DefaultTableModel> sort = new TableRowSorter<>(tableSup);
         tbSupplier.setRowSorter(sort);
         sort.setRowFilter(RowFilter.regexFilter(tfSearch.getText().toUpperCase().trim()));
     }//GEN-LAST:event_tfSearchKeyReleased
@@ -478,17 +478,17 @@ public class Suppliers extends javax.swing.JFrame {
 
     private void tfSupplierNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSupplierNameKeyPressed
         char isNum = evt.getKeyChar();
-        if(Character.isDigit(isNum)){
-                tfSupplierName.setText("");
-                JOptionPane.showMessageDialog(null, "No numbers allowed !");                
+        if (Character.isDigit(isNum)) {
+            tfSupplierName.setText("");
+            JOptionPane.showMessageDialog(null, "No numbers allowed !");
         }
     }//GEN-LAST:event_tfSupplierNameKeyPressed
 
     private void tfContactKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfContactKeyPressed
-       char isNum = evt.getKeyChar();
-        if(Character.isDigit(isNum)){
-                tfContact.setText("");
-                JOptionPane.showMessageDialog(null, "No numbers allowed !");                
+        char isNum = evt.getKeyChar();
+        if (Character.isDigit(isNum)) {
+            tfContact.setText("");
+            JOptionPane.showMessageDialog(null, "No numbers allowed !");
         }
     }//GEN-LAST:event_tfContactKeyPressed
 
