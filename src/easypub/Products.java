@@ -30,9 +30,11 @@ public class Products extends javax.swing.JFrame {
     ResultSet resst = null;
     PreparedStatement prepst = null;
     DefaultTableModel tableProd;
-    private boolean isDot = false;
+    private boolean isDot;
+    
 
     public Products() {
+        this.isDot = false;
         initComponents();
         cnct = ConnectDB.connect();
         setResizable(false);
@@ -548,16 +550,17 @@ public class Products extends javax.swing.JFrame {
         } else {
             try {
                 prepst = cnct.prepareStatement("update product SET product_name = ?, supplier_name = ?, cost = ?, Quantity = ?, sales_price= ?, lead_time= ?, unit= ?, min_qty= ?, category = ? where product_ID = ?");
-                prepst.setString(1, tfproductId.getText());
-                prepst.setString(2, tfName.getText().toUpperCase());
-                prepst.setString(3, cbSupplier.getSelectedItem().toString());
-                prepst.setString(4, tfCost.getText());
-                prepst.setString(5, tfSalePrice.getText());
-                prepst.setString(6, tfLeadTime.getText());
-                prepst.setString(7, tfUnit.getText().toUpperCase());
-                prepst.setString(8, tfMinQty.getText());
-                prepst.setString(9, tfServing.getText());
-                prepst.setString(10, cbCategory.getSelectedItem().toString());
+                
+                prepst.setString(1, tfName.getText().toUpperCase());
+                prepst.setString(2, cbSupplier.getSelectedItem().toString());
+                prepst.setString(3, tfCost.getText());
+                prepst.setString(4, tfSalePrice.getText());
+                prepst.setString(5, tfLeadTime.getText());
+                prepst.setString(6, tfUnit.getText().toUpperCase());
+                prepst.setString(7, tfMinQty.getText());
+                prepst.setString(8, tfServing.getText());
+                prepst.setString(9, cbCategory.getSelectedItem().toString());
+                prepst.setString(10, tfproductId.getText());
                 int row1 = prepst.executeUpdate();
                 productSelect();
                 JOptionPane.showMessageDialog(this, "Category updated sucesfully");
@@ -599,6 +602,7 @@ public class Products extends javax.swing.JFrame {
         tfUnit.setText("");
         tfMinQty.setText("");
         tfServing.setText("");
+        tfQty.setText("");
     }//GEN-LAST:event_btClearMouseClicked
 
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
